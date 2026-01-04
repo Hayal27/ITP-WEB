@@ -1,0 +1,192 @@
+/* Custom styles for PartnersInvestors component with enterprise-level aesthetics */
+
+/* Glassmorphism Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Hero Section Patterns */
+.hero-pattern {
+  background-image: radial-gradient(#16284f 0.5px, transparent 0.5px);
+  background-size: 20px 20px;
+  background-color: #f8fafc;
+}
+
+/* Premium Card Transitions */
+.partner-card,
+.investor-card {
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.partner-card:hover,
+.investor-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 30px 60px -12px rgba(22, 40, 79, 0.15), 0 18px 36px -18px rgba(0, 0, 0, 0.2);
+}
+
+/* Table Enhancements */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+tbody tr {
+  transition: all 0.2s ease;
+}
+
+tbody tr:hover {
+  background: rgba(248, 250, 252, 1);
+  transform: scale(1.002);
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+/* Modern Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(22, 40, 79, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(12, 124, 146, 0.3);
+}
+
+/* Typography Enhancements */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
+}
+
+/* Logo & Image Shine Effect */
+.logo-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.logo-shine::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(45deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0.3) 50%,
+      rgba(255, 255, 255, 0) 60%,
+      rgba(255, 255, 255, 0) 100%);
+  transition: all 0.6s;
+}
+
+.group:hover .logo-shine::after {
+  top: -50%;
+  left: -50%;
+}
+
+/* Modal Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-content-animate {
+  animation: slideUp 0.6s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+}
+
+/* Tab Button Shimmer */
+.tab-button-premium {
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-button-premium::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+
+.tab-button-premium:hover::after {
+  opacity: 1;
+  transform: translate(25%, 25%);
+}
+
+/* Status Badge Pulse */
+.status-pulse {
+  position: relative;
+}
+
+.status-pulse::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: currentColor;
+  opacity: 0.2;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+
+  50% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+}
+
+/* Count Badge styling */
+.count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-left: 8px;
+  background: rgba(12, 124, 146, 0.2);
+  color: #16284F;
+  transition: all 0.3s ease;
+}
+
+/* Section Dividers */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(22, 40, 79, 0.1), transparent);
+}

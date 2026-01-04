@@ -1,0 +1,253 @@
+@import '@mantine/core/styles.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom CSS */
+:root {
+  /* Ethiopian IT Park Strict Brand Colors - Optimized for Contrast */
+  --primary: #0b7084;
+  /* Primary Blue (Passes on White & Light Gray) */
+  --secondary: #16284F;
+  /* Secondary Blue (Dark Navy) */
+  --accent: #4ca8a2;
+  /* Accent Teal (Darkened to pass 4.5:1 ratio) */
+  --neutral: #f4f4f4;
+
+  /* Ethiopian IT Park Strict Typography */
+  font-family: "Roboto", system-ui, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(1, 1, 1, 0.87);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  font-family: "Roboto", system-ui, Arial, sans-serif;
+  font-size: 100% !important;
+  background-color: #fcfdfe;
+  background-image:
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%230b7084' fill-opacity='0.1' stroke='%230b7084' stroke-opacity='0.08' stroke-width='0.5'%3E%3Ccircle cx='50' cy='50' r='1.5' fill-opacity='0.15'/%3E%3Cline x1='50' y1='50' x2='50' y2='30'/%3E%3Ccircle cx='50' cy='30' r='1'/%3E%3Cline x1='50' y1='50' x2='69' y2='43.8'/%3E%3Ccircle cx='69' cy='43.8' r='1'/%3E%3Cline x1='50' y1='50' x2='61.7' y2='66.2'/%3E%3Ccircle cx='61.7' cy='66.2' r='1'/%3E%3Cline x1='50' y1='50' x2='38.3' y2='66.2'/%3E%3Ccircle cx='38.3' cy='66.2' r='1'/%3E%3Cline x1='50' y1='50' x2='31' y2='43.8'/%3E%3Ccircle cx='31' cy='43.8' r='1'/%3E%3C/g%3E%3C/svg%3E"),
+    radial-gradient(at 0% 0%, rgba(12, 124, 146, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(22, 40, 79, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(12, 124, 146, 0.05) 0px, transparent 50%),
+    radial-gradient(at 0% 100%, rgba(22, 40, 79, 0.05) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+.logo img {
+  width: 70px;
+}
+
+/* Utility class for Roboto font */
+.roboto-font {
+  font-family: "Roboto", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Utility class for Amharic content */
+.amharic-text {
+  font-family: "Noto Sans Ethiopic", sans-serif;
+}
+
+body p,
+body h4,
+body h5,
+body h6 {
+  font-size: 98% !important;
+
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* --- Large/Ultra-wide Screen Enhancements for Parallel, Modern Layout --- */
+@media (min-width: 1280px) {
+
+  .container,
+  .max-w-screen-xl {
+    max-width: 1400px !important;
+    padding-left: 3rem !important;
+    padding-right: 3rem !important;
+  }
+}
+
+@media (min-width: 1536px) {
+
+  .container,
+  .max-w-screen-xl {
+    max-width: 1800px !important;
+    padding-left: 5rem !important;
+    padding-right: 5rem !important;
+  }
+}
+
+@media (min-width: 1920px) {
+
+  .container,
+  .max-w-screen-xl {
+    max-width: 2200px !important;
+    padding-left: 7vw !important;
+    padding-right: 7vw !important;
+  }
+}
+
+@media (min-width: 2560px) {
+
+  .container,
+  .max-w-screen-xl {
+    max-width: 3000px !important;
+    padding-left: 10vw !important;
+    padding-right: 10vw !important;
+  }
+}
+
+@media (min-width: 3840px) {
+
+  .container,
+  .max-w-screen-xl {
+    max-width: 4200px !important;
+    padding-left: 14vw !important;
+    padding-right: 14vw !important;
+  }
+}
+
+/* --- End large screen enhancements --- */
+
+/* Tailwind extension layer for brand utilities */
+@layer utilities {
+  .brand-bg-primary {
+    background-color: var(--primary);
+  }
+
+  .brand-bg-secondary {
+    background-color: var(--secondary);
+  }
+
+  .brand-bg-accent {
+    background-color: var(--accent);
+  }
+
+  .brand-text-primary {
+    color: var(--primary);
+  }
+
+  .brand-text-secondary {
+    color: var(--secondary);
+  }
+
+  .brand-text-accent {
+    color: var(--accent);
+  }
+
+  .brand-gradient-text {
+    @apply font-extrabold tracking-tight;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .brand-gradient-border {
+    border-image: linear-gradient(45deg, var(--primary), var(--secondary)) 1;
+  }
+
+  .brand-focus-outline {
+    outline: 2px solid var(--secondary);
+    outline-offset: 2px;
+  }
+
+  .brand-underline {
+    position: relative;
+  }
+
+  .brand-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -0.35rem;
+    height: 4px;
+    width: 64%;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    border-radius: 999px;
+  }
+
+  .brand-glow {
+    box-shadow: 0 0 0 0 rgba(12, 124, 146, 0.4);
+    animation: brandPulse 4s ease-in-out infinite;
+  }
+
+  @keyframes brandPulse {
+
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(12, 124, 146, 0.0);
+    }
+
+    50% {
+      box-shadow: 0 0 0 14px rgba(12, 124, 146, 0.08);
+    }
+  }
+
+  .brand-glass {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+  }
+}
+
+/* Accessibility helpers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--primary);
+  color: white;
+  padding: 12px 24px;
+  z-index: 10000;
+  border-radius: 0 0 12px 12px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: top 0.3s;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.skip-link:focus {
+  top: 0;
+  outline: 3px solid white;
+  outline-offset: -6px;
+}

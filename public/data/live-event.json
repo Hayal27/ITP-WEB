@@ -1,0 +1,71 @@
+{
+  "id": "itpc-annual-innovation",
+  "title": "ITPC Annual Innovation Conference",
+  "subtitle": "",
+  "date": "2025-09-17",
+  "startTime": "10:00",
+  "endTime": "16:00",
+  "timezone": "Africa/Addis_Ababa",
+  "location": "IT Park, Addis Ababa + Live Stream",
+  "stream": {
+    "platform": "youtube",
+    "url": "https://www.youtube.com/watch?v=ysz5S6PUM-U",
+    "poster": "/images/hero/icons8-support-64.PNG",
+    "aspect": "16:9",
+    "lowLatency": true
+  },
+  "chat": {
+    "enabled": true,
+    "pinned": [
+      {
+        "author": "Host",
+        "text": "Welcome to the live event! Share your questions here."
+      }
+    ],
+    "moderationNote": "Be respectful. Off-topic or abusive messages will be removed."
+  },
+  "agenda": [
+    {
+      "time": "10:00",
+      "title": "Welcome & Key note",
+      "speaker": "Mr. Belete Esubalew"
+    },
+    {
+      "time": "11:00",
+      "title": "Panel: The Future of AI in Ethiopia",
+      "speaker": "Panelists"
+    },
+    {
+      "time": "12:30",
+      "title": "Lunch Break"
+    },
+    {
+      "time": "14:00",
+      "title": "Workshop: Building Scalable Web Apps",
+      "speaker": "Mr. Olana Abebe"
+    },
+    {
+      "time": "15:30",
+      "title": "Closing Remarks"
+    }
+  ],
+  "speakers": [
+    {
+      "name": "Mr. Belete Esubalew",
+      "role": "CEO",
+      "photo": "/images/Asset%2022@30x.png"
+    },
+    {
+      "name": "Mr. Olana Abebe",
+      "role": "Deputy CEO",
+      "photo": "/images/Asset%2021@30x.png"
+    }
+  ],
+  "cta": {
+    "label": "Add to Calendar",
+    "href": "#"
+  },
+  "analytics": {
+    "estimatedViewers": 1240
+  }
+}

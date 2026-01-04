@@ -1,0 +1,10 @@
+{
+    "modulesToProcess": [
+      {
+        "module": "@mantine/core",
+        "files": [
+          "./src/styles/mantine.css"
+        ]
+      }
+    ]
+  }

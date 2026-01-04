@@ -1,0 +1,10 @@
+# Ethiopian IT Park - Robots.txt
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://ethiopianitpark.com/sitemap.xml
+
+# Crawl delay (prevents overwhelming server)
+Crawl-delay: 1

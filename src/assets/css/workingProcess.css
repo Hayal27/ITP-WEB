@@ -1,0 +1,563 @@
+/* ============================================
+   WORKING PROCESS - TIMELINE VISUALIZATION
+   Professional process flow with interactive timeline
+   ============================================ */
+
+/* ============================================
+   CSS VARIABLES
+   ============================================ */
+:root {
+    --primary: #0C7C92;
+    --secondary: #6EC9C4;
+    --accent: #16284F;
+    --dark: #16284F;
+    --neutral-50: #FAFAFA;
+    --neutral-600: #525252;
+}
+
+/* ============================================
+   MAIN SECTION
+   ============================================ */
+.working-process {
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #ffffff 0%, #f8fbfd 30%, #f8fbfd 70%, #ffffff 100%);
+}
+
+.working-process::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: radial-gradient(circle at top left, rgba(110, 201, 196, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ============================================
+   HEADER SECTION
+   ============================================ */
+.working-process .section-title {
+    margin-bottom: 1rem;
+}
+
+.process-subtitle {
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--primary);
+    margin-bottom: 0.75rem;
+}
+
+.process-main-title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    color: var(--dark);
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.working-process .btn-default {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    border: none;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    transform: translateY(0);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.working-process .btn-default::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary), var(--dark));
+    transition: left 0.5s ease;
+    z-index: -1;
+}
+
+.working-process .btn-default:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(12, 124, 146, 0.3);
+}
+
+.working-process .btn-default:hover::before {
+    left: 0;
+}
+
+/* ============================================
+   PROGRESS INDICATOR
+   ============================================ */
+.process-progress-container {
+    margin: 3rem 0 4rem;
+    text-align: center;
+}
+
+.process-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(12, 124, 146, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.process-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+    border-radius: 10px;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 12px rgba(12, 124, 146, 0.4);
+}
+
+.process-progress-text {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary);
+    letter-spacing: 0.05em;
+}
+
+/* ============================================
+   PROCESS GRID
+   ============================================ */
+
+/* Desktop: 4 columns */
+
+/* Tablet: 2-3 columns */
+
+/* Mobile: 1 column */
+
+/* ============================================
+   TIMELINE SVG (Desktop)
+   ============================================ */
+
+@keyframes dashAnimation {
+    to {
+        stroke-dashoffset: -1000;
+    }
+}
+
+/* ============================================
+   PROCESS CARD CONTAINER
+   ============================================ */
+.process-card-container {
+    position: relative;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.process-card-container.process-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.process-card-container.active .working-process-step {
+    border-color: var(--primary);
+    box-shadow: 0 12px 32px rgba(12, 124, 146, 0.15);
+}
+
+/* ============================================
+   PROCESS STEP CARD
+   ============================================ */
+.working-process-step {
+    background: white;
+    border: 2px solid rgba(110, 201, 196, 0.15);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    height: 100%;
+    min-height: 320px;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+}
+
+.working-process-step::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(12, 124, 146, 0.03) 0%, rgba(110, 201, 196, 0.03) 100%);
+    border-radius: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.working-process-step:hover::before {
+    opacity: 1;
+}
+
+.working-process-step:hover {
+    transform: translateY(-14px) scale(1.03);
+    border-color: var(--primary);
+    box-shadow: 0 24px 48px rgba(12, 124, 146, 0.15), 0 12px 24px rgba(110, 201, 196, 0.1);
+}
+
+/* Progress Line (Left side indicator) */
+.step-progress-line {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--primary), var(--secondary));
+    border-radius: 0 4px 4px 0;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.process-card-container.active .step-progress-line {
+    opacity: 1;
+}
+
+/* ============================================
+   CARD HEADER
+   ============================================ */
+.working-process-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1.25rem;
+    position: relative;
+    z-index: 1;
+}
+
+.working-process-title {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 0.75rem;
+}
+
+.working-process-title h3 {
+    margin: 0;
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--dark);
+    transition: color 0.3s ease;
+    line-height: 1.3;
+}
+
+.working-process-step:hover .working-process-title h3 {
+    color: var(--primary);
+}
+
+.icon-style {
+    font-size: 1.875rem;
+    min-width: 32px;
+    text-align: center;
+    vertical-align: middle;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.working-process-step:hover .icon-style {
+    transform: scale(1.2) rotateY(360deg);
+}
+
+/* ============================================
+   NUMBER BADGE
+   ============================================ */
+.working-process-no {
+    color: white;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 1.125rem;
+    box-shadow: 0 4px 12px rgba(12, 124, 146, 0.25);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    flex-shrink: 0;
+}
+
+.working-process-no p {
+    margin: 0;
+}
+
+.working-process-step:hover .working-process-no {
+    transform: scale(1.15) rotate(360deg);
+    box-shadow: 0 6px 16px rgba(12, 124, 146, 0.35);
+}
+
+/* ============================================
+   CARD CONTENT
+   ============================================ */
+.working-process-content {
+    margin-top: 0;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+}
+
+.working-process-content p {
+    color: var(--neutral-600);
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    margin: 0;
+}
+
+/* ============================================
+   STATUS BADGE
+   ============================================ */
+.step-status-badge {
+    margin-top: 1.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+.status-active {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary);
+    padding: 0.5rem 1rem;
+    background: rgba(12, 124, 146, 0.08);
+    border-radius: 50px;
+    border: 1px solid rgba(12, 124, 146, 0.2);
+}
+
+.status-active i {
+    font-size: 0.75rem;
+}
+
+.status-upcoming {
+    display: inline-flex;
+    align-items: center;
+    color: var(--neutral-600);
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.04);
+    border-radius: 50px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   CONNECTION DOT
+   ============================================ */
+.step-connection-dot {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px white, 0 0 0 6px rgba(12, 124, 146, 0.2);
+    z-index: 3;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.process-card-container.active .step-connection-dot {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.3);
+}
+
+@media (max-width: 767px) {
+    .step-connection-dot {
+        left: -15px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    .process-card-container.active .step-connection-dot {
+        transform: translateY(-50%) scale(1.2);
+    }
+}
+
+/* ============================================
+   BACKGROUND DECORATION
+   ============================================ */
+.process-bg-decoration {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.process-bg-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(12, 124, 146, 0.04) 0%, transparent 70%);
+    animation: floatShape 20s ease-in-out infinite;
+}
+
+.process-bg-shape-1 {
+    width: 600px;
+    height: 600px;
+    top: 20%;
+    right: -10%;
+    animation-delay: 0s;
+}
+
+.process-bg-shape-2 {
+    width: 500px;
+    height: 500px;
+    bottom: 15%;
+    left: -8%;
+    background: radial-gradient(circle, rgba(110, 201, 196, 0.03) 0%, transparent 70%);
+    animation-delay: 7s;
+}
+
+@keyframes floatShape {
+
+    0%,
+    100% {
+        transform: translateY(0) translateX(0);
+    }
+
+    25% {
+        transform: translateY(-30px) translateX(20px);
+    }
+
+    50% {
+        transform: translateY(-50px) translateX(-20px);
+    }
+
+    75% {
+        transform: translateY(-30px) translateX(20px);
+    }
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .working-process {
+        padding: 80px 0;
+    }
+
+    .process-progress-container {
+        margin: 2.5rem 0 3.5rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .working-process {
+        padding: 60px 0;
+    }
+
+    .working-process-step {
+        padding: 1.75rem;
+        min-height: 280px;
+    }
+
+    .icon-style {
+        font-size: 1.625rem;
+        min-width: 28px;
+    }
+
+    .working-process-title h3 {
+        font-size: 1.25rem;
+    }
+
+    .working-process-no {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .working-process-content p {
+        font-size: 0.875rem;
+    }
+
+    .process-progress-container {
+        margin: 2rem 0 3rem;
+    }
+
+    .step-status-badge {
+        margin-top: 1.25rem;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .working-process {
+        padding: 50px 0;
+    }
+
+    .working-process-step {
+        padding: 1.5rem;
+        border-radius: 1.25rem;
+    }
+
+    .working-process-title {
+        gap: 0.5rem;
+    }
+
+    .process-main-title {
+        font-size: 1.75rem;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY
+   ============================================ */
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High Contrast */
+@media (prefers-contrast: high) {
+    .working-process-step {
+        border: 2px solid var(--primary);
+    }
+
+    .icon-style,
+    .working-process-title h3 {
+        font-weight: 800;
+    }
+}
+
+/* Focus Visible */
+.working-process .btn-default:focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 4px;
+}
+
+/* Print Styles */
+@media print {
+
+    .process-bg-decoration,
+    .step-connection-dot,
+    .step-progress-line {
+        display: none !important;
+    }
+
+    .working-process-step {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}

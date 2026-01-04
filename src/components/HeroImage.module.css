@@ -1,0 +1,237 @@
+/*
+  Namespaced hero module (hi_) to avoid style collisions.
+  Only responsible for advanced animations and layering that Tailwind cannot succinctly express.
+  All colors derive from CSS variables (brand palette) defined in :root (index.css).
+*/
+
+.hi_root {
+  position: relative;
+  overflow: hidden;
+  padding-top: 0;
+  isolation: isolate;
+}
+
+@keyframes hi_zoomOut {
+  from {
+    background-size: 110% auto;
+  }
+
+  to {
+    background-size: 100% auto;
+  }
+}
+
+.hi_root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 20% 30%, rgba(12, 124, 146, 0.35), transparent 55%),
+    linear-gradient(120deg, rgba(22, 40, 79, 0.85) 0%, rgba(22, 40, 79, 0.55) 60%, rgba(22, 40, 79, 0.25) 100%);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 0;
+  animation: hi_overlayFade 1.6s ease;
+}
+
+@keyframes hi_overlayFade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.hi_particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transform: translateZ(-1px) scale(1.2);
+}
+
+.hi_inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: calc(100vh - 6rem);
+}
+
+.hi_content {
+  max-width: 50rem;
+  padding-inline: clamp(0.5rem, 2vw, 1.5rem);
+  animation: hi_slideIn 900ms cubic-bezier(.16, .84, .44, 1) both;
+}
+
+@keyframes hi_slideIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(-48px, 0, 0) scale(.98);
+    filter: blur(4px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translate3d(4px, 0, 0) scale(1);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.hi_title {
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.hi_desc {
+  opacity: .92;
+  animation: hi_fadeIn 1.2s .25s both;
+}
+
+.hi_actions {
+  animation: hi_fadeIn 1.2s .5s both;
+}
+
+@keyframes hi_fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button embellishments */
+.hi_btnPrimary {
+  position: relative;
+  overflow: hidden;
+}
+
+.hi_btnPrimary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, 0));
+  transform: translateX(-60%);
+  transition: all .55s ease;
+}
+
+.hi_btnPrimary:hover::after {
+  opacity: 1;
+  transform: translateX(40%);
+}
+
+.hi_btnSecondary {
+  backdrop-filter: blur(6px);
+}
+
+/* Slider dots */
+.hi_dots {
+  position: absolute;
+  left: 50%;
+  bottom: 1.5rem;
+  transform: translateX(-50%);
+  display: flex;
+  gap: .65rem;
+  z-index: 10;
+}
+
+.hi_dot {
+  width: .75rem;
+  height: .75rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, .35);
+  transition: all .35s ease;
+  cursor: pointer;
+  outline: none;
+  border: 2px solid rgba(255, 255, 255, .5);
+  box-shadow: 0 0 0 0 rgba(255, 255, 255, .4);
+}
+
+.hi_dot:hover {
+  background: rgba(255, 255, 255, .55);
+}
+
+.hi_dotActive {
+  background: var(--secondary);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, .08);
+  transform: scale(1.15);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+  .hi_content,
+  .hi_actions,
+  .hi_desc,
+  .hi_root {
+    animation: none;
+  }
+
+  .hi_root {
+    transition: none;
+  }
+}
+
+/* Floating animations for fancy top banner elements */
+@keyframes float-slow {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(12deg);
+  }
+
+  50% {
+    transform: translateY(-15px) rotate(12deg);
+  }
+}
+
+@keyframes float-medium {
+
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+}
+
+@keyframes float-fast {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(-12deg);
+  }
+
+  50% {
+    transform: translateY(-10px) rotate(-12deg);
+  }
+}
+
+/* Animation utility classes */
+:global(.animate-float-slow) {
+  animation: float-slow 6s ease-in-out infinite;
+}
+
+:global(.animate-float-medium) {
+  animation: float-medium 4s ease-in-out infinite;
+}
+
+:global(.animate-float-fast) {
+  animation: float-fast 3s ease-in-out infinite;
+}

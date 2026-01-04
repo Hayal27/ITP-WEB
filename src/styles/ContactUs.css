@@ -1,0 +1,435 @@
+/* Contact Us Page - Modern Professional Design */
+.contact-us-container {
+  background: linear-gradient(180deg, #ffffff 0%, var(--neutral, #f4f4f4) 50%, #ffffff 100%);
+  padding: 3rem 2rem 5rem;
+  padding-top: calc(var(--app-header-offset, 10rem) + 2rem);
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+/* Utility classes */
+.text-primary {
+  color: var(--primary, #0C7C92);
+}
+
+.bg-primary\/10 {
+  background-color: rgba(12, 124, 146, 0.1);
+}
+
+.text-accent {
+  color: var(--accent, #16284F);
+}
+
+.text-gray-600 {
+  color: #4b5563;
+}
+
+.contact-us-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  background: radial-gradient(circle at top right, rgba(12, 124, 146, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+  
+  .contact-header {
+    text-align: center;
+    margin-bottom: 4rem;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .contact-header h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  
+  .contact-header p {
+    font-size: 1.2rem;
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .contact-main {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: flex-start;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .contact-info {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contact-info h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 2rem;
+  }
+  
+  .info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .info-icon {
+    color: var(--primary);
+    font-size: 1.5rem;
+    margin-top: 5px;
+  }
+  
+  .info-details h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .info-details p {
+    color: #555;
+    font-size: 1rem;
+  }
+  
+  .contact-form {
+    background: #fff;
+    padding: 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contact-form h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 2rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: #444;
+  }
+  
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(12, 124, 146, 0.15);
+  }
+  
+  .form-group textarea {
+    resize: vertical;
+    min-height: 150px;
+  }
+  
+  .submit-btn {
+    background-color: var(--primary);
+    color: #fff;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .submit-btn:hover {
+    background-color: #0a6072;
+    transform: translateY(-2px);
+  }
+  
+  .map-container {
+    margin-top: 5rem;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .map-container h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 2rem;
+  }
+  
+  .map-frame {
+    width: 100%;
+    height: 450px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .map-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  
+  @media (max-width: 992px) {
+    .contact-main {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+/* Animation classes */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.animate-on-scroll.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Header badge */
+.header-badge {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.brand-gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Contact info grid - Compact Version */
+.info-items-grid-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-item-compact {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border-radius: 10px;
+  border: 1px solid rgba(12, 124, 146, 0.08);
+  transition: all 0.3s ease;
+}
+
+.info-item-compact:hover {
+  border-color: var(--secondary);
+  box-shadow: 0 4px 12px rgba(12, 124, 146, 0.08);
+  transform: translateX(4px);
+}
+
+.info-icon-wrapper-compact {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.info-icon-wrapper-compact .info-icon {
+  color: white;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.info-details-compact {
+  flex: 1;
+  min-width: 0;
+}
+
+.info-details-compact h3 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-details-compact .info-value,
+.info-details-compact p.info-value {
+  color: #333;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.info-details-compact a.info-value {
+  color: var(--primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: block;
+}
+
+.info-details-compact a.info-value:hover {
+  color: var(--secondary);
+  text-decoration: underline;
+}
+
+/* Form styling */
+.form-header {
+  margin-bottom: 2rem;
+}
+
+.modern-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(12, 124, 146, 0.1);
+}
+
+.submit-btn-modern {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.submit-btn-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(12, 124, 146, 0.25);
+}
+
+/* Map section */
+.map-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.map-wrapper {
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.map-frame {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border: 3px solid rgba(12, 124, 146, 0.1);
+}
+
+.map-overlay-card {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+  max-width: 300px;
+  z-index: 10;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .contact-main {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-us-container {
+    padding: 2rem 1rem 3rem;
+    padding-top: calc(var(--app-header-offset, 10rem) + 1rem);
+  }
+  
+  .contact-header h1 {
+    font-size: 2rem;
+  }
+  
+  .contact-header p {
+    font-size: 1rem;
+  }
+  
+  .contact-info, 
+  .contact-form {
+    padding: 1.5rem;
+  }
+  
+  .map-frame {
+    height: 400px;
+  }
+  
+  .map-overlay-card {
+    position: static;
+    margin-top: 1rem;
+    max-width: 100%;
+  }
+}

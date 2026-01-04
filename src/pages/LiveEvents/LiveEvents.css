@@ -1,0 +1,86 @@
+:root {
+  --event-branding-gradient: linear-gradient(180deg, #16284F 0%, #0C7C92 100%);
+  --secondary-bg: #f8fafc;
+}
+
+.live-events-page {
+  padding: 0;
+  font-family: inherit;
+  background-color: var(--secondary-bg);
+  min-height: 100vh;
+}
+
+.event-header-container {
+  background: var(--event-branding-gradient);
+  color: white;
+  padding: 8rem 2rem 12rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 0 50px 50px;
+}
+
+.event-header-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.event-header-container h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.event-header-container p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+}
+
+.meta-badge {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.main-content-wrapper {
+  max-width: 1400px;
+  margin: -6rem auto 4rem;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 20;
+}
+
+/* Custom scrollbar for chat */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+}
+
+body.live-events-active {
+  background: var(--secondary-bg) !important;
+}

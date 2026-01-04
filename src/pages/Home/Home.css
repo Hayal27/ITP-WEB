@@ -1,0 +1,46 @@
+/* Home page scoped supplemental styles (hn_ prefix). Avoid global collisions. */
+/* Prefer Tailwind utilities; only place patterns here when utilities become verbose. */
+
+:root {
+	/* Expose semantic aliases if needed later (no color changes) */
+	--hn-focus-ring: 0 0 0 3px rgba(110,201,196,.5);
+}
+
+.hn_focusable:focus-visible { outline: none; box-shadow: var(--hn-focus-ring); }
+
+/* Decorative underlines for headings (fallback where pseudo utilities too long) */
+.hn_headingAccent {
+	position: relative;
+	display: inline-block;
+}
+.hn_headingAccent::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -0.35rem;
+	height: 4px;
+	width: 70%;
+	background: linear-gradient(90deg,var(--primary),var(--secondary));
+	border-radius: 999px;
+	box-shadow: 0 2px 6px -1px rgba(12,124,146,.4);
+}
+
+/* Simple fade-in utility (used via intersection observer hook if added later) */
+.hn_fadeIn { opacity: 0; transform: translateY(18px); transition: opacity .8s ease, transform .8s ease; }
+.hn_fadeIn.is-visible { opacity: 1; transform: translateY(0); }
+
+/* Card shine effect (optional class) */
+.hn_cardInteractive { position: relative; overflow: hidden; }
+.hn_cardInteractive::before {
+	content: "";
+	position: absolute; inset:0;
+	background: linear-gradient(120deg,transparent 0%,rgba(255,255,255,.22) 45%,transparent 80%);
+	transform: translateX(-80%) skewX(-12deg);
+	transition: transform 1s ease;
+	pointer-events: none;
+}
+.hn_cardInteractive:hover::before { transform: translateX(120%) skewX(-12deg); }
+
+/* Minimal keyframes if needed for future dynamic list mount */
+@keyframes hn_scaleIn { from { opacity:0; transform: scale(.95);} to { opacity:1; transform: scale(1);} }
+.hn_scaleIn { animation: hn_scaleIn .6s cubic-bezier(.16,.84,.44,1); }
