@@ -26,7 +26,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ enabled = true, pinned = [], eventI
     if (!enabled) return;
 
     // Connect to backend socket
-    const socket = io(`http://${window.location.hostname}:5001`);
+    const socket = io(`http://${window.location.hostname}:5005`);
     socketRef.current = socket;
 
     socket.emit('join-event', { eventId, username: localStorage.getItem('chat_username') || `Guest_${Math.floor(Math.random() * 1000)}` });

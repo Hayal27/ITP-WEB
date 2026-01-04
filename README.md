@@ -785,7 +785,7 @@ The security scanner (ZAP) is still detecting missing headers because the **Ngin
     add_header X-Content-Type-Options "nosniff" always;
     add_header X-Frame-Options "SAMEORIGIN" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: http:; connect-src 'self' https://api.ethiopianitpark.et https://optimizationguide-pa.googleapis.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self';" always;
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: http:; connect-src 'self' localhost:5005 https://optimizationguide-pa.googleapis.com; frame-ancestors 'self'; base-uri 'self'; form-action 'self';" always;
 
     # Hide Server Version & Fingerprint
     server_tokens off;
@@ -813,7 +813,7 @@ Base: `https://test.ethiopianitpark.et`
 | `/contact` | Contact Us form |
 
 ### **Backend API Endpoints**
-Base: `https://api.ethiopianitpark.et/api`
+Base: `localhost:5005/api`
 
 -   `GET /newsf` - Fetch news items
 -   `GET /eventsf` - Fetch all events

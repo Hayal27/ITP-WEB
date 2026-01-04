@@ -34,7 +34,7 @@ const LiveEventsPage: React.FC = () => {
   useEffect(() => {
     if (config?.id) {
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const socket = io(`${protocol}//${window.location.hostname}:5001`);
+      const socket = io(`${protocol}//${window.location.hostname}:5005`);
       socketRef.current = socket;
 
       socket.emit('join-event', {

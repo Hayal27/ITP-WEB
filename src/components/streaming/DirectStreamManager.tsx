@@ -67,7 +67,7 @@ const DirectStreamManager: React.FC<DirectStreamManagerProps> = ({ eventId, onSt
 
         const peer = new Peer(`viewer-${Math.random().toString(36).substr(2, 9)}`, {
             host: window.location.hostname,
-            port: 5001,
+            port: 5005,
             path: '/peerjs',
             secure: window.location.protocol === 'https:',
             debug: 0,
