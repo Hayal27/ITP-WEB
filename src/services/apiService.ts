@@ -2,7 +2,7 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 
-export const BACKEND_URL = "http://localhost:5005";
+export const BACKEND_URL = "https://api.ethiopianitpark.et";
 
 // Generic request function using axios
 export async function request<T>(url: string, options: AxiosRequestConfig = {}): Promise<T> {
@@ -217,7 +217,9 @@ export const updateEventItem = async (id: string | number, eventData: Partial<Ev
     ...updatedItem,
     date: updatedItem.date ? updatedItem.date.split('T')[0] : '',
     tags: Array.isArray(updatedItem.tags) ? updatedItem.tags : [],
-    image: updatedItem.image === "" ? null : updatedItem.image,
+    image: Array.isArray(updatedItem.image)
+      ? updatedItem.image.map(img => fixImageUrl(img) as string)
+      : (updatedItem.image ? [fixImageUrl(updatedItem.image) as string] : []),
   };
 };
 
@@ -794,6 +796,14 @@ export const getInvestmentResources = async (): Promise<InvestmentResource[]> =>
     ...r,
     file_url: fixImageUrl(r.file_url) as string
   }));
+};
+
+// --- SUBSCRIPTION API ---
+export const subscribeToNewsletter = async (email: string): Promise<{ success: boolean; message: string }> => {
+  return await request<{ success: boolean; message: string }>('/subscribe', {
+    method: 'POST',
+    data: { email },
+  });
 };
 
 // --- BOARD MEMBERS & WHO WE ARE API ---

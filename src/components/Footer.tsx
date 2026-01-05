@@ -16,8 +16,9 @@ import {
   FaTiktok,
   FaTelegram
 } from 'react-icons/fa';
-import logo from '/images/logo.png';
+import { subscribeToNewsletter } from '../services/apiService';
 import { notifications } from '@mantine/notifications';
+import logo from '/images/logo.png';
 
 const Footer: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -49,35 +50,27 @@ const Footer: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('http://localhost:5005/api/subscribe', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email }),
-      });
+      const response = await subscribeToNewsletter(email);
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (response.success) {
         notifications.show({
           title: 'Subscribed',
-          message: data.message || 'Successfully subscribed to our newsletter!',
+          message: response.message || 'Successfully subscribed to our newsletter!',
           color: 'green',
         });
         setEmail('');
       } else {
         notifications.show({
           title: 'Subscription Failed',
-          message: data.message || 'Subscription failed. Please try again.',
+          message: response.message || 'Subscription failed. Please try again.',
           color: 'orange',
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Subscription error:', error);
       notifications.show({
         title: 'Error',
-        message: 'Failed to subscribe. Please check your connection and try again.',
+        message: error.message || 'Failed to subscribe. Please check your connection and try again.',
         color: 'red',
       });
     } finally {

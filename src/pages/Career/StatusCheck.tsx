@@ -18,7 +18,9 @@ let DefaultIcon = L.icon({
 
 L.Marker.prototype.options.icon = DefaultIcon;
 
-const API_BASE = "http://localhost:5005/api/careers";
+import { BACKEND_URL } from '../../services/apiService';
+
+const API_BASE = `${BACKEND_URL}/api/careers`;
 
 const StatusCheck: React.FC = () => {
     const [trackingCode, setTrackingCode] = useState('');

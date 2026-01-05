@@ -2,6 +2,7 @@ import React, { useState, useEffect, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiX, FiMail, FiBell, FiZap } from 'react-icons/fi';
 import { notifications } from '@mantine/notifications';
+import { subscribeToNewsletter } from '../services/apiService';
 import './SubscriptionPopup.css';
 
 const SubscriptionPopup: React.FC = () => {
@@ -41,17 +42,12 @@ const SubscriptionPopup: React.FC = () => {
 
         setIsSubmitting(true);
         try {
-            const response = await fetch('http://localhost:5005/api/subscribe', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email }),
-            });
+            const response = await subscribeToNewsletter(email);
 
-            const data = await response.json();
-            if (data.success) {
+            if (response.success) {
                 notifications.show({
                     title: 'Success',
-                    message: 'Thank you for subscribing!',
+                    message: response.message || 'Thank you for subscribing!',
                     color: 'green',
                 });
                 localStorage.setItem('newsletter_subscribed', 'true');
@@ -59,14 +55,14 @@ const SubscriptionPopup: React.FC = () => {
             } else {
                 notifications.show({
                     title: 'Subscription Failed',
-                    message: data.message || 'Subscription failed.',
+                    message: response.message || 'Subscription failed.',
                     color: 'orange',
                 });
             }
-        } catch (error) {
+        } catch (error: any) {
             notifications.show({
                 title: 'Error',
-                message: 'Connection error. Please try again.',
+                message: error.message || 'Connection error. Please try again.',
                 color: 'red',
             });
         } finally {

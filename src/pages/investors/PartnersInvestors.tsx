@@ -7,11 +7,9 @@ import {
   FaLinkedin, FaTwitter, FaFacebook
 } from 'react-icons/fa';
 import { MdEmail, MdLocationOn, MdBusiness, MdSchool, MdFilterList } from 'react-icons/md';
-import { getPartners, getInvestors, Partner, Investor } from '../../services/apiService';
-
+import { getPartners, getInvestors, Partner, Investor, BACKEND_URL } from '../../services/apiService';
 import './partners.css';
 
-const BACKEND_URL = "http://localhost:5005";
 
 const PartnersInvestors: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'partners' | 'investors'>('partners');
