@@ -19,19 +19,34 @@ const CustomCursor: React.FC = () => {
     const dotY = useSpring(mouseY, { stiffness: 1000, damping: 50 });
 
     useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth <= 768);
-        handleResize();
-        window.addEventListener('resize', handleResize);
+        const mediaQuery = window.matchMedia('(pointer: coarse) or (max-width: 1024px)');
+        const handleDeviceType = (e: MediaQueryListEvent | MediaQueryList) => {
+            const mobile = e.matches;
+            setIsMobile(mobile);
+
+            if (mobile) {
+                document.body.style.cursor = 'auto';
+            } else {
+                document.body.style.cursor = 'none';
+            }
+        };
+
+        // Initial check
+        handleDeviceType(mediaQuery);
+
+        // Listen for changes (e.g., resizing or switching to/from touch emulation)
+        mediaQuery.addEventListener('change', handleDeviceType);
 
         const handleMouseMove = (e: MouseEvent) => {
+            if (window.matchMedia('(pointer: coarse) or (max-width: 1024px)').matches) return;
             mouseX.set(e.clientX);
             mouseY.set(e.clientY);
         };
 
         const handleMouseOver = (e: MouseEvent) => {
+            if (window.matchMedia('(pointer: coarse) or (max-width: 1024px)').matches) return;
             const target = e.target as HTMLElement;
 
-            // Optimized check: Use tag names and specific classes instead of expensive getComputedStyle
             const tagName = target.tagName;
             const isClickableTag = tagName === 'A' || tagName === 'BUTTON' || tagName === 'INPUT' ||
                 tagName === 'SELECT' || tagName === 'TEXTAREA' || tagName === 'LABEL';
@@ -48,18 +63,17 @@ const CustomCursor: React.FC = () => {
         window.addEventListener('mousemove', handleMouseMove, { passive: true });
         window.addEventListener('mouseover', handleMouseOver, { passive: true });
 
-        // Hide default cursor
-        document.body.style.cursor = 'none';
-
         return () => {
-            window.removeEventListener('resize', handleResize);
+            mediaQuery.removeEventListener('change', handleDeviceType);
             window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('mouseover', handleMouseOver);
             document.body.style.cursor = 'auto';
         };
     }, [mouseX, mouseY]);
 
-    if (isMobile) return null;
+    if (isMobile) {
+        return null;
+    }
 
     return (
         <div className="custom-cursor-container">

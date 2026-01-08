@@ -58,13 +58,42 @@
     box-shadow: 0 0 15px rgba(239, 68, 68, 0.8);
 }
 
-/* Hide default cursor globally */
-html,
-body,
-a,
-button,
-[role="button"] {
-    cursor: none !important;
+/* Hide default cursor only on devices with a mouse and sufficiently wide screens */
+@media (pointer: fine) and (min-width: 1025px) {
+
+    html,
+    body,
+    a,
+    button,
+    [role="button"],
+    label,
+    input,
+    textarea,
+    select,
+    [onclick] {
+        cursor: none !important;
+    }
+}
+
+/* Ensure default cursor on touch devices */
+@media (pointer: coarse) {
+
+    html,
+    body,
+    a,
+    button,
+    [role="button"],
+    label,
+    input,
+    textarea,
+    select,
+    [onclick] {
+        cursor: auto !important;
+    }
+
+    .custom-cursor-container {
+        display: none !important;
+    }
 }
 
 /* Fallback for when JS is disabled */

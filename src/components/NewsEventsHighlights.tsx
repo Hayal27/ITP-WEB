@@ -219,7 +219,7 @@ const NewsEventsHighlights: React.FC<NewsEventsHighlightsProps> = ({ onShowDetai
       {highlights.map((item) => (
         <div
           key={`${item.type}-${item.id}`}
-          className="bg-white rounded-xl shadow-card border border-gray-100 hover:shadow-2xl transition group overflow-hidden flex flex-col cursor-pointer"
+          className="bg-white rounded-xl shadow-card border border-gray-100 hover:shadow-2xl transition group overflow-hidden flex flex-col cursor-pointer touch-manipulation"
           onClick={(e) => goToDetail(item, e)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
