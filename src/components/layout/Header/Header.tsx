@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, JSX } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 import {
   IconChevronDown,
@@ -150,6 +150,7 @@ const Header: React.FC = () => {
   const [searchResults, setSearchResults] = useState<MenuItem[]>([]);
   const searchBoxRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Define searchable pages
   const searchablePages: MenuItem[] = [
@@ -279,6 +280,11 @@ const Header: React.FC = () => {
     setSearchQuery('');
     setSearchResults([]);
   };
+
+  // Professional/Robust way: Close mobile menu automatically on any navigation event
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.key]);
 
   const [hoveredMenuItem, setHoveredMenuItem] = useState<number | null>(null);
   const [hoveredSubMenuItem, setHoveredSubMenuItem] = useState<number | null>(null);
