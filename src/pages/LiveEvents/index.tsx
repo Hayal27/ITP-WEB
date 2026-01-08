@@ -11,7 +11,7 @@ import ShareButtons from '../../components/LiveEvents/ShareButtons';
 import SEO from '../../components/SEO/SEO';
 import DirectStreamManager from '../../components/streaming/DirectStreamManager';
 import * as api from '../../services/apiService';
-import { io, Socket } from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import './LiveEvents.css';
 
 const LiveEventsPage: React.FC = () => {
@@ -23,7 +23,7 @@ const LiveEventsPage: React.FC = () => {
 
   // WebRTC State for Direct Streaming
   const [directStream, setDirectStream] = useState<MediaStream | null>(null);
-  const socketRef = useRef<Socket | null>(null);
+  const socketRef = useRef<ReturnType<typeof io> | null>(null);
 
   useEffect(() => {
     fetchActiveEvent();

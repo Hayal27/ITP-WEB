@@ -6,8 +6,11 @@ const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 export default defineConfig({
   plugins: [react()],
+  esbuild: {
+    logOverride: { 'this-is-undefined-in-esm': 'silent' }
+  },
   server: {
-    port: 3002,
+    port: 5173,
     host: true,
     open: true,
   },
@@ -29,7 +32,7 @@ export default defineConfig({
           'vendor-ui-icons': ['react-icons', '@tabler/icons-react'],
           'vendor-animation': ['framer-motion'],
           'vendor-bootstrap': ['react-bootstrap', 'bootstrap'],
-          'vendor-utils': ['axios', 'zod'],
+          'vendor-utils': ['axios'],
           'vendor-three': ['@tsparticles/react', '@tsparticles/slim', '@tsparticles/engine'],
           'vendor-maps': ['leaflet', 'react-leaflet']
         },

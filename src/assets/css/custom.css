@@ -239,7 +239,6 @@ body {
 	background: -webkit-linear-gradient(270.46deg, var(--text-color) 25.72%, var(--primary-color) 148.05%);
 	background-clip: text;
 	-webkit-text-fill-color: transparent;
-	cursor: none;
 	padding-bottom: 0.1em;
 }
 
@@ -248,7 +247,6 @@ body {
 	background: -webkit-linear-gradient(270.46deg, var(--text-color) 25.72%, var(--primary-color) 148.05%);
 	background-clip: text;
 	-webkit-text-fill-color: transparent;
-	cursor: none;
 	padding-bottom: 0.1em;
 }
 

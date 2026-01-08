@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { io, Socket } from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import { FaUsers, FaComments } from 'react-icons/fa';
 
 export interface Message {
@@ -20,7 +20,7 @@ const LiveChat: React.FC<LiveChatProps> = ({ enabled = true, pinned = [], eventI
   const [newMessage, setNewMessage] = useState('');
   const [viewerCount, setViewerCount] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const socketRef = useRef<Socket | null>(null);
+  const socketRef = useRef<ReturnType<typeof io> | null>(null);
 
   useEffect(() => {
     if (!enabled) return;
