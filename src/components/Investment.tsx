@@ -190,7 +190,6 @@ const featureVariants = {
 const InvestmentCard: React.FC<{ opportunity: InvestmentOpportunity; index: number }> = ({ opportunity, index }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const Icon = opportunity.Icon;
   const isImageLeft = index % 2 === 0;
 
   return (
@@ -199,43 +198,19 @@ const InvestmentCard: React.FC<{ opportunity: InvestmentOpportunity; index: numb
       variants={cardVariants}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
-      whileHover={{ scale: 1.01 }}
       className={`investment-item ${isImageLeft ? 'image-left' : 'image-right'}`}
       data-index={index}
     >
       {/* Image Panel */}
       <motion.div
         className="investment-image-panel"
-        whileHover={{ scale: 1.02 }}
-        transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
         <motion.div
           className="investment-image"
           style={{ backgroundImage: `url(${opportunity.image})` }}
           variants={imageVariants}
-          whileHover={{ scale: 1.08 }}
-          transition={{ duration: 0.6, ease: [0.43, 0.13, 0.23, 0.96] }}
         >
-          <motion.div
-            className="investment-image-overlay"
-            whileHover={{ opacity: 0.6 }}
-            transition={{ duration: 0.4 }}
-          />
-          <motion.div
-            className="investment-image-icon"
-            whileHover={{
-              y: -8,
-              rotate: 5,
-              scale: 1.1
-            }}
-            transition={{
-              type: "spring",
-              stiffness: 400,
-              damping: 10
-            }}
-          >
-            <Icon />
-          </motion.div>
+          <div className="investment-image-overlay" />
         </motion.div>
       </motion.div>
 
@@ -245,43 +220,13 @@ const InvestmentCard: React.FC<{ opportunity: InvestmentOpportunity; index: numb
           className="investment-content"
           variants={contentVariants}
         >
-          <motion.span
-            className="investment-badge"
-            style={{ background: opportunity.gradient }}
-            whileHover={{
-              scale: 1.05,
-              x: isImageLeft ? 8 : -8
-            }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          >
-            {opportunity.badge}
-          </motion.span>
-
           <h3 className="investment-title">
-            <Link to={opportunity.link} className="investment-title-link">
-              <motion.span
-                whileHover={{ x: 5 }}
-                transition={{ type: "spring", stiffness: 300 }}
-              >
-                {opportunity.title}
-              </motion.span>
-              <motion.div
-                whileHover={{ x: 5, scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 400 }}
-              >
-                <ArrowRightIcon className="investment-title-arrow" />
-              </motion.div>
-            </Link>
+            {opportunity.title}
           </h3>
 
-          <motion.p
-            className="investment-description"
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-          >
+          <p className="investment-description">
             {opportunity.description}
-          </motion.p>
+          </p>
 
           <ul className="investment-features" role="list">
             {opportunity.features.map((feature, idx) => (
@@ -292,11 +237,6 @@ const InvestmentCard: React.FC<{ opportunity: InvestmentOpportunity; index: numb
                 variants={featureVariants}
                 initial="hidden"
                 animate={isInView ? "visible" : "hidden"}
-                whileHover={{
-                  x: isImageLeft ? 6 : -6,
-                  backgroundColor: "rgba(12, 124, 146, 0.06)"
-                }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 <CheckCircleIcon className="investment-feature-icon" aria-hidden="true" />
                 <span>{feature}</span>
@@ -304,29 +244,9 @@ const InvestmentCard: React.FC<{ opportunity: InvestmentOpportunity; index: numb
             ))}
           </ul>
 
-          <Link to={opportunity.link} className="investment-cta-wrapper">
-            <motion.div
-              className="investment-cta"
-              whileHover={{
-                scale: 1.05,
-                y: -2
-              }}
-              whileTap={{ scale: 0.98 }}
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 10
-              }}
-            >
-              <span>Learn More</span>
-              <motion.div
-                whileHover={{ x: 4 }}
-                transition={{ type: "spring", stiffness: 400 }}
-              >
-                <ArrowRightIcon className="investment-cta-arrow" />
-              </motion.div>
-            </motion.div>
-          </Link>
+          <div className="investment-cta">
+            Learn More
+          </div>
         </motion.div>
       </div>
     </motion.article>
