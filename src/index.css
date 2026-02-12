@@ -1,5 +1,26 @@
 @import '@mantine/core/styles.css';
 
+/* --- CURSOR RESTORATION --- */
+html,
+body,
+a,
+button,
+[role="button"],
+label,
+input,
+textarea,
+select,
+[onclick] {
+  cursor: auto !important;
+}
+
+a,
+button,
+[role="button"],
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,12 +29,22 @@
 :root {
   /* Ethiopian IT Park Strict Brand Colors - Optimized for Contrast */
   --primary: #0b7084;
-  /* Primary Blue (Passes on White & Light Gray) */
   --secondary: #16284F;
-  /* Secondary Blue (Dark Navy) */
   --accent: #4ca8a2;
-  /* Accent Teal (Darkened to pass 4.5:1 ratio) */
   --neutral: #f4f4f4;
+  --brand-gradient: linear-gradient(180deg, #16284F 0%, #0C7C92 100%);
+  --brand-gradient-horizontal: linear-gradient(90deg, #16284F 0%, #0C7C92 100%);
+
+  /* Global Theme Variables - Light (Default) */
+  --bg-main: #fcfdfe;
+  --bg-card: #ffffff;
+  --text-main: #1a202c;
+  --text-muted: #52617a;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --nav-bg: rgba(255, 255, 255, 0.85);
+  --bg-layout: #fcfdfe;
+  --text-inverted: #ffffff;
 
   /* Ethiopian IT Park Strict Typography */
   font-family: "Roboto", system-ui, Arial, sans-serif;
@@ -21,7 +52,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(1, 1, 1, 0.87);
+  color: var(--text-main);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -30,17 +61,200 @@
 }
 
 body {
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+[data-theme='dark'] {
+  --bg-main: rgba(26, 31, 46, 0.8);
+  --bg-card: rgba(36, 41, 56, 0.8);
+  --bg-main-solid: #1a1f2e;
+  --bg-card-solid: #242938;
+  --text-main: #e2e8f0;
+  --text-muted: #cbd5e1;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(36, 41, 56, 0.7);
+  --neutral: rgba(45, 53, 72, 0.5);
+  --nav-bg: rgba(26, 31, 46, 0.95);
+  --bg-layout: transparent;
+  --text-inverted: #ffffff;
+
+  /* Refine brand colors for dark mode accessibility */
+  --primary: #0ea5e9;
+
+  color: var(--text-main);
+}
+
+/* --- GLOBAL DARK THEME OVERRIDES --- */
+
+[data-theme='dark'] body {
+  background: linear-gradient(135deg, #1a1f2e 0%, #242938 100%) fixed;
+  background-attachment: fixed;
+  color: var(--text-main);
+}
+
+/* Global Particle Background Positioning */
+#global-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  /* Float over all backgrounds */
+  pointer-events: none !important;
+  opacity: 0.5;
+}
+
+/* Base Typography Global Force */
+[data-theme='dark'] :is(h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6) {
+  color: var(--text-main) !important;
+}
+
+/* Broad Paragraph & List Compatibility */
+[data-theme='dark'] :is(p, li, blockquote, dt, dd, td, th, caption, address, b, strong, i, em) {
+  color: var(--text-main) !important;
+}
+
+/* Universal Text Components & Containers */
+[data-theme='dark'] :is(span, label, small, .text-container, .passage, .content-text, .who-general, .who-intro, [class*="-desc"], [class*="-description"], [class*="-text"]):not(.status-badge):not(.badge):not(.exclude-theme):not(.itpc-label) {
+  color: var(--text-main);
+}
+
+/* Re-apply Muted Aesthetics for Sub-components */
+[data-theme='dark'] :is(.text-muted, .muted, .desc, .description, .itpc-label, .itpc-services-stat-label, .card-position, [class*="text-gray-5"], [class*="text-slate-5"], [class*="text-zinc-5"]) {
+  color: var(--text-muted);
+}
+
+/* Preserve Light-on-Dark Design for Heroes, Banners and Buttons */
+[data-theme='dark'] :is(.hero, .banner, .itpc-services-hero, .board-hero, .career-header, .btn, .button, .footer-description, .footer-title, .footer-link) :is(h1, h2, h3, h4, h5, h6, p, span, li, label, strong) {
+  color: #ffffff !important;
+}
+
+[data-theme='dark'] :is(.hero, .banner, .itpc-services-hero, .board-hero, .career-header) p {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+[data-theme='light'] :is(.hero, .banner, .itpc-services-hero, .board-hero, .career-header) :is(h1) {
+  background: var(--brand-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
+[data-theme='dark'] :is(.investment-badge, .investment-cta, .btn, .button, .badge, .status-badge) {
+  color: var(--text-inverted) !important;
+}
+
+
+
+
+/* Force Light Text on any Tailwind/Hardcoded Classes that are likely to be dark */
+[data-theme='dark'] .text-black,
+[data-theme='dark'] .text-dark,
+[data-theme='dark'] [class*="text-gray-9"],
+[data-theme='dark'] [class*="text-slate-9"],
+[data-theme='dark'] [class*="text-gray-8"],
+[data-theme='dark'] [class*="text-slate-8"],
+[data-theme='dark'] [class*="text-gray-7"],
+[data-theme='dark'] [class*="text-slate-7"],
+[data-theme='dark'] [class*="text-zinc-9"],
+[data-theme='dark'] [class*="text-zinc-8"],
+[data-theme='dark'] [class*="text-zinc-7"] {
+  color: var(--text-main) !important;
+}
+
+[data-theme='dark'] [class*="text-gray-6"],
+[data-theme='dark'] [class*="text-slate-6"],
+[data-theme='dark'] [class*="text-gray-5"],
+[data-theme='dark'] [class*="text-slate-5"],
+[data-theme='dark'] [class*="text-zinc-6"],
+[data-theme='dark'] [class*="text-zinc-5"],
+[data-theme='dark'] [class*="text-muted"] {
+  color: var(--text-muted) !important;
+}
+
+/* Global Background Overrides */
+[data-theme='dark'] .bg-white,
+[data-theme='dark'] [class*="bg-gray-5"],
+[data-theme='dark'] [class*="bg-slate-5"],
+[data-theme='dark'] [class*="bg-zinc-5"],
+[data-theme='dark'] [class*="bg-gray-1"],
+[data-theme='dark'] [class*="bg-slate-1"],
+[data-theme='dark'] [class*="bg-zinc-1"] {
+  background-color: var(--bg-card) !important;
+}
+
+[data-theme='dark'] .bg-neutral,
+[data-theme='dark'] .bg-light,
+[data-theme='dark'] .bg-gray-50,
+[data-theme='dark'] .bg-slate-50 {
+  background-color: var(--neutral) !important;
+}
+
+/* Container & Card Force Mapping */
+[data-theme='dark'] .card,
+[data-theme='dark'] [class*="card"],
+[data-theme='dark'] [class*="Card"],
+[data-theme='dark'] .shadow-card,
+[data-theme='dark'] .glass-effect {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Global Border Overrides */
+[data-theme='dark'] .border,
+[data-theme='dark'] [class*="border-gray-"],
+[data-theme='dark'] [class*="border-slate-"],
+[data-theme='dark'] [class*="border-zinc-"] {
+  border-color: var(--border-color) !important;
+}
+
+/* Interactive Elements */
+[data-theme='dark'] a:not([class*="btn"]) {
+  color: var(--primary);
+}
+
+[data-theme='dark'] button:not([class*="btn-brand"]):not(.status-badge):not([class*="btn-primary"]) {
+  color: var(--text-main);
+}
+
+/* Form Elements */
+[data-theme='dark'] input,
+[data-theme='dark'] textarea,
+[data-theme='dark'] select {
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme='dark'] input::placeholder,
+[data-theme='dark'] textarea::placeholder {
+  color: var(--text-muted) !important;
+  opacity: 0.6;
+}
+
+/* Global Shadow Overrides */
+[data-theme='dark'] [class*="shadow"] {
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.45) !important;
+}
+
+
+body {
   margin: 0;
   font-family: "Roboto", system-ui, Arial, sans-serif;
   font-size: 100% !important;
-  background-color: #fcfdfe;
+  background-color: var(--bg-main);
+  color: var(--text-main);
   background-image:
-    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%230b7084' fill-opacity='0.1' stroke='%230b7084' stroke-opacity='0.08' stroke-width='0.5'%3E%3Ccircle cx='50' cy='50' r='1.5' fill-opacity='0.15'/%3E%3Cline x1='50' y1='50' x2='50' y2='30'/%3E%3Ccircle cx='50' cy='30' r='1'/%3E%3Cline x1='50' y1='50' x2='69' y2='43.8'/%3E%3Ccircle cx='69' cy='43.8' r='1'/%3E%3Cline x1='50' y1='50' x2='61.7' y2='66.2'/%3E%3Ccircle cx='61.7' cy='66.2' r='1'/%3E%3Cline x1='50' y1='50' x2='38.3' y2='66.2'/%3E%3Ccircle cx='38.3' cy='66.2' r='1'/%3E%3Cline x1='50' y1='50' x2='31' y2='43.8'/%3E%3Ccircle cx='31' cy='43.8' r='1'/%3E%3C/g%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%230b7084' fill-opacity='0.05' stroke='%230b7084' stroke-opacity='0.04' stroke-width='0.5'%3E%3Ccircle cx='50' cy='50' r='1.5' fill-opacity='0.1'/%3E%3Cline x1='50' y1='50' x2='50' y2='30'/%3E%3Ccircle cx='50' cy='30' r='1'/%3E%3Cline x1='50' y1='50' x2='69' y2='43.8'/%3E%3Ccircle cx='69' cy='43.8' r='1'/%3E%3Cline x1='50' y1='50' x2='61.7' y2='66.2'/%3E%3Ccircle cx='61.7' cy='66.2' r='1'/%3E%3Cline x1='50' y1='50' x2='38.3' y2='66.2'/%3E%3Ccircle cx='38.3' cy='66.2' r='1'/%3E%3Cline x1='50' y1='50' x2='31' y2='43.8'/%3E%3Ccircle cx='31' cy='43.8' r='1'/%3E%3C/g%3E%3C/svg%3E"),
     radial-gradient(at 0% 0%, rgba(12, 124, 146, 0.05) 0px, transparent 50%),
     radial-gradient(at 100% 0%, rgba(22, 40, 79, 0.05) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(12, 124, 146, 0.05) 0px, transparent 50%),
     radial-gradient(at 0% 100%, rgba(22, 40, 79, 0.05) 0px, transparent 50%);
   background-attachment: fixed;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .logo img {
@@ -59,16 +273,91 @@ body {
   font-family: "Noto Sans Ethiopic", sans-serif;
 }
 
+/* Base typography defaults */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-main);
+  transition: color 0.3s ease;
+}
+
+p,
+li,
+blockquote,
+span,
+div {
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
 body p,
 body h4,
 body h5,
 body h6 {
   font-size: 98% !important;
-
+  color: var(--text-main);
 }
 
-.animate-float {
-  animation: float 3s ease-in-out infinite;
+.intro,
+.text-muted,
+[class*="text-muted"],
+.passage-muted {
+  color: var(--text-muted) !important;
+}
+
+/* Force headings to use main text color unless overridden by brand classes */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text-main);
+}
+
+/* --- THEME BRIDGE: Force visibility for hardcoded components --- */
+[data-theme='dark'] .contact-us-container,
+[data-theme='dark'] .about-park,
+[data-theme='dark'] .enterprise-page,
+[data-theme='dark'] .investor-landing,
+[data-theme='dark'] .incubation-page {
+  color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .contact-us-container *,
+[data-theme='dark'] .about-park *,
+[data-theme='dark'] .enterprise-page *,
+[data-theme='dark'] .investor-landing *,
+[data-theme='dark'] .incubation-page * {
+  border-color: var(--border-color) !important;
+}
+
+/* Specific text visibility force for dark mode */
+[data-theme='dark'] .info-details p,
+[data-theme='dark'] .info-details-compact p,
+[data-theme='dark'] .feature-desc,
+[data-theme='dark'] .about-general,
+[data-theme='dark'] .office-card p,
+[data-theme='dark'] .contact-header p,
+[data-theme='dark'] .form-header p {
+  color: var(--text-muted) !important;
+}
+
+[data-theme='dark'] .info-details h3,
+[data-theme='dark'] .info-details-compact h3,
+[data-theme='dark'] .text-container h3,
+[data-theme='dark'] .office-card h3,
+[data-theme='dark'] .contact-header h1,
+[data-theme='dark'] .form-label {
+  color: var(--text-main) !important;
+}
+
+/* Global Transition for Theme */
+* {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
 }
 
 @keyframes float {
@@ -250,4 +539,26 @@ body h6 {
   top: 0;
   outline: 3px solid white;
   outline-offset: -6px;
+}
+
+/* Particle Background Global Layer */
+#main-hero-particles,
+#investor-hero-particles,
+#incubation-hero-particles,
+#footer-particles {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+/* Container normalization for particles */
+.investor-hero,
+.incubation-hero,
+#dk-footer {
+  position: relative !important;
+  overflow: hidden;
 }

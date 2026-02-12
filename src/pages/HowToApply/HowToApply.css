@@ -11,8 +11,40 @@
   --htap-text-light: #6c757d;
   --htap-gradient: linear-gradient(135deg, var(--htap-primary) 0%, var(--htap-accent) 100%);
   --htap-shadow: 0 10px 30px rgba(12, 124, 146, 0.08);
-  --htap-shadow-hover: 0 15px 40px rgba(12, 124, 146, 0.12);
   --htap-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme='dark'] .how-to-apply-page {
+  --htap-white: var(--bg-card);
+  --htap-neutral: var(--bg-main);
+  --htap-primary: var(--primary);
+  --htap-secondary: var(--secondary);
+  --htap-accent: var(--text-main);
+  --htap-text-dark: var(--text-main);
+  --htap-text-light: var(--text-muted);
+}
+
+[data-theme='dark'] .htap-criteria-card,
+[data-theme='dark'] .htap-timeline-content,
+[data-theme='dark'] .htap-requirement-card,
+[data-theme='dark'] .htap-benefit-card,
+[data-theme='dark'] .htap-eligibility,
+[data-theme='dark'] .htap-types,
+[data-theme='dark'] .htap-cta {
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+[data-theme='dark'] .htap-timeline-description,
+[data-theme='dark'] .htap-criteria-description,
+[data-theme='dark'] .htap-benefit-card p,
+[data-theme='dark'] .htap-requirement-content p {
+  color: var(--text-muted);
+}
+
+[data-theme='dark'] .htap-timeline-icon {
+  background-color: var(--bg-card);
 }
 
 /* Hero Section */

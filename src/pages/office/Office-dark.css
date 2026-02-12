@@ -1,0 +1,256 @@
+/* Dark mode overrides for Office page */
+[data-theme='dark'] {
+    --text-main: var(--text-main);
+    --text-muted: var(--text-muted);
+    --bg-light: var(--bg-main);
+    --glass-bg: rgba(21, 28, 44, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+}
+
+/* Dark mode component overrides */
+[data-theme='dark'] .enterprise-page {
+    background-color: var(--bg-main);
+}
+
+[data-theme='dark'] .top-utility-bar {
+    background: var(--bg-card);
+    border-bottom-color: var(--border-color);
+}
+
+[data-theme='dark'] .btn-utility,
+[data-theme='dark'] .btn-utility-icon {
+    background: var(--bg-main);
+    color: var(--text-main);
+}
+
+[data-theme='dark'] .btn-utility:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .export-menu {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme='dark'] .export-menu button:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .stat-card,
+[data-theme='dark'] .office-sidebar,
+[data-theme='dark'] .results-toolbar,
+[data-theme='dark'] .empty-state,
+[data-theme='dark'] .office-card {
+    background: var(--bg-card) !important;
+}
+
+[data-theme='dark'] .search-box input,
+[data-theme='dark'] .search-box-sidebar input,
+[data-theme='dark'] .filter-group select {
+    background: var(--bg-main);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+[data-theme='dark'] .toggle-group {
+    background: var(--bg-main);
+}
+
+[data-theme='dark'] .toggle-group button.active,
+[data-theme='dark'] .view-toggle button.active,
+[data-theme='dark'] .view-mode-toggle button.active {
+    background: var(--bg-card);
+    color: var(--text-main);
+}
+
+[data-theme='dark'] .filter-list button:hover,
+[data-theme='dark'] .filter-list button.active {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='dark'] .modern-table th {
+    background: var(--bg-main);
+    color: var(--text-muted);
+}
+
+[data-theme='dark'] .modern-table td {
+    background: var(--bg-card);
+    border-top-color: var(--border-color);
+    color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .office-detail-premium {
+    background: var(--bg-card);
+}
+
+[data-theme='dark'] .detail-info {
+    background: var(--bg-card);
+}
+
+[data-theme='dark'] .card-metrics {
+    border-top-color: var(--border-color);
+}
+
+[data-theme='dark'] .btn-details {
+    background: var(--bg-main);
+    color: var(--text-main);
+}
+
+[data-theme='dark'] .glass-effect {
+    background: rgba(21, 28, 44, 0.8);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Force all text in cards to be light */
+[data-theme='dark'] .office-card *,
+[data-theme='dark'] .stat-card * {
+    color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .office-card h3,
+[data-theme='dark'] .stat-info h3 {
+    color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .office-card p,
+[data-theme='dark'] .office-card span:not(.status-badge),
+[data-theme='dark'] .card-metrics span,
+[data-theme='dark'] .stat-info p {
+    color: var(--text-muted) !important;
+}
+
+[data-theme='dark'] .building-name,
+[data-theme='dark'] .card-metrics strong {
+    color: var(--text-main) !important;
+}
+
+/* Sidebar text */
+[data-theme='dark'] .sidebar-section label {
+    color: var(--text-muted) !important;
+}
+
+[data-theme='dark'] .filter-list button {
+    color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .sidebar-header h3 {
+    color: var(--text-main) !important;
+}
+
+/* Results toolbar */
+[data-theme='dark'] .results-info,
+[data-theme='dark'] .results-info strong {
+    color: var(--text-main) !important;
+}
+
+/* Empty state */
+[data-theme='dark'] .empty-state h3,
+[data-theme='dark'] .empty-state p {
+    color: var(--text-main) !important;
+}
+
+/* Status badges keep their own colors */
+[data-theme='dark'] .status-badge.available {
+    background: #065f46 !important;
+    color: #d1fae5 !important;
+}
+
+[data-theme='dark'] .status-badge.rented {
+    background: #7f1d1d !important;
+    color: #fecaca !important;
+}
+
+/* Additional comprehensive text fixes */
+[data-theme='dark'] .office-experience-container h1,
+[data-theme='dark'] .office-experience-container h2,
+[data-theme='dark'] .office-experience-container h3,
+[data-theme='dark'] .office-experience-container h4,
+[data-theme='dark'] .office-experience-container h5 {
+    color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .office-experience-container p {
+    color: var(--text-muted) !important;
+}
+
+/* Card body specific */
+[data-theme='dark'] .card-body,
+[data-theme='dark'] .card-body * {
+    color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .card-body p,
+[data-theme='dark'] .card-body span:not(.status-badge) {
+    color: var(--text-muted) !important;
+}
+
+/* Filter section */
+[data-theme='dark'] .filter-container-premium,
+[data-theme='dark'] .filter-container-premium * {
+    color: var(--text-main) !important;
+}
+
+/* Office cards - all text elements */
+[data-theme='dark'] .office-card .card-body p,
+[data-theme='dark'] .office-card .card-body span,
+[data-theme='dark'] .office-card .card-metrics div,
+[data-theme='dark'] .office-card h3 {
+    color: var(--text-main) !important;
+}
+
+/* Detail modal content */
+[data-theme='dark'] .detail-content,
+[data-theme='dark'] .detail-content * {
+    color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .detail-content p,
+[data-theme='dark'] .section-heading {
+    color: var(--text-muted) !important;
+}
+
+[data-theme='dark'] .detail-content h4 {
+    color: var(--text-main) !important;
+}
+
+/* Spec list */
+[data-theme='dark'] .spec-list li,
+[data-theme='dark'] .spec-list li strong {
+    color: var(--text-main) !important;
+}
+
+/* Price display */
+[data-theme='dark'] .price-display .amount,
+[data-theme='dark'] .price-display .currency {
+    color: var(--text-main) !important;
+}
+
+/* Status pills */
+[data-theme='dark'] .status-pills button {
+    color: var(--text-main) !important;
+    background: var(--bg-card) !important;
+}
+
+[data-theme='dark'] .status-pills button.active {
+    background: var(--primary) !important;
+    color: white !important;
+}
+
+/* View toggle buttons */
+[data-theme='dark'] .view-toggle button,
+[data-theme='dark'] .view-mode-toggle button {
+    color: var(--text-main) !important;
+}
+
+/* Table actions */
+[data-theme='dark'] .table-actions button {
+    color: var(--text-main) !important;
+}
+
+/* Font mono class */
+[data-theme='dark'] .font-mono {
+    color: var(--text-main) !important;
+}

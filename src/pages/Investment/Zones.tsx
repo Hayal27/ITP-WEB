@@ -16,156 +16,8 @@ import {
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-// --- Types and Constants ---
-type ZoneName =
-  | "ICT Business Zone"
-  | "Commercial Zone"
-  | "Manufacturing Zone"
-  | "Knowledge Zone"
-  | "Residential Zone"
-  | "Skill & Training Zone";
-
-interface ZoneDetails {
-  purpose: string;
-  features: string[];
-  tenants: string;
-}
-
-interface ZoneData {
-  name: ZoneName;
-  color: string;
-  images: string[];
-  summary: string;
-  details: ZoneDetails;
-  position: {
-    left: string;
-    top: string;
-  };
-}
-
-// --- Zone Data with your images ---
-const ZONES: ZoneData[] = [
-  {
-    name: "ICT Business Zone",
-    color: "bg-blue-600",
-    images: [
-      "https://res.cloudinary.com/yesuf/image/upload/v1747136300/bpo1_kxricq.jpg",
-      "https://res.cloudinary.com/yesuf/image/upload/v1747135443/bpo2_kmphwy.png",
-      "https://res.cloudinary.com/yesuf/image/upload/v1747135437/bpo_ckg1ys.png"
-    ],
-    summary: "Modern office spaces, robust IT infrastructure, and global connectivity for ICT and business operations.",
-    details: {
-      purpose: "To host ICT companies, business process outsourcing, and digital service providers.",
-      features: [
-        "High-speed fiber internet",
-        "Secure data centers",
-        "Business support services",
-        "Conference and meeting facilities",
-        "24/7 power backup"
-      ],
-      tenants: "ICT firms, BPOs, digital agencies, consulting companies."
-    },
-    position: { left: "41%", top: "35%" }
-  },
-  {
-    name: "Commercial Zone",
-    color: "bg-emerald-600",
-    images: [
-      "https://res.cloudinary.com/yesuf/image/upload/v1747135441/mk_wd3mtf.png",
-      "https://res.cloudinary.com/yesuf/image/upload/v1747135437/bpo_ckg1ys.png"
-    ],
-    summary: "Retail, banking, and business centers supporting commercial activities and services.",
-    details: {
-      purpose: "To provide a vibrant environment for retail, banking, and commercial enterprises.",
-      features: [
-        "Retail outlets and showrooms",
-        "Banking and financial services",
-        "Business lounges",
-        "Food courts and cafes"
-      ],
-      tenants: "Retailers, banks, service providers, commercial offices."
-    },
-    position: { left: "20%", top: "20%" }
-  },
-  {
-    name: "Manufacturing Zone",
-    color: "bg-amber-600",
-    images: [
-      "https://res.cloudinary.com/yesuf/image/upload/v1747135433/Incubation_euahej.png",
-      "https://res.cloudinary.com/yesuf/image/upload/v1747135430/swdevelop_tc9anx.png"
-    ],
-    summary: "State-of-the-art facilities for electronics, hardware, and light manufacturing industries.",
-    details: {
-      purpose: "To support electronics assembly, hardware production, and light manufacturing.",
-      features: [
-        "Modern manufacturing units",
-        "Logistics and warehousing",
-        "Quality control labs",
-        "Prototyping and testing facilities"
-      ],
-      tenants: "Electronics manufacturers, hardware startups, assembly plants."
-    },
-    position: { left: "22%", top: "55%" }
-  },
-  {
-    name: "Knowledge Zone",
-    color: "bg-purple-600",
-    images: [
-      "https://res.cloudinary.com/yesuf/image/upload/v1747135429/raxio_vgz5ev.png",
-      "https://res.cloudinary.com/yesuf/image/upload/v1747135430/swdevelop_tc9anx.png"
-    ],
-    summary: "Academic, research, and innovation hubs for knowledge creation and collaboration.",
-    details: {
-      purpose: "To foster research, innovation, and academic-industry partnerships.",
-      features: [
-        "Research labs and libraries",
-        "Innovation hubs",
-        "Collaboration spaces",
-        "Seminar and workshop venues"
-      ],
-      tenants: "Universities, R&D centers, think tanks, innovation hubs."
-    },
-    position: { left: "35%", top: "35%" }
-  },
-  {
-    name: "Residential Zone",
-    color: "bg-rose-600",
-    images: [
-      "https://res.cloudinary.com/yesuf/image/upload/v1747136300/bpo1_kxricq.jpg",
-      "https://res.cloudinary.com/yesuf/image/upload/v1747135446/reaseach_ew642q.png"
-    ],
-    summary: "Residential zone area is reserved for future development.",
-    details: {
-      purpose: "Housing and accommodation facilities for professionals working in the IT Park.",
-      features: [
-        "Green spaces and parks",
-        "24/7 security"
-      ],
-      tenants: "IT park staff, professionals, families."
-    },
-    position: { left: "30%", top: "81%" }
-  },
-  {
-    name: "Skill & Training Zone",
-    color: "bg-indigo-600",
-    images: [
-      "https://res.cloudinary.com/yesuf/image/upload/v1747135430/swdevelop_tc9anx.png",
-      "https://res.cloudinary.com/yesuf/image/upload/v1747135446/reaseach_ew642q.png"
-    ],
-    summary: "Training centers, academies, and labs for upskilling and workforce development.",
-    details: {
-      purpose: "To host training institutions and skill development programs for the digital economy.",
-      features: [
-        "Training centers and classrooms",
-        "Hands-on labs",
-        "E-learning platforms",
-        "Internship and placement support"
-      ],
-      tenants: "Training academies, bootcamps, workforce development agencies."
-    },
-    position: { left: "35%", top: "50%" }
-  }
-];
+import { getZones, ZoneData } from "../../services/apiService";
+import { notifications } from '@mantine/notifications';
 
 const GALLERY_IMAGES = [
   "https://res.cloudinary.com/yesuf/image/upload/v1747136300/bpo1_kxricq.jpg",
@@ -179,11 +31,33 @@ const GALLERY_IMAGES = [
 ];
 
 const Zones: React.FC = () => {
+  const [zones, setZones] = useState<ZoneData[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeZone, setActiveZone] = useState<number | null>(null);
+
+  React.useEffect(() => {
+    const fetchZones = async () => {
+      try {
+        const data = await getZones();
+        setZones(data);
+      } catch (error) {
+        console.error("Failed to fetch zones:", error);
+        notifications.show({
+          title: 'Error',
+          message: 'Failed to load zones information.',
+          color: 'red',
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchZones();
+  }, []);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredZones = ZONES.filter(zone =>
+  const filteredZones = zones.filter(zone =>
     zone.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     zone.summary.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -194,7 +68,7 @@ const Zones: React.FC = () => {
       <section className="relative h-[500px] bg-gradient-to-r from-primary-default to-primary-light text-white">
         <div className="absolute inset-0 bg-primary-default/40" />
         <div className="container mx-auto px-4 h-full flex flex-col justify-center relative z-10">
-          <motion.h1 
+          <motion.h1
             className="text-4xl md:text-5xl font-bold mb-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -202,16 +76,16 @@ const Zones: React.FC = () => {
           >
             Ready to Join Ethiopian IT Park?
           </motion.h1>
-          <motion.p 
+          <motion.p
             className="text-xl mb-8 max-w-2xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
           >
-            
+
             Find the right zone for your business and become part of Ethiopia's digital future at the IT Park.
           </motion.p>
-          <motion.div 
+          <motion.div
             className="flex flex-wrap gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -231,7 +105,7 @@ const Zones: React.FC = () => {
 
       {/* Search and Filter */}
       <div className="container mx-auto px-4 -mt-12 relative z-20">
-        <motion.div 
+        <motion.div
           className="bg-white rounded-xl shadow-lg p-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -265,7 +139,7 @@ const Zones: React.FC = () => {
 
       {/* Zones Grid */}
       <section className="container mx-auto px-4 py-18">
-        <motion.h2 
+        <motion.h2
           className="text-4xl font-bold mb-12 text-center text-primary-default"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -308,23 +182,23 @@ const Zones: React.FC = () => {
                   {zone.name}
                 </h3>
               </div>
-              
+
               {/* Content Area */}
               <div className="p-6 flex-1 flex flex-col">
                 <p className="text-gray-600 mb-4 flex-1">{zone.summary}</p>
-                
+
                 {/* Feature Tags */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {zone.details.features.slice(0, 3).map((feature, i) => (
-                    <span 
-                      key={i} 
+                    <span
+                      key={i}
                       className="text-xs bg-gray-100 text-gray-700 px-3 py-1.5 rounded-full font-medium hover:bg-gray-200 transition-colors"
                     >
                       {feature}
                     </span>
                   ))}
                 </div>
-                
+
                 {/* Action Buttons */}
                 <div className="mt-auto pt-4 border-t border-gray-100">
                   <button
@@ -332,12 +206,12 @@ const Zones: React.FC = () => {
                     className="w-full flex items-center justify-between text-white font-medium hover:text-primary-darker transition-colors"
                   >
                     <span>{activeZone === index ? 'Show less details' : 'View more details'}</span>
-                    <IconChevronDown 
-                      className={`ml-2 transition-transform duration-300 ${activeZone === index ? 'rotate-180' : ''}`} 
-                      size={20} 
+                    <IconChevronDown
+                      className={`ml-2 transition-transform duration-300 ${activeZone === index ? 'rotate-180' : ''}`}
+                      size={20}
                     />
                   </button>
-                  
+
                   <AnimatePresence>
                     {activeZone === index && (
                       <motion.div
@@ -381,7 +255,7 @@ const Zones: React.FC = () => {
       {/* Interactive Map Section */}
       <section className="bg-gray-50 py-16">
         <div className="container mx-auto px-4">
-          <motion.h2 
+          <motion.h2
             className="text-3xl font-bold mb-12 text-center"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -399,12 +273,12 @@ const Zones: React.FC = () => {
                   className="w-full h-full object-contain"
                 />
               </div>
-              {ZONES.map((zone, index) => (
+              {zones.map((zone, index) => (
                 <button
                   key={index}
                   className={`absolute w-10 h-10 ${zone.color} rounded-full flex items-center justify-center text-white font-bold shadow-lg hover:scale-110 transition-all duration-300 border-2 border-white`}
-                  style={{ 
-                    left: zone.position.left, 
+                  style={{
+                    left: zone.position.left,
                     top: zone.position.top,
                     transform: 'translate(-50%, -50%)'
                   }}
@@ -417,14 +291,13 @@ const Zones: React.FC = () => {
             </div>
             <div className="p-6 bg-white border-t border-gray-100">
               <div className="flex flex-wrap justify-center gap-4">
-                {ZONES.map((zone, index) => (
+                {zones.map((zone, index) => (
                   <button
                     key={index}
-                    className={`px-2 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition-colors ${
-                      activeZone === index 
-                        ? `${zone.color} text-white` 
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                    className={`px-2 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition-colors ${activeZone === index
+                      ? `${zone.color} text-white`
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
                     onClick={() => setActiveZone(activeZone === index ? null : index)}
                   >
                     <span className={`w-3 h-3 rounded-full ${zone.color}`}></span>
@@ -439,7 +312,7 @@ const Zones: React.FC = () => {
 
       {/* Gallery Section */}
       <section className="container mx-auto px-4 py-16">
-        <motion.h2 
+        <motion.h2
           className="text-3xl font-bold mb-12 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -477,7 +350,7 @@ const Zones: React.FC = () => {
       {/* CTA Section */}
       <section className="bg-primary-light text-white py-16">
         <div className="container mx-auto px-4 text-center">
-          <motion.h2 
+          <motion.h2
             className="text-3xl font-bold mb-6"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -486,7 +359,7 @@ const Zones: React.FC = () => {
           >
             Ready to Join Our Community?
           </motion.h2>
-          <motion.p 
+          <motion.p
             className="text-xl mb-8 max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -495,7 +368,7 @@ const Zones: React.FC = () => {
           >
             Discover the perfect space for your business and be part of Ethiopia's growing tech ecosystem.
           </motion.p>
-          <motion.div 
+          <motion.div
             className="flex flex-wrap justify-center gap-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

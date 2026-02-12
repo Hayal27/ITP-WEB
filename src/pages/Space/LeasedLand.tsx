@@ -261,7 +261,7 @@ const LeasedLand: React.FC = () => {
           </div>
 
           {(searchTerm || zoneFilter !== 'all' || filter !== 'all' || sortConfig) && (
-            <button className="btn-reset-all" onClick={clearFilters}>
+            <button className="btn-secondary-premium" style={{ width: '100%', marginTop: '1.5rem', padding: '0.85rem' }} onClick={clearFilters}>
               <FaTrashAlt /> Reset Search
             </button>
           )}
@@ -316,10 +316,22 @@ const LeasedLand: React.FC = () => {
                             <div><span>Type</span><strong>{land.landType}</strong></div>
                           </div>
                         </div>
-                        <div className="card-footer">
-                          <button className="btn-details" onClick={() => setSelectedLand(land)}>Details</button>
+                        <div className="card-footer" style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
+                          <button
+                            className="btn-secondary-premium"
+                            style={{ flex: 1, padding: '0.75rem' }}
+                            onClick={() => setSelectedLand(land)}
+                          >
+                            Details
+                          </button>
                           {land.status === 'Available' && (
-                            <button className="btn-apply" onClick={() => handleInquire(land)}>Inquire</button>
+                            <button
+                              className="btn-primary-premium"
+                              style={{ flex: 1, padding: '0.75rem' }}
+                              onClick={() => handleInquire(land)}
+                            >
+                              Inquire
+                            </button>
                           )}
                         </div>
                       </motion.div>
@@ -381,7 +393,7 @@ const LeasedLand: React.FC = () => {
                   <FaSearch />
                   <h3>No parcels found</h3>
                   <p>Try different search criteria or reset filters.</p>
-                  <button onClick={clearFilters} className="btn-reset-inline">Reset All</button>
+                  <button onClick={clearFilters} className="btn-primary-premium" style={{ marginTop: '1.5rem' }}>Reset All</button>
                 </div>
               )}
             </div>
@@ -453,15 +465,15 @@ const LeasedLand: React.FC = () => {
 
                   <div className="cta-group">
                     {selectedLand.status === 'Available' ? (
-                      <button className="btn-premium-action land-btn" onClick={() => handleInquire(selectedLand)}>
+                      <button className="btn-primary-premium" style={{ width: '100%', justifyContent: 'center' }} onClick={() => handleInquire(selectedLand)}>
                         Inquire About Lease <FaArrowRight />
                       </button>
                     ) : (
-                      <button className="btn-premium-disabled" disabled>
+                      <button className="btn-premium-disabled" disabled style={{ width: '100%', opacity: 0.5 }}>
                         Lease Agreement Active
                       </button>
                     )}
-                    <button className="btn-outline-action" onClick={() => setSelectedLand(null)}>
+                    <button className="btn-secondary-premium" style={{ width: '100%', justifyContent: 'center' }} onClick={() => setSelectedLand(null)}>
                       Return to Map
                     </button>
                   </div>

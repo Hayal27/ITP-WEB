@@ -92,18 +92,21 @@ const LiveChat: React.FC<LiveChatProps> = ({ enabled = true, pinned = [], eventI
         )}
       </div>
 
-      <form onSubmit={handleSendMessage} className="flex gap-2 border-t border-gray-200 p-3">
+      <form onSubmit={handleSendMessage} className="flex gap-2 border-t border-gray-200 p-3" aria-label="Live event chat form">
         <input
           type="text"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           placeholder={enabled ? 'Type your message…' : 'Chat disabled for this event'}
           disabled={!enabled}
+          aria-label="Chat message"
+          title="Type your message here to participate in the live discussion"
           className="block w-full rounded-lg border-gray-300 focus:border-primary-default focus:ring-primary-default disabled:cursor-not-allowed disabled:bg-gray-100"
         />
         <button
           type="submit"
           disabled={!enabled || newMessage.trim().length === 0}
+          aria-label="Send chat message"
           className="inline-flex items-center rounded-lg bg-primary-default px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-dark disabled:cursor-not-allowed disabled:opacity-50"
         >
           Send

@@ -54,33 +54,33 @@ const SkillsResumeStep: React.FC<SkillsResumeStepProps> = ({
           <button
             type="button"
             onClick={handleAddSkill}
-            className="bg-blue-600 text-white px-6 rounded-2xl hover:bg-black transition-all shadow-lg active:scale-95 flex items-center justify-center"
+            className="bg-[var(--primary)] text-white px-6 rounded-2xl hover:bg-[var(--secondary)] transition-all shadow-lg active:scale-95 flex items-center justify-center"
           >
             <FaPlus />
           </button>
         </div>
         <div className="flex flex-wrap gap-2 pt-2">
           {skills.map((skill) => (
-            <span key={skill} className="bg-blue-50 text-blue-600 pl-4 pr-2 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-blue-100 flex items-center gap-2 group hover:bg-blue-600 hover:text-white transition-all">
+            <span key={skill} className="bg-[var(--primary)]/10 text-[var(--accent)] pl-4 pr-2 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border border-[var(--primary)]/20 flex items-center gap-2 group hover:bg-[var(--primary)] hover:text-white transition-all">
               {skill}
               <button
                 type="button"
                 onClick={() => handleRemoveSkill(skill)}
-                className="text-blue-300 group-hover:text-white transition-colors"
+                className="text-[var(--primary)] group-hover:text-white transition-colors opacity-50 group-hover:opacity-100"
                 title="Remove Skill"
               >
                 <FaTimesCircle />
               </button>
             </span>
           ))}
-          {skills.length === 0 && <p className="text-[10px] uppercase font-black text-gray-400 italic">No skills added yet...</p>}
+          {skills.length === 0 && <p className="text-[10px] uppercase font-black text-[var(--text-muted)] italic">No skills added yet...</p>}
         </div>
       </div>
 
       {/* Resume Upload */}
       <div className="space-y-4">
         <label className="itpc-label">Resume / CV Document *</label>
-        <div className={`relative group cursor-pointer ${resume ? 'border-blue-500 bg-blue-50/10' : 'border-gray-200'} border-2 border-dashed rounded-[2.5rem] transition-all p-10 hover:border-blue-500 hover:bg-blue-50/10`}>
+        <div className={`relative group cursor-pointer ${resume ? 'border-[var(--primary)] bg-[var(--primary)]/5' : 'border-[var(--border-color)]'} border-2 border-dashed rounded-[2.5rem] transition-all p-10 hover:border-[var(--primary)] hover:bg-[var(--primary)]/5`}>
           <input
             type="file"
             id="resumeUpload"
@@ -89,16 +89,23 @@ const SkillsResumeStep: React.FC<SkillsResumeStepProps> = ({
             className="absolute inset-0 opacity-0 cursor-pointer z-10"
           />
           <div className="flex flex-col items-center justify-center text-center space-y-4 relative z-0">
-            <div className={`w-16 h-16 rounded-3xl ${resume ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-400'} flex items-center justify-center shadow-2xl transition-all`}>
+            <div className={`w-16 h-16 rounded-3xl ${resume ? 'bg-[var(--primary)] text-white' : 'bg-[var(--bg-main)] text-[var(--text-muted)]'} flex items-center justify-center shadow-2xl transition-all`}>
               {resume ? <FaCheckCircle size={30} /> : <FaUpload size={24} />}
             </div>
             <div>
-              <h5 className="font-black uppercase tracking-widest text-sm text-gray-900">
+              <h5 className="font-black uppercase tracking-widest text-sm text-[var(--text-main)]">
                 {resume ? resume.name : 'Upload your CV'}
               </h5>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter mt-1">
-                {resume ? `${(resume.size / 1024 / 1024).toFixed(2)} MB • Ready to submit` : 'PDF, DOC, DOCX up to 5MB'}
+              <p className="text-[10px] font-bold text-[var(--text-muted)] uppercase tracking-tighter mt-1">
+                {resume ?
+                  `${(resume.size / 1024 / 1024).toFixed(2)} MB • ${resume.size > 10 * 1024 * 1024 ? '🚨 File too large' : 'Ready to submit'}`
+                  : 'PDF, DOC, DOCX up to 10MB'}
               </p>
+              {resume && resume.size > 10 * 1024 * 1024 && (
+                <p className="text-[9px] font-black text-red-500 uppercase tracking-widest mt-2">
+                  Please select a file smaller than 10MB
+                </p>
+              )}
             </div>
           </div>
         </div>

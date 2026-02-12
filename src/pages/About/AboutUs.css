@@ -28,16 +28,28 @@
   --about-card-shadow-hover: 0 10px 15px -3px var(--about-color-shadow-hover);
 }
 
+[data-theme='dark'] {
+  --about-color-primary: var(--primary);
+  --about-color-text: var(--text-main);
+  --about-color-text-light: var(--text-muted);
+  --about-color-muted-bg: var(--neutral);
+  --about-color-white: var(--bg-card);
+  --about-color-shadow: rgba(0, 0, 0, 0.4);
+  --about-color-shadow-hover: rgba(0, 0, 0, 0.5);
+  --about-gradient-primary: linear-gradient(135deg, var(--about-color-primary), #6EC9C4);
+}
+
 .about-it-park {
   position: relative;
-  background-color: var(--about-color-white);
+  background-color: var(--bg-main);
   color: var(--about-color-text);
   padding: var(--about-section-padding) 0;
   font-family: var(--about-font-base);
   overflow: hidden;
   margin-top: 4%;
-  margin-left: 6%;
-  margin-right: 6%;
+  padding-left: 6%;
+  padding-right: 6%;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .about-it-park-wrapper {
@@ -71,6 +83,7 @@
   font-weight: 500;
   background: var(--about-gradient-primary);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
 }
@@ -305,6 +318,7 @@
   display: block;
   background: var(--about-gradient-primary);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -686,6 +700,7 @@
   color: var(--about-color-primary);
   background: var(--about-gradient-primary);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   letter-spacing: 1px;
 }

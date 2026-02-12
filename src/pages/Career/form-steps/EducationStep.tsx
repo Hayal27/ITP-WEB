@@ -1,14 +1,7 @@
 import React from 'react';
 import { FaPlusCircle, FaTrash, FaGraduationCap, FaUniversity, FaCalendarAlt } from 'react-icons/fa';
 
-export interface Education {
-  id: string;
-  institutionName: string;
-  degree: string;
-  fieldOfStudy: string;
-  graduationYear: string;
-  gpa?: string;
-}
+import { Education } from '../types';
 
 interface EducationStepProps {
   data: Education[];
@@ -37,18 +30,18 @@ const EducationStep: React.FC<EducationStepProps> = ({ data, onChange }) => {
   return (
     <div className="space-y-8 fade-up">
       {data.map((edu, index) => (
-        <div key={edu.id} className="relative bg-slate-50/50 rounded-[2rem] p-8 border border-slate-100 transition-all hover:bg-white hover:shadow-xl hover:shadow-emerald-500/5 group">
+        <div key={edu.id} className="relative bg-[var(--bg-main)] rounded-[2rem] p-8 border border-[var(--border-color)] transition-all hover:bg-[var(--bg-card)] hover:shadow-xl hover:shadow-emerald-500/5 group">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
                 <FaGraduationCap size={16} />
               </div>
-              <h5 className="font-black text-xs uppercase tracking-widest text-slate-400">Education #{index + 1}</h5>
+              <h5 className="font-black text-xs uppercase tracking-widest text-[var(--text-muted)]">Education #{index + 1}</h5>
             </div>
             <button
               type="button"
               onClick={() => removeEducation(index)}
-              className="bg-red-50 text-red-500 p-3 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"
+              className="bg-red-500/10 text-red-500 p-3 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"
             >
               <FaTrash size={12} />
             </button>
@@ -124,7 +117,7 @@ const EducationStep: React.FC<EducationStepProps> = ({ data, onChange }) => {
       <button
         type="button"
         onClick={addEducation}
-        className="w-full py-6 rounded-[2rem] border-2 border-dashed border-gray-200 text-gray-400 hover:border-emerald-500 hover:text-emerald-500 hover:bg-emerald-50/10 transition-all flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest"
+        className="w-full py-6 rounded-[2rem] border-2 border-dashed border-[var(--border-color)] text-[var(--text-muted)] hover:border-emerald-500 hover:text-emerald-500 hover:bg-emerald-500/10 transition-all flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest"
       >
         <FaPlusCircle /> Add Educational Background
       </button>

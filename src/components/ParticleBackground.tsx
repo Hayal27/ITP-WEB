@@ -2,13 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { type Container, type ISourceOptions } from "@tsparticles/engine";
 import { loadSlim } from "@tsparticles/slim";
+import { useTheme } from "../context/ThemeContext";
 
 interface ParticleBackgroundProps {
   className?: string;
+  id?: string;
 }
 
-const ParticleBackground = ({ className }: ParticleBackgroundProps) => {
+const ParticleBackground = ({ className, id = "tsparticles" }: ParticleBackgroundProps) => {
   const [init, setInit] = useState(false);
+  const { theme } = useTheme();
 
   // this should be run only once per application lifetime
   useEffect(() => {
@@ -20,11 +23,12 @@ const ParticleBackground = ({ className }: ParticleBackgroundProps) => {
   }, []);
 
   const particlesLoaded = async (container?: Container): Promise<void> => {
-    console.log(container);
+    // Container loaded
   };
 
   const options: ISourceOptions = useMemo(
     () => ({
+      fullScreen: { enable: false }, // Keep particles inside the container
       background: {
         color: {
           value: "transparent",
@@ -54,13 +58,13 @@ const ParticleBackground = ({ className }: ParticleBackgroundProps) => {
       },
       particles: {
         color: {
-          value: "#ffffff",
+          value: "#0ea5e9",
         },
         links: {
-          color: "#ffffff",
+          color: "#0ea5e9",
           distance: 150,
           enable: true,
-          opacity: 0.5,
+          opacity: 0.3,
           width: 1,
         },
         move: {
@@ -70,34 +74,34 @@ const ParticleBackground = ({ className }: ParticleBackgroundProps) => {
             default: "bounce",
           },
           random: false,
-          speed: 2,
+          speed: 1,
           straight: false,
         },
         number: {
           density: {
             enable: true,
           },
-          value: 80,
+          value: 60,
         },
         opacity: {
-          value: 0.5,
+          value: theme === 'dark' ? 0.6 : 0.6,
         },
         shape: {
           type: "circle",
         },
         size: {
-          value: { min: 1, max: 5 },
+          value: { min: 1, max: 4 },
         },
       },
       detectRetina: true,
     }),
-    [],
+    [theme],
   );
 
   if (init) {
     return (
       <Particles
-        id="tsparticles"
+        id={id}
         particlesLoaded={particlesLoaded}
         options={options}
         className={className}

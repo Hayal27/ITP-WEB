@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Container } from 'react-bootstrap';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { FaArrowRight, FaRocket, FaLightbulb, FaGraduationCap, FaLaptopCode, FaChartLine, FaCheckCircle, FaStar } from 'react-icons/fa';
 import '../styles/IncubationCard.css';
 import { getIncubationPrograms, getIncubationSuccessStories, IncubationProgram, IncubationSuccessStory, BACKEND_URL } from '../services/apiService';
@@ -72,9 +72,9 @@ const IncubationCard: React.FC = () => {
   return (
     <section className="itpc-incubation-wrapper">
       {/* Dynamic Background */}
-      <div className="bg-blob blob-1"></div>
-      <div className="bg-blob blob-2"></div>
-      <div className="bg-blob blob-3"></div>
+      <div className="bg-blob blob-1 pointer-events-none"></div>
+      <div className="bg-blob blob-2 pointer-events-none"></div>
+      <div className="bg-blob blob-3 pointer-events-none"></div>
 
       <Container>
         {/* Section 1: Programs with Image */}
@@ -103,6 +103,24 @@ const IncubationCard: React.FC = () => {
                   <div className="feature-pill"><FaCheckCircle className="text-[#6EC9C4]" aria-hidden="true" /> Mentorship</div>
                   <div className="feature-pill"><FaCheckCircle className="text-[#6EC9C4]" aria-hidden="true" /> Funding</div>
                   <div className="feature-pill"><FaCheckCircle className="text-[#6EC9C4]" aria-hidden="true" /> Networking</div>
+                </div>
+
+                {/* Added Stat Summary Box */}
+                <div className="stat-summary-box mt-10">
+                  <div className="stat-item-premium">
+                    <span className="stat-val">50+</span>
+                    <span className="stat-lab">Startups</span>
+                  </div>
+                  <div className="divider-v"></div>
+                  <div className="stat-item-premium">
+                    <span className="stat-val">12</span>
+                    <span className="stat-lab">Programs</span>
+                  </div>
+                  <div className="divider-v"></div>
+                  <div className="stat-item-premium">
+                    <span className="stat-val">100%</span>
+                    <span className="stat-lab">Support</span>
+                  </div>
                 </div>
               </motion.div>
             </Col>
@@ -142,9 +160,15 @@ const IncubationCard: React.FC = () => {
                   <div className="program-content">
                     <h3>{program.title}</h3>
                     <p>{program.description}</p>
-                    <a href={program.link} className="learn-more-btn" aria-label={`Explore details for ${program.title}`}>
-                      Explore Details <FaArrowRight aria-hidden="true" />
-                    </a>
+                    {program.link.startsWith('http') ? (
+                      <a href={program.link} className="learn-more-btn" aria-label={`Explore details for ${program.title}`} target="_blank" rel="noopener noreferrer">
+                        Explore Details <FaArrowRight aria-hidden="true" />
+                      </a>
+                    ) : (
+                      <Link to={program.link} className="learn-more-btn" aria-label={`Explore details for ${program.title}`}>
+                        Explore Details <FaArrowRight aria-hidden="true" />
+                      </Link>
+                    )}
                   </div>
                 </motion.div>
               </Col>
@@ -158,101 +182,53 @@ const IncubationCard: React.FC = () => {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           variants={containerVariants}
+          className="mt-32"
         >
-          <Row className="align-items-center g-5 flex-row-reverse mb-16">
-            <Col lg={6}>
-              <motion.div variants={itemVariants} className="premium-content-block">
-                <span className="section-tag tag-alt">
-                  <FaChartLine aria-hidden="true" /> Success Stories
-                </span>
-                <h2 className="itpc-section-title">
-                  Real Impact, <span>Real Success</span>
-                </h2>
-                <p className="itpc-section-description">
-                  Discover how startups have transformed from early-stage concepts to market leaders.
-                  These stories highlight the resilience and innovation of our portfolio.
-                </p>
-                <div className="stat-summary-box mt-8">
-                  <div className="stat-item-premium">
-                    <span className="stat-val">150+</span>
-                    <span className="stat-lab">Mentored</span>
-                  </div>
-                  <div className="divider-v"></div>
-                  <div className="stat-item-premium">
-                    <span className="stat-val">$5M+</span>
-                    <span className="stat-lab">Capital Raised</span>
-                  </div>
-                </div>
-              </motion.div>
-            </Col>
-            <Col lg={6}>
-              <motion.div
-                variants={imageVariants}
-                className="premium-image-container alt group"
-              >
-                <div className="image-backdrop-alt"></div>
-                <img
-                  src="/images/story.png"
-                  alt="Success Stories - Growth Enabled"
-                  className="premium-header-img"
-                  width="600"
-                  height="400"
-                  loading="lazy"
-                />
-                <div className="floating-badge-bottom left-10 bottom-10" aria-hidden="true">
-                  <FaChartLine className="text-[#6EC9C4]" />
-                  <span>Growth Enabled</span>
-                </div>
-              </motion.div>
-            </Col>
-          </Row>
+          <div className="text-center mb-16">
+            <span className="section-tag tag-alt">
+              <FaCheckCircle className="text-[#16284F]" aria-hidden="true" /> Success Stories
+            </span>
+            <h2 className="itpc-section-title">
+              Our <span>Impact</span> in Numbers
+            </h2>
+            <p className="itpc-section-description mx-auto">
+              Real stories from real Partners and investors who have scaled their visions with IT Park's ecosystem.
+            </p>
+          </div>
 
           <div className="story-grid-premium">
-            {stories.map((story, index) => (
+            {stories.map((story, idx) => (
               <motion.div
                 key={story.id}
                 variants={itemVariants}
-                onMouseEnter={() => setHoveredStory(index)}
+                className="story-card-premium group"
+                onMouseEnter={() => setHoveredStory(idx)}
                 onMouseLeave={() => setHoveredStory(null)}
-                className="story-card-premium"
               >
-                <img
-                  src={story.image_url.startsWith('http') ? story.image_url : `${BACKEND_URL}${story.image_url}`}
-                  alt={story.title}
-                  width={300}
-                  height={200}
-                  className="story-image-premium"
-                  loading="lazy"
-                />
-
+                <img src={story.image_url} alt={story.title} className="story-image-premium" />
                 <div className="story-overlay-premium">
-                  <h4 className="story-title-premium">{story.title}</h4>
-                  <div className="story-stats-premium">
-                    {story.stats.slice(0, 2).map((stat, sIdx) => (
-                      <div key={sIdx} className="stat-box-premium">
-                        <span className="stat-value">{stat.number}</span>
-                        <span className="stat-label">{stat.label}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <h3 className="story-title-premium">{story.title}</h3>
                 </div>
-
                 <div className="hover-details-premium">
-                  <h4 className="text-2xl font-black text-white mb-4">{story.title}</h4>
-                  {story.description.slice(0, 2).map((desc, i) => (
-                    <p key={i}>{desc}</p>
-                  ))}
-                  <div className="flex gap-4 mt-4">
-                    {story.stats.map((stat, sIdx) => (
-                      <div key={sIdx} className="text-center">
-                        <div className="text-white font-black text-lg">{stat.number}</div>
-                        <div className="text-[#6EC9C4] text-[10px] uppercase font-bold">{stat.label}</div>
+                  <h3 className="text-white text-2xl font-bold mb-4">{story.title}</h3>
+                  <div className="space-y-2 mb-6">
+                    {(story.description || []).map((line, i) => (
+                      <p key={i} className="text-white/90 text-sm leading-relaxed">{line}</p>
+                    ))}
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    {(story.stats || []).map((stat, i) => (
+                      <div key={i} className="text-white">
+                        <div className="text-xl font-black">{stat.number}</div>
+                        <div className="text-[10px] uppercase tracking-wider opacity-80">{stat.label}</div>
                       </div>
                     ))}
                   </div>
-                  <a href={story.link} target="_blank" rel="noopener noreferrer" className="story-action-btn no-underline">
-                    Read Full Story
-                  </a>
+                  {story.link && (
+                    <Link to={story.link} className="story-action-btn">
+                      Read Full Story
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             ))}

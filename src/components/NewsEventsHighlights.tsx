@@ -11,8 +11,8 @@ import {
 import { sanitizeHtml } from "../utils/sanitize";
 
 // Constants
-const PLACEHOLDER_NEWS_IMAGE = '/images/placeholder-news.jpg';
-const PLACEHOLDER_EVENT_IMAGE = '/images/placeholder-event.jpg';
+const PLACEHOLDER_NEWS_IMAGE = 'https://placehold.co/600x400/0c7c92/white?text=IT+Park+News';
+const PLACEHOLDER_EVENT_IMAGE = 'https://placehold.co/600x400/4f46e5/white?text=IT+Park+Event';
 
 // Types
 export type HighlightType = "news" | "event";
@@ -77,7 +77,11 @@ const NewsEventsHighlights: React.FC<NewsEventsHighlightsProps> = ({ onShowDetai
   // Handle image loading errors
   const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement>, type: HighlightType) => {
     const target = e.target as HTMLImageElement;
-    target.src = type === 'news' ? PLACEHOLDER_NEWS_IMAGE : PLACEHOLDER_EVENT_IMAGE;
+    const fallback = type === 'news' ? PLACEHOLDER_NEWS_IMAGE : PLACEHOLDER_EVENT_IMAGE;
+    // Prevent infinite loop if fallback also fails
+    if (!target.src.endsWith(fallback)) {
+      target.src = fallback;
+    }
   }, []);
 
   // Fetch highlights data
@@ -164,7 +168,7 @@ const NewsEventsHighlights: React.FC<NewsEventsHighlightsProps> = ({ onShowDetai
   if (error) {
     return (
       <div className="text-center py-10 text-red-600">
-        <p>Failed to load highlights: {error}</p>
+        <p>Waiting for News and Events</p>
       </div>
     );
   }

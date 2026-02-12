@@ -1,0 +1,53 @@
+/* Emergency Mobile Navigation Fix */
+
+/* Ensure all links and buttons are clickable on mobile */
+a,
+button,
+[role="button"] {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+    cursor: pointer;
+}
+
+/* Force pointer events on all interactive elements */
+a:not([disabled]),
+button:not([disabled]),
+[role="button"]:not([disabled]) {
+    pointer-events: auto !important;
+}
+
+/* Ensure React Router Links work */
+a[href] {
+    pointer-events: auto !important;
+    position: relative;
+    z-index: 1;
+}
+
+/* Remove any blocking overlays on mobile */
+@media (max-width: 1024px) {
+
+    /* Ensure no fixed/absolute elements block clicks */
+    body * {
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    }
+
+    /* Force all links to be clickable */
+    a,
+    button {
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
+    }
+}
+
+/* Disable custom cursor completely on touch devices */
+@media (hover: none) and (pointer: coarse) {
+
+    .custom-cursor-container,
+    .cursor-ring,
+    .cursor-dot {
+        display: none !important;
+        pointer-events: none !important;
+        visibility: hidden !important;
+    }
+}

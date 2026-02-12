@@ -5,6 +5,9 @@ import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 import App from './App';
 import './index.css';
+import './assets/css/custom.css';
+
+import { ThemeProvider } from './context/ThemeContext';
 
 const container = document.getElementById('root') as HTMLElement;
 const root = createRoot(container);
@@ -12,8 +15,10 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <MantineProvider>
-      <Notifications />
-      <App />
+      <ThemeProvider>
+        <Notifications />
+        <App />
+      </ThemeProvider>
     </MantineProvider>
   </React.StrictMode>
 );

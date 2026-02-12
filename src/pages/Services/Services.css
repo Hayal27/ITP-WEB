@@ -21,6 +21,16 @@
   --itpc-header-height: 80px;
 }
 
+[data-theme='dark'] .itpc-services-page {
+  --itpc-primary-color: var(--primary);
+  --itpc-text-color: var(--text-main);
+  --itpc-light-text: var(--text-muted);
+  --itpc-background-color: var(--bg-main);
+  --itpc-card-background: var(--bg-card);
+  --itpc-border-color: var(--border-color);
+  --itpc-neutral-color: var(--neutral);
+}
+
 /* Base Styles */
 .itpc-services-page {
   font-family: var(--itpc-font-primary);

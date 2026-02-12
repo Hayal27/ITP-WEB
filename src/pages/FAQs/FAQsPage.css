@@ -16,6 +16,68 @@
   --faq-glass-border: rgba(255, 255, 255, 0.1);
 }
 
+[data-theme='dark'] {
+  --faq-slate-50: var(--bg-main);
+  --faq-slate-100: var(--bg-card);
+  --faq-slate-200: var(--border-color);
+  --faq-slate-300: var(--text-muted);
+  --faq-slate-400: var(--text-muted);
+  --faq-slate-500: var(--text-muted);
+  --faq-slate-600: var(--text-muted);
+  --faq-slate-700: var(--border-color);
+  --faq-slate-800: var(--text-main);
+  --faq-slate-900: #0a0f18;
+  /* Keep dark for hero/sections that need contrast */
+  --faq-glass: rgba(15, 23, 42, 0.7);
+  --faq-glass-border: var(--border-color);
+  --faq-primary: var(--primary);
+  --faq-primary-hover: var(--primary);
+}
+
+[data-theme='dark'] .faqPageWrapper {
+  color: var(--text-main);
+}
+
+[data-theme='dark'] .faqPageCategories,
+[data-theme='dark'] .faqPageAccordionItem,
+[data-theme='dark'] .categoryIconWrapper,
+[data-theme='dark'] .faqPageFeedbackButton,
+[data-theme='dark'] .faqPageHelpOption,
+[data-theme='dark'] .faqPageHelp {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .faqPageCategoryButton {
+  background: var(--bg-main);
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .faqPageCategoryButton:hover {
+  background: var(--bg-card);
+}
+
+[data-theme='dark'] .faqPageAccordionHeader,
+[data-theme='dark'] .faqPageHeroTitle,
+[data-theme='dark'] .faqPageAccordionQuestion,
+[data-theme='dark'] .categoryTitle,
+[data-theme='dark'] .faqPageHelpTitle,
+[data-theme='dark'] .faqPageHelpOption h3 {
+  color: var(--text-main);
+}
+
+[data-theme='dark'] .faqPageAccordionAnswer,
+[data-theme='dark'] .faqPageHelpDesc,
+[data-theme='dark'] .faqPageHelpOption p,
+[data-theme='dark'] .learnMore {
+  color: var(--text-muted);
+}
+
+[data-theme='dark'] .learnMore {
+  color: var(--faq-primary);
+}
+
 .faqPageWrapper {
   background-color: var(--faq-slate-50);
   min-height: 100vh;
@@ -95,7 +157,7 @@
 
 .faqPageHeroSubtitle {
   font-size: 1.25rem;
-  color: var(--faq-slate-400);
+  color: var(--faq-slate-300);
   max-width: 600px;
   margin: 0 auto 3.5rem;
   line-height: 1.6;
@@ -143,7 +205,7 @@
 }
 
 .faqPageSearchInput::placeholder {
-  color: var(--faq-slate-500);
+  color: rgba(255, 255, 255, 0.4);
 }
 
 .searchSuggestions {
@@ -174,7 +236,7 @@
 /* Categories Section */
 .faqPageCategories {
   padding: 3rem 0;
-  background: white;
+  background: var(--bg-card);
   border-bottom: 1px solid var(--faq-slate-200);
   position: sticky;
   top: 0;
@@ -231,7 +293,7 @@
   width: 48px;
   height: 48px;
   border-radius: 14px;
-  background: white;
+  background: var(--bg-card);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -269,7 +331,7 @@
 
 .faqPageCategoryButton:hover {
   border-color: var(--faq-primary);
-  background: white;
+  background: var(--bg-card);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
@@ -319,7 +381,7 @@
 }
 
 .faqPageAccordionItem {
-  background: white;
+  background: var(--bg-card);
   border-radius: 24px;
   border: 1px solid var(--faq-slate-200);
   overflow: hidden;
@@ -448,7 +510,7 @@
   padding: 0.5rem 1rem;
   border-radius: 12px;
   border: 1px solid var(--faq-slate-200);
-  background: white;
+  background: var(--bg-card);
   font-size: 0.85rem;
   font-weight: 700;
   color: var(--faq-slate-600);
@@ -572,7 +634,7 @@
 .faqPageSmartCardRight {
   flex: 1.2;
   padding: 4rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .featuresTitle {
@@ -621,7 +683,7 @@
 /* Help Section */
 .faqPageHelp {
   padding: 8rem 2rem;
-  background: white;
+  background: var(--bg-main);
   text-align: center;
 }
 
@@ -692,7 +754,7 @@
   align-items: center;
   gap: 0.75rem;
   font-weight: 800;
-  color: var(--faq-slate-900);
+  color: var(--faq-primary);
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;

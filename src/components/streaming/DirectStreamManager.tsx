@@ -13,25 +13,31 @@ const DirectStreamManager: React.FC<DirectStreamManagerProps> = ({ eventId, onSt
     const retryIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const connectToAdmin = (peer: Peer) => {
-        const adminPeerId = `event-${eventId}-admin`;
-
+        // Security: Sanitize eventId to prevent injection in peer identifiers
+        const safeEventId = eventId.replace(/[^a-zA-Z0-9-]/g, '');
+        const adminPeerId = `event-${safeEventId}-admin`;
 
         // 1. Open Data Link
         const conn = peer.connect(adminPeerId);
 
         conn.on('open', () => {
-            conn.send({ type: 'REQUEST_STREAM' });
+            // Send a structured request
+            conn.send({ type: 'REQUEST_STREAM', timestamp: Date.now() });
         });
 
         conn.on('data', (data: any) => {
-            if (data && data.type === 'NOT_READY') {
+            // Security: Validate incoming data structure
+            if (typeof data !== 'object' || data === null) return;
+
+            if (data.type === 'NOT_READY') {
                 startRetrying(peer);
             }
         });
 
         // 2. Listen for the Host to call US back
         peer.on('call', (call) => {
-            call.answer(new MediaStream()); // Minimal response to establish link
+            // Security: In a production P2P setup, we would verify a token here
+            call.answer(new MediaStream());
 
             call.on('stream', (remoteStream) => {
                 const videoTracks = remoteStream.getVideoTracks();
@@ -43,10 +49,16 @@ const DirectStreamManager: React.FC<DirectStreamManagerProps> = ({ eventId, onSt
                     onStream(remoteStream);
                 }
             });
+
+            call.on('error', (err) => {
+                console.error('📡 Viewer: Call error:', err);
+                onStream(null);
+            });
         });
 
         conn.on('error', (err) => {
-            console.warn('📡 Viewer: Host not reachable.');
+            // Use generic warnings to avoid leaking host structure
+            console.warn('📡 Viewer: Connection sync interrupted.');
             startRetrying(peer);
         });
     };
@@ -55,17 +67,20 @@ const DirectStreamManager: React.FC<DirectStreamManagerProps> = ({ eventId, onSt
         if (retryIntervalRef.current) return;
 
         retryIntervalRef.current = setInterval(() => {
-            if (peer && !peer.destroyed) {
+            if (peer && !peer.destroyed && !peer.disconnected) {
                 connectToAdmin(peer);
             }
-        }, 6000);
+        }, 8000); // Slightly increased backoff for network stability
     };
 
     useEffect(() => {
         if (peerRef.current && !peerRef.current.destroyed) return;
 
+        // Generate a cryptographically stronger random ID part
+        const randomPart = Array.from(window.crypto.getRandomValues(new Uint32Array(1)))[0].toString(36);
+        const viewerId = `viewer-${randomPart}`;
 
-        const peer = new Peer(`viewer-${Math.random().toString(36).substr(2, 9)}`, {
+        const peer = new Peer(viewerId, {
             host: window.location.hostname,
             port: 5005,
             path: '/peerjs',

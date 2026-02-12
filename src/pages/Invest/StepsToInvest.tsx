@@ -66,7 +66,7 @@ const StepsToInvest: React.FC = () => {
           >
             <span className="sti-hero-tag">Strategic Roadmap</span>
             <h1 className="sti-hero-title">
-              Invest in <span style={{ color: '#68d3ea' }}>Tomorrow</span>, Today
+              Invest in <span className="sti-hero-accent">Tomorrow</span>, Today
             </h1>
             <p className="sti-hero-subtitle">
               Your gateway to Africa's premier technology hub. Simple steps, strategic support, sustainable success.
@@ -77,10 +77,10 @@ const StepsToInvest: React.FC = () => {
               transition={{ delay: 0.5 }}
               className="d-flex justify-content-center gap-3"
             >
-              <a href="#sti-stepper" className="sti-btn sti-btn-primary" style={{ background: '#fff', color: '#16284F' }}>
+              <a href="#sti-stepper" className="sti-btn sti-btn-primary">
                 Start Your Journey
               </a>
-              <a href="#sti-support" className="sti-btn sti-btn-outline-white" style={{ border: '1px solid rgba(255,255,255,0.3)', color: '#fff' }}>
+              <a href="#sti-support" className="sti-btn sti-btn-outline-white">
                 Consult Expert
               </a>
             </motion.div>
@@ -99,12 +99,11 @@ const StepsToInvest: React.FC = () => {
             <Col md={4} key={idx}>
               <motion.div
                 whileHover={{ y: -5 }}
-                className="text-center p-4 h-100"
-                style={{ background: '#fff', borderRadius: '20px', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}
+                className="sti-feature-card text-center p-4 h-100"
               >
-                <div style={{ fontSize: '2.5rem', color: '#0C7C92', marginBottom: '15px' }}>{item.icon}</div>
-                <h4 style={{ fontWeight: 800, color: '#16284F' }}>{item.title}</h4>
-                <p style={{ color: '#64748b' }}>{item.desc}</p>
+                <div className="sti-feature-icon">{item.icon}</div>
+                <h4 className="sti-feature-title">{item.title}</h4>
+                <p className="sti-feature-desc">{item.desc}</p>
               </motion.div>
             </Col>
           ))}
@@ -173,8 +172,8 @@ const StepsToInvest: React.FC = () => {
         </Container>
       </section>
 
-      {/* Static Support Section (Can be dynamic later) */}
-      <section id="sti-support" className="py-5" style={{ background: '#fff' }}>
+      {/* Static Support Section */}
+      <section id="sti-support" className="sti-support-section py-5">
         <Container>
           <div className="text-center mb-5">
             <h2 className="sti-section-title" style={{ marginBottom: '20px' }}>Dedicated Investment Support</h2>
@@ -182,13 +181,13 @@ const StepsToInvest: React.FC = () => {
           </div>
           <Row className="justify-content-center">
             <Col md={8}>
-              <div className="p-5" style={{ background: '#f8fafc', borderRadius: '30px', border: '1px solid #e2e8f0' }}>
+              <div className="sti-support-card p-5">
                 <div className="d-flex align-items-center justify-content-center flex-column text-center">
-                  <FaUserTie style={{ fontSize: '3rem', color: '#16284F', marginBottom: '20px' }} />
+                  <FaUserTie className="sti-support-icon" />
                   <h3>Investment Bureau</h3>
                   <p>Direct line to site allocation and licensing officers.</p>
                   <div className="d-flex gap-3 mt-3">
-                    <a href="mailto:invest@ethiopianitpark.et" className="sti-btn sti-btn-primary">Email Support</a>
+                    <a href="mailto:invest@ethiopianitpark.et" className="sti-btn sti-btn-primary-dark">Email Support</a>
                     <a href="tel:+251111000000" className="sti-btn sti-btn-outline">Call Direct</a>
                   </div>
                 </div>

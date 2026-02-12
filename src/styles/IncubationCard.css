@@ -10,7 +10,7 @@
 
 .itpc-incubation-wrapper {
   position: relative;
-  background: #f8fafc;
+  background: var(--bg-main);
   overflow: hidden;
   padding: 100px 0;
 }
@@ -22,6 +22,7 @@
   z-index: 0;
   opacity: 0.1;
   border-radius: 50%;
+  pointer-events: none;
 }
 
 .blob-1 {
@@ -65,9 +66,8 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 10px 20px;
-  background: white;
-  border-radius: 100px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   color: var(--premium-cyan);
   font-weight: 800;
   font-size: 0.8rem;
@@ -105,11 +105,11 @@
 
 /* Feature Grid */
 .program-card-premium {
-  background: white;
+  background: var(--bg-card);
   border-radius: 35px;
   padding: 45px 40px;
   height: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--border-color);
   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   z-index: 1;
@@ -147,7 +147,7 @@
 }
 
 .program-content p {
-  color: #64748b;
+  color: var(--text-muted);
   line-height: 1.7;
   margin-bottom: 28px;
   font-size: 1.05rem;
@@ -252,11 +252,11 @@
 .stat-summary-box {
   display: flex;
   gap: 40px;
-  background: white;
+  background: var(--bg-card);
   padding: 30px 40px;
   border-radius: 30px;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.04);
-  width: fit-content;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-color);
 }
 
 .stat-item-premium {
@@ -281,7 +281,7 @@
 .divider-v {
   width: 1px;
   height: 50px;
-  background: #e2e8f0;
+  background: var(--border-color);
   align-self: center;
 }
 
@@ -289,13 +289,12 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 16px;
-  background: white;
+  background: var(--bg-card);
   border-radius: 100px;
   font-weight: 700;
   font-size: 0.9rem;
-  color: var(--premium-navy);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
 }
 
 /* Success Story Cards */

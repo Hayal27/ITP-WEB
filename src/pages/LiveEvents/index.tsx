@@ -97,19 +97,19 @@ const LiveEventsPage: React.FC = () => {
     return { h, m, s };
   }, [config, eventStatus, now]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-gray-50">
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-[var(--bg-main)]">
     <div className="flex flex-col items-center gap-4">
       <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-      <p className="text-gray-500 font-medium">Connecting to hub...</p>
+      <p className="text-[var(--text-muted)] font-medium">Connecting to hub...</p>
     </div>
   </div>;
 
-  if (!config) return <div className="min-h-screen flex items-center justify-center bg-gray-50">
+  if (!config) return <div className="min-h-screen flex items-center justify-center bg-[var(--bg-main)]">
     <div className="text-center p-8 max-w-md">
-      <div className="bg-white p-8 rounded-[40px] shadow-xl">
-        <FaVideo size={48} className="mx-auto text-gray-300 mb-6" />
-        <h2 className="text-2xl font-black text-gray-900 mb-2 tracking-tight">STAY TUNED</h2>
-        <p className="text-gray-500 font-medium">There are no live events scheduled at the moment. Please check back later.</p>
+      <div className="bg-[var(--bg-card)] p-8 rounded-[40px] shadow-xl">
+        <FaVideo size={48} className="mx-auto text-[var(--text-muted)] mb-6" />
+        <h2 className="text-2xl font-black text-[var(--text-main)] mb-2 tracking-tight">STAY TUNED</h2>
+        <p className="text-[var(--text-muted)] font-medium">There are no live events scheduled at the moment. Please check back later.</p>
       </div>
     </div>
   </div>;
@@ -121,10 +121,37 @@ const LiveEventsPage: React.FC = () => {
   }[eventStatus as string] || 'bg-gray-100 text-gray-500';
 
   return (
-    <div className="min-h-screen bg-gray-50 font-sans selection:bg-blue-100 selection:text-blue-900">
+    <div className="min-h-screen bg-[var(--bg-main)] font-sans selection:bg-blue-100 selection:text-blue-900">
       <SEO
         title={`${config.title} - Live Hub`}
-        description={config.subtitle}
+        description={config.subtitle || `Watch the live broadcast of ${config.title} at Ethiopian IT Park's Digital Hub.`}
+        keywords={`Live Stream Ethiopia, Digital Hub, ITPC Live, Tech Events Addis Ababa, ${config.title}, Ethiopian IT Park Streaming`}
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Event",
+          "name": config.title,
+          "description": config.subtitle,
+          "startDate": `${config.date}T${config.startTime || '00:00'}`,
+          "endDate": `${config.date}T${config.endTime || '23:59'}`,
+          "eventStatus": config.status === 'live' ? "https://schema.org/EventScheduled" : "https://schema.org/EventCancelled",
+          "eventAttendanceMode": "https://schema.org/MixedEventAttendanceMode",
+          "location": {
+            "@type": "Place",
+            "name": config.location || "ITPC Digital Hall",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Goro",
+              "addressLocality": "Addis Ababa",
+              "addressCountry": "ET"
+            }
+          },
+          "image": config.stream?.poster || "https://res.cloudinary.com/yesuf/image/upload/v1758800607/office_hmfkwd.jpg",
+          "organizer": {
+            "@type": "Organization",
+            "name": "Ethiopian IT Park",
+            "url": "https://ethiopianitpark.com"
+          }
+        }}
       />
 
       <div className="w-full bg-[#16284F] bg-gradient-to-r from-[#16284F] to-[#0C7C92] pt-16 pb-32">
@@ -203,37 +230,37 @@ const LiveEventsPage: React.FC = () => {
               )}
             </motion.div>
 
-            <div className="bg-white rounded-[40px] p-8 md:p-10 shadow-xl border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-8">
+            <div className="bg-[var(--bg-card)] rounded-[40px] p-8 md:p-10 shadow-xl border border-[var(--border-color)] flex flex-col md:flex-row md:items-center justify-between gap-8">
               <div className="flex items-center gap-8">
                 <ViewerStats
                   base={config.analytics?.estimatedViewers || 0}
                   realCount={viewerCount}
                 />
-                <div className="h-10 w-px bg-gray-100 hidden md:block"></div>
-                <div className="flex items-center gap-3 text-gray-500 font-bold text-sm tracking-tight">
-                  <div className="bg-gray-50 p-2 rounded-xl"><FaGlobe className="text-blue-600" /></div>
+                <div className="h-10 w-px bg-[var(--border-color)] hidden md:block"></div>
+                <div className="flex items-center gap-3 text-[var(--text-muted)] font-bold text-sm tracking-tight">
+                  <div className="bg-[var(--bg-main)] p-2 rounded-xl"><FaGlobe className="text-[var(--primary)]" /></div>
                   GLOBAL BROADCAST
                 </div>
               </div>
               <ShareButtons title={config.title} />
             </div>
 
-            <div className="bg-white rounded-[40px] p-10 shadow-xl border border-gray-100 overflow-hidden relative group">
+            <div className="bg-[var(--bg-card)] rounded-[40px] p-10 shadow-xl border border-[var(--border-color)] overflow-hidden relative group">
               <div className="absolute top-0 right-0 p-8 scale-150 opacity-5 pointer-events-none group-hover:rotate-12 transition-transform">
                 <FaVideo size={120} />
               </div>
-              <h2 className="text-2xl font-black mb-6 text-gray-900 tracking-tight uppercase tracking-widest text-sm flex items-center gap-3">
+              <h2 className="text-2xl font-black mb-6 text-[var(--accent)] tracking-tight uppercase tracking-widest text-sm flex items-center gap-3">
                 <span className="w-8 h-1 bg-blue-600 rounded-full"></span>
                 About this Event
               </h2>
-              <div className="prose max-w-none text-gray-600 leading-relaxed font-medium">
+              <div className="prose max-w-none text-[var(--text-muted)] leading-relaxed font-medium">
                 {config.description || config.subtitle}
               </div>
             </div>
 
-            <div className="bg-white rounded-[40px] p-10 shadow-xl border border-gray-100">
+            <div className="bg-[var(--bg-card)] rounded-[40px] p-10 shadow-xl border border-[var(--border-color)]">
               <div className="flex items-center justify-between mb-10">
-                <h2 className="text-2xl font-black text-gray-900 tracking-tight uppercase tracking-widest text-sm flex items-center gap-3">
+                <h2 className="text-2xl font-black text-[var(--accent)] tracking-tight uppercase tracking-widest text-sm flex items-center gap-3">
                   <span className="w-8 h-1 bg-blue-600 rounded-full"></span>
                   Program Agenda
                 </h2>
@@ -244,13 +271,13 @@ const LiveEventsPage: React.FC = () => {
 
               <div className="space-y-0">
                 {config.agenda?.map((item, idx) => (
-                  <div key={idx} className="flex gap-8 pb-10 border-l-2 border-gray-50 pl-10 relative last:pb-0">
+                  <div key={idx} className="flex gap-8 pb-10 border-l-2 border-[var(--border-color)] pl-10 relative last:pb-0">
                     <div className="absolute -left-[9.5px] top-0 h-4 w-4 rounded-full bg-blue-600 border-4 border-white shadow-xl shadow-blue-500/30"></div>
                     <div className="min-w-[100px] font-black text-blue-600 text-sm tracking-widest uppercase">{item.time}</div>
                     <div>
-                      <h3 className="text-xl font-black text-gray-900 mb-2 leading-tight">{item.title}</h3>
+                      <h3 className="text-xl font-black text-[var(--accent)] mb-2 leading-tight">{item.title}</h3>
                       {item.speaker && (
-                        <div className="flex items-center gap-2 text-gray-400 font-bold text-xs uppercase tracking-wider">
+                        <div className="flex items-center gap-2 text-[var(--text-muted)] font-bold text-xs uppercase tracking-wider">
                           <FaUsers className="text-blue-400" />
                           {item.speaker}
                         </div>
@@ -284,9 +311,9 @@ const LiveEventsPage: React.FC = () => {
               </div>
             )}
 
-            <div className="bg-white rounded-[40px] shadow-2xl border border-gray-100 overflow-hidden flex flex-col h-[650px]">
-              <div className="bg-gray-50/50 p-6 border-b border-gray-100 flex items-center justify-between">
-                <h3 className="font-black text-gray-900 flex items-center gap-3 uppercase tracking-tighter text-sm">
+            <div className="bg-[var(--bg-card)] rounded-[40px] shadow-2xl border border-[var(--border-color)] overflow-hidden flex flex-col h-[650px]">
+              <div className="bg-[var(--bg-main)] p-6 border-b border-[var(--border-color)] flex items-center justify-between">
+                <h3 className="font-black text-[var(--text-main)] flex items-center gap-3 uppercase tracking-tighter text-sm">
                   <div className="bg-blue-600 p-2 rounded-xl"><FaComments className="text-white" /></div>
                   Live Interaction
                 </h3>
@@ -306,8 +333,8 @@ const LiveEventsPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-[40px] p-8 shadow-xl border border-gray-100">
-              <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-8">Session Contributors</h3>
+            <div className="bg-[var(--bg-card)] rounded-[40px] p-8 shadow-xl border border-[var(--border-color)]">
+              <h3 className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-8">Session Contributors</h3>
               <div className="space-y-6">
                 {config.speakers?.map((sp, idx) => (
                   <div key={idx} className="flex items-center gap-5 group cursor-default">
@@ -320,8 +347,8 @@ const LiveEventsPage: React.FC = () => {
                       />
                     </div>
                     <div>
-                      <h4 className="font-black text-gray-900 group-hover:text-blue-600 transition tracking-tight">{sp.name}</h4>
-                      <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mt-0.5">{sp.role}</p>
+                      <h4 className="font-black text-[var(--text-main)] group-hover:text-blue-600 transition tracking-tight">{sp.name}</h4>
+                      <p className="text-[10px] text-[var(--text-muted)] font-black uppercase tracking-widest mt-0.5">{sp.role}</p>
                     </div>
                   </div>
                 ))}

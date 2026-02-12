@@ -1,4 +1,4 @@
-import React, { useState, useEffect, JSX, useCallback } from 'react';
+import React, { useState, useEffect, JSX, useCallback, useRef } from 'react';
 import {
   Container,
   Row,
@@ -12,6 +12,7 @@ import {
 import { notifications } from '@mantine/notifications';
 import { motion, AnimatePresence, PanInfo } from 'framer-motion';
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs';
+import { FiSearch, FiXCircle, FiCalendar, FiUsers, FiClock, FiMapPin, FiMessageSquare } from 'react-icons/fi';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import './NewsEvents.css'; // Ensure this CSS file is linked and updated as per suggestions
 import {
@@ -28,6 +29,7 @@ import {
 } from '../../services/apiService';
 import { sanitizeHtml } from '../../utils/sanitize';
 import SkeletonLoader from '../../components/SkeletonLoader';
+import ReCAPTCHA from "react-google-recaptcha";
 
 interface Comment extends ApiComment { }
 
@@ -62,7 +64,7 @@ const heroSlides: HeroSlide[] = [
   { image: 'https://res.cloudinary.com/yesuf/image/upload/v1758529700/1758004298340_akccou.jpg', title: 'Global Tech Partnerships', description: 'Connect with industry leaders and explore collaboration opportunities in our world-class facilities.' },
   { image: '/images/hero/news-events-hero3.jpeg', title: 'Global Tech Partnerships', description: 'Connect with industry leaders and explore collaboration opportunities in our world-class facilities.' },
   { image: '/images/hero/news-events-hero.png', title: 'Latest Updates & Announcements', description: 'Stay informed about the latest developments, innovations, and opportunities at Ethiopian IT Park.' },
-  { image: '/images/hero/news-events-hero2.jpg', title: 'Innovation & Technology Hub', description: "Experience the pulse of Ethiopia's growing tech ecosystem and be part of our success stories." },
+  { image: '/images/hero/news-events-hero2.jpeg', title: 'Innovation & Technology Hub', description: "Experience the pulse of Ethiopia's growing tech ecosystem and be part of our success stories." },
   { image: '/images/hero/news-events-hero1.png', title: 'Upcoming Events & Programs', description: 'Discover our upcoming tech events, workshops, and networking opportunities designed to foster innovation.' },
 ];
 
@@ -102,7 +104,7 @@ const filterApprovedComments = (comments?: Comment[]): Comment[] => {
 };
 
 interface CommentFormProps {
-  onSubmit: (commentData: { name: string; email: string; text: string }, parentId?: string | null) => Promise<void>;
+  onSubmit: (commentData: { name: string; email: string; text: string; website?: string; captchaToken: string }, parentId?: string | null) => Promise<void>;
   newsItemId: string | number;
   parentId?: string | null;
   onCancelReply?: () => void;
@@ -114,9 +116,11 @@ const CommentForm: React.FC<CommentFormProps> = ({
   onSubmit, newsItemId, parentId = null, onCancelReply, isReplyForm = false,
   isSubmitting = false
 }) => {
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [text, setText] = useState('');
+  const [website, setWebsite] = useState(''); // Honeypot field
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -137,11 +141,23 @@ const CommentForm: React.FC<CommentFormProps> = ({
       return;
     }
 
+    const token = recaptchaRef.current?.getValue();
+    if (!token) {
+      notifications.show({
+        title: 'Security Check',
+        message: 'Please complete the reCAPTCHA.',
+        color: 'red'
+      });
+      return;
+    }
+
     try {
-      await onSubmit({ name, email, text }, parentId);
+      await onSubmit({ name, email, text, website, captchaToken: token }, parentId);
       setName('');
       setEmail('');
       setText('');
+      setWebsite('');
+      recaptchaRef.current?.reset();
       if (onCancelReply) onCancelReply();
     } catch (error) {
       console.error("Comment submission failed in form:", error);
@@ -152,6 +168,17 @@ const CommentForm: React.FC<CommentFormProps> = ({
 
   return (
     <Form onSubmit={handleSubmit} className={`news-events-comment-form ${isReplyForm ? 'reply-form-compact' : ''}`}>
+      {/* Honeypot field - hidden from users */}
+      <div style={{ display: 'none' }} aria-hidden="true">
+        <input
+          type="text"
+          name="website"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       {!isReplyForm && <h5 className="mb-3">Leave a Comment</h5>}
 
       <Row className={isReplyForm ? 'g-2' : 'mb-3'}>
@@ -204,6 +231,14 @@ const CommentForm: React.FC<CommentFormProps> = ({
           className={isReplyForm ? 'form-control-sm' : ''}
         />
       </Form.Group>
+
+      <div className="mb-3 d-flex justify-content-center">
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // Google test key
+          size={isReplyForm ? "compact" : "normal"}
+        />
+      </div>
 
       <div className="d-flex gap-2">
         <Button
@@ -454,7 +489,7 @@ const NewsEvents: React.FC = () => {
   };
 
   const handleCommentSubmit = async (
-    commentInput: { name: string; email: string; text: string },
+    commentInput: { name: string; email: string; text: string; website?: string; captchaToken: string },
     parentId: string | null = null
   ) => {
     if (detailItem && 'category' in detailItem) {
@@ -496,7 +531,7 @@ const NewsEvents: React.FC = () => {
   // --- Tailwind-based Card Layouts ---
   const renderNewsCard = (item: NewsItem) => (
     <div
-      className="news-events-card bg-white rounded-2xl shadow-card flex flex-col h-full transition hover:shadow-lg cursor-pointer"
+      className="news-events-card bg-[var(--bg-card)] rounded-2xl shadow-card flex flex-col h-full transition hover:shadow-lg cursor-pointer"
       onClick={() => handleShowDetail(item)}
     >
       <img
@@ -508,24 +543,24 @@ const NewsEvents: React.FC = () => {
         onError={(e) => (e.currentTarget.src = '/images/placeholder-news.jpg')}
       />
       <div className="news-events-card-body flex flex-col flex-1 p-6">
-        <div className="news-events-card-meta flex items-center gap-3 mb-2 text-gray-500">
+        <div className="news-events-card-meta flex items-center gap-3 mb-2 text-[var(--text-muted)]">
           <span className="news-events-badge">{item.category}</span>
           <span className="news-events-card-date-highlight flex items-center">
-            <i className="bi bi-calendar3"></i> {formatDate(item.date)}
+            <FiCalendar className="mr-1" /> {formatDate(item.date)}
           </span>
         </div>
         {renderTags(item.tags)}
-        <div className="news-events-card-title font-bold text-lg mb-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.title) }} />
-        <div className="news-events-card-text text-gray-600 mb-4" dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description.substring(0, 120) + (item.description.length > 120 ? '...' : '')) }} />
+        <div className="news-events-card-title font-bold text-lg mb-2 text-[var(--text-main)]" dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.title) }} />
+        <div className="news-events-card-text text-[var(--text-muted)] mb-4" dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description.substring(0, 120) + (item.description.length > 120 ? '...' : '')) }} />
         <div className="flex justify-between items-center mt-auto">
           <button
-            className="news-events-read-more-btn border border-primary-default text-primary-default bg-gray-50 font-semibold rounded-md px-4 py-2 hover:bg-primary hover:text-white transition"
+            className="news-events-read-more-btn border border-primary-default text-primary-default bg-[var(--bg-main)] font-semibold rounded-md px-4 py-2 hover:bg-primary hover:text-white transition"
             onClick={e => { e.stopPropagation(); handleShowDetail(item); }}
           >
             View Details
           </button>
           <span className="news-events-card-comments-highlight" title="Approved Comments">
-            <i className="bi bi-chat-dots"></i> {item.approvedCommentsCount ?? 0} Comments
+            <FiMessageSquare className="mr-1" /> {item.approvedCommentsCount ?? 0} Comments
           </span>
         </div>
       </div>
@@ -534,7 +569,7 @@ const NewsEvents: React.FC = () => {
 
   const renderEventCard = (item: EventItem) => {
     const eventStatus = getEventStatus(item.date);
-    const cardClasses = ["news-events-card", "bg-white", "rounded-2xl", "shadow-card", "flex", "flex-col", "h-full", "transition", "hover:shadow-lg", "cursor-pointer"];
+    const cardClasses = ["news-events-card", "bg-[var(--bg-card)]", "rounded-2xl", "shadow-card", "flex", "flex-col", "h-full", "transition", "hover:shadow-lg", "cursor-pointer"];
     if (eventStatus === 'upcoming_or_today') cardClasses.push("event-is-upcoming");
     return (
       <div className={cardClasses.join(" ")} onClick={() => handleShowDetail(item)}>
@@ -547,18 +582,18 @@ const NewsEvents: React.FC = () => {
           onError={(e) => (e.currentTarget.src = '/images/placeholder-event.jpg')}
         />
         <div className="news-events-card-body flex flex-col flex-1 p-6">
-          <div className="news-events-card-meta flex items-center gap-3 mb-2 text-gray-500">
+          <div className="news-events-card-meta flex items-center gap-3 mb-2 text-[var(--text-muted)]">
             <span className={`news-events-badge ${eventStatus === 'upcoming_or_today' ? 'badge-upcoming' : 'badge-past'}`}>{eventStatus === 'upcoming_or_today' ? 'Upcoming' : 'Past'}</span>
             <span className="news-events-card-date-highlight flex items-center">
-              <i className="bi bi-calendar3"></i> {formatDate(item.date)}
+              <FiCalendar className="mr-1" /> {formatDate(item.date)}
             </span>
-            <span className="news-events-card-readtime flex items-center"><i className="bi bi-people"></i> {item.capacity}</span>
+            <span className="news-events-card-readtime flex items-center"><FiUsers className="mr-1" /> {item.capacity}</span>
           </div>
           {renderTags(item.tags)}
-          <div className="news-events-card-title font-bold text-lg mb-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.title) }} />
-          <div className="news-events-card-text text-gray-600 mb-4">
-            <span><i className="bi bi-clock"></i> {item.time}</span><br />
-            <span><i className="bi bi-geo-alt"></i> {item.venue}</span>
+          <div className="news-events-card-title font-bold text-lg mb-2 text-[var(--text-main)]" dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.title) }} />
+          <div className="news-events-card-text text-[var(--text-muted)] mb-4">
+            <span className="flex items-center gap-1"><FiClock /> {item.time}</span>
+            <span className="flex items-center gap-1"><FiMapPin /> {item.venue}</span>
           </div>
           <div className="flex justify-between items-center mt-auto">
             {(item.registrationLink && item.registrationLink !== '#') && (
@@ -572,7 +607,7 @@ const NewsEvents: React.FC = () => {
                 Register
               </a>
             )}
-            <span className="text-muted" title="Comments"><i className="bi bi-chat-dots"></i> {item.comments ?? 0}</span>
+            <span className="text-muted flex items-center gap-1" title="Comments"><FiMessageSquare /> {item.comments ?? 0}</span>
           </div>
         </div>
       </div>
@@ -606,12 +641,12 @@ const NewsEvents: React.FC = () => {
     return (
       <div
         key={item.id.toString()}
-        className="news-events-sidebar-card flex items-center gap-1 bg-white rounded-xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 p-3 mb-2 cursor-pointer border border-gray-100 group"
+        className="news-events-sidebar-card flex items-center gap-1 bg-[var(--bg-card)] rounded-xl shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-200 p-3 mb-2 cursor-pointer border border-[var(--border-color)] group"
         onClick={() => handleShowDetail(item)}
         title={item.title.replace(/<[^>]*>?/gm, '')}
         style={{ minHeight: 100 }}
       >
-        <div className="news-events-sidebar-img-wrap w-20 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 border border-gray-200">
+        <div className="news-events-sidebar-img-wrap w-20 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-[var(--neutral)] border border-[var(--border-color)]">
           <img
             src={imageSrc}
             alt={item.title.replace(/<[^>]*>?/gm, '')}
@@ -627,7 +662,7 @@ const NewsEvents: React.FC = () => {
         <div className="news-events-sidebar-body flex-1 min-w-0 flex flex-col justify-between h-full">
           <div>
             <div
-              className="news-events-sidebar-title font-semibold text-[1rem] text-gray-900 leading-tight line-clamp-2 group-hover:text-primary-default transition-colors cursor-pointer"
+              className="news-events-sidebar-title font-semibold text-[1rem] text-[var(--text-main)] leading-tight line-clamp-2 group-hover:text-primary-default transition-colors cursor-pointer"
               dangerouslySetInnerHTML={{
                 __html: sanitizeHtml(
                   item.title.length > 80
@@ -637,7 +672,7 @@ const NewsEvents: React.FC = () => {
               }}
             />
           </div>
-          <div className="news-events-sidebar-meta flex items-center gap-2 mt-2 text-xs text-gray-500">
+          <div className="news-events-sidebar-meta flex items-center gap-2 mt-2 text-xs text-[var(--text-muted)]">
             <span className="news-events-sidebar-badge">{badgeText}</span>
             <span className="news-events-sidebar-date">{formatDate(item.date)}</span>
             <span className="news-events-card-comments-highlight flex items-center ml-auto">
@@ -670,7 +705,7 @@ const NewsEvents: React.FC = () => {
       }
     } else {
       items.push(
-        <button key={1} className={`px-3 py-1 rounded ${1 === currentPageNews ? 'bg-primary-default text-white' : 'bg-white border text-primary-default'} mx-1`} onClick={() => handleNewsPageChange(1)}>1</button>
+        <button key={1} className={`px-3 py-1 rounded ${1 === currentPageNews ? 'bg-primary-default text-white' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-primary-default'} mx-1`} onClick={() => handleNewsPageChange(1)}>1</button>
       );
       let startPage = Math.max(2, currentPageNews - Math.floor((MAX_VISIBLE_PAGES - 2) / 2));
       let endPage = Math.min(totalPages - 1, currentPageNews + Math.ceil((MAX_VISIBLE_PAGES - 2) / 2) - 1);
@@ -686,7 +721,7 @@ const NewsEvents: React.FC = () => {
         items.push(
           <button
             key={number}
-            className={`px-3 py-1 rounded ${number === currentPageNews ? 'bg-primary-default text-white' : 'bg-white border text-primary-default'} mx-1`}
+            className={`px-3 py-1 rounded ${number === currentPageNews ? 'bg-primary-default text-white' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-primary-default'} mx-1`}
             onClick={() => handleNewsPageChange(number)}
           >
             {number}
@@ -695,14 +730,14 @@ const NewsEvents: React.FC = () => {
       }
       if (endPage < totalPages - 1) items.push(<span key="end-ellipsis" className="mx-1">...</span>);
       items.push(
-        <button key={totalPages} className={`px-3 py-1 rounded ${totalPages === currentPageNews ? 'bg-primary-default text-white' : 'bg-white border text-primary-default'} mx-1`} onClick={() => handleNewsPageChange(totalPages)}>{totalPages}</button>
+        <button key={totalPages} className={`px-3 py-1 rounded ${totalPages === currentPageNews ? 'bg-primary-default text-white' : 'bg-[var(--bg-card)] border border-[var(--border-color)] text-primary-default'} mx-1`} onClick={() => handleNewsPageChange(totalPages)}>{totalPages}</button>
       );
     }
     return (
       <div className="flex justify-center mt-6 news-events-pagination">
-        <button className="px-3 py-1 rounded bg-white border text-primary-default mx-1" onClick={() => handleNewsPageChange(currentPageNews - 1)} disabled={currentPageNews === 1}>Prev</button>
+        <button className="px-3 py-1 rounded bg-[var(--bg-card)] border border-[var(--border-color)] text-primary-default mx-1" onClick={() => handleNewsPageChange(currentPageNews - 1)} disabled={currentPageNews === 1}>Prev</button>
         {items}
-        <button className="px-3 py-1 rounded bg-white border text-primary-default mx-1" onClick={() => handleNewsPageChange(currentPageNews + 1)} disabled={currentPageNews === totalPages}>Next</button>
+        <button className="px-3 py-1 rounded bg-[var(--bg-card)] border border-[var(--border-color)] text-primary-default mx-1" onClick={() => handleNewsPageChange(currentPageNews + 1)} disabled={currentPageNews === totalPages}>Next</button>
       </div>
     );
   };
@@ -837,7 +872,7 @@ const NewsEvents: React.FC = () => {
             className="news-events-detail-img"
             onError={(e) => (e.currentTarget.src = (isNewsItem ? '/images/placeholder-news-large.jpg' : '/images/placeholder-event-large.jpg'))}
           />
-          <div className="news-events-detail-image-overlay absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <div className="news-events-detail-image-overlay absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
             <span className="bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-white text-sm font-medium border border-white/30">
               <i className="bi bi-arrows-fullscreen mr-2"></i> View Full Image
             </span>
@@ -859,8 +894,8 @@ const NewsEvents: React.FC = () => {
           {Array.isArray(detailItem.image) && detailItem.image.length > 1 && (
             <div className="news-events-detail-gallery mt-8 mb-8 overflow-hidden">
               <div className="d-flex justify-content-between align-items-center mb-4">
-                <h4 className="font-bold text-xl text-gray-800 m-0">Gallery</h4>
-                <div className="gallery-hint text-muted small"><i className="bi bi-arrows-expand mr-1"></i> Click to enlarge</div>
+                <h4 className="font-bold text-xl text-[var(--text-main)] m-0">Gallery</h4>
+                <div className="gallery-hint text-[var(--text-muted)] small"><i className="bi bi-arrows-expand mr-1"></i> Click to enlarge</div>
               </div>
 
               <div className="gallery-scroll-container">
@@ -938,7 +973,7 @@ const NewsEvents: React.FC = () => {
                   loading="eager"
                   draggable={false}
                 />
-                <div className="news-events-hero-overlay"></div>
+                <div className="news-events-hero-overlay pointer-events-none"></div>
               </motion.div>
             </AnimatePresence>
             <div className="news-events-hero-content container mx-auto">
@@ -996,59 +1031,81 @@ const NewsEvents: React.FC = () => {
               </section>
 
               {/* Filters */}
-              <section className="news-events-filters-section sticky top-[var(--header-height)] z-50 shadow">
-                <div className="container mx-auto">
-                  <div className="flex flex-wrap gap-3 items-center">
-                    <input
-                      type="text"
-                      placeholder="Search news and events..."
-                      value={searchQuery}
-                      onChange={handleSearchChange}
-                      className="news-events-search-input flex-1 min-w-[180px]"
-                      aria-label="Search news and events"
-                    />
-                    <select
-                      value={selectedCategory}
-                      onChange={handleCategoryChange}
-                      className="news-events-category-select min-w-[140px]"
-                      aria-label="Select category"
-                      disabled={activeTab !== 'news'}
-                    >
-                      {categories.map((category) => (
-                        <option key={category} value={category}>{category}</option>
-                      ))}
-                    </select>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-700">Filter by Year:</span>
-                      <input
-                        type="date"
-                        value={filterDate}
-                        onChange={handleDateChange}
-                        className="news-events-year-select min-w-[140px] px-2 py-2 border rounded-md"
-                        aria-label="Filter by date"
-                      />
-                      {filterDate && (
-                        <button
-                          onClick={() => setFilterDate('')}
-                          className="text-xs text-red-500 hover:text-red-700 underline"
-                        >
-                          Clear
-                        </button>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        className={`news-events-tab-button px-4 py-2 rounded-lg font-semibold ${activeTab === 'news' ? 'bg-primary-default text-white' : 'bg-white border border-primary-default text-primary-default'}`}
-                        onClick={() => handleTabChange('news')}
-                      >
-                        News
-                      </button>
-                      <button
-                        className={`news-events-tab-button px-4 py-2 rounded-lg font-semibold ${activeTab === 'events' ? 'bg-primary-default text-white' : 'bg-white border border-primary-default text-primary-default'}`}
-                        onClick={() => handleTabChange('events')}
-                      >
-                        Events
-                      </button>
+              <section
+                className="news-events-filters-section sticky z-[100]"
+                style={{ top: 'var(--app-header-offset, 78px)' }}
+              >
+                <div className="container mx-auto px-2 sm:px-4">
+                  <div className="news-events-filters-container bg-[var(--bg-card)] shadow-xl rounded-2xl p-3 md:p-6 mb-6 -mt-6 md:-mt-12 relative z-10 border border-[var(--border-color)]">
+                    <div className="grid grid-cols-1 lg:flex lg:flex-row gap-3 lg:gap-4 items-center justify-between">
+                      {/* Search & Category Group */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 flex-1">
+                        <div className="news-events-search-wrapper">
+                          <div className="relative">
+                            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={16} />
+                            <input
+                              type="text"
+                              placeholder="Search..."
+                              value={searchQuery}
+                              onChange={handleSearchChange}
+                              className="news-events-search-input w-full pl-10 pr-4 py-2 bg-[var(--bg-main)] border-none rounded-xl focus:ring-2 focus:ring-primary-default transition-all text-[var(--text-main)] text-sm"
+                              aria-label="Search news and events"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="news-events-category-wrapper">
+                          <select
+                            value={selectedCategory}
+                            onChange={handleCategoryChange}
+                            className="news-events-category-select w-full py-2 px-3 bg-[var(--bg-main)] border-none rounded-xl focus:ring-2 focus:ring-primary-default appearance-none transition-all cursor-pointer text-[var(--text-main)] text-sm"
+                            aria-label="Select category"
+                            disabled={activeTab !== 'news'}
+                          >
+                            {categories.map((category) => (
+                              <option key={category} value={category}>{category}</option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+
+                      {/* Year & Tabs Group */}
+                      <div className="grid grid-cols-1 md:flex md:flex-row gap-2 items-center">
+                        <div className="news-events-year-wrapper flex items-center gap-2 bg-[var(--bg-main)] px-3 py-2 rounded-xl w-full md:w-auto">
+                          <span className="text-[10px] font-bold text-[var(--text-muted)] uppercase whitespace-nowrap">Date:</span>
+                          <input
+                            type="date"
+                            value={filterDate}
+                            onChange={handleDateChange}
+                            className="news-events-year-select bg-transparent border-none text-xs font-medium focus:ring-0 p-0 text-[var(--text-main)]"
+                            aria-label="Filter by date"
+                          />
+                          {filterDate && (
+                            <button
+                              onClick={() => setFilterDate('')}
+                              className="text-[var(--text-muted)] hover:text-red-500 transition-colors"
+                              title="Clear date"
+                            >
+                              <FiXCircle size={14} />
+                            </button>
+                          )}
+                        </div>
+
+                        <div className="news-events-tab-group flex p-1 bg-[var(--bg-main)] rounded-xl w-full md:w-auto border border-[var(--border-color)]">
+                          <button
+                            className={`news-events-tab-button flex-1 md:flex-none md:px-6 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 ${activeTab === 'news' ? 'news-tab-active' : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'}`}
+                            onClick={() => handleTabChange('news')}
+                          >
+                            News
+                          </button>
+                          <button
+                            className={`news-events-tab-button flex-1 md:flex-none md:px-6 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 ${activeTab === 'events' ? 'news-tab-active' : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'}`}
+                            onClick={() => handleTabChange('events')}
+                          >
+                            Events
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1058,13 +1115,13 @@ const NewsEvents: React.FC = () => {
               {detailItem ? renderDetailContent() : renderMainContent()}
             </div>
             {/* Sidebar */}
-            <div className="news-events-sidebar-col w-full lg:w-[370px] px-3 py-8 border-l border-gray-200">
+            <div className="news-events-sidebar-col w-full lg:w-[370px] px-3 py-8 border-l border-[var(--border-color)]">
               <aside className="news-events-sidebar">
                 {/* Latest News */}
                 <div className="news-events-sidebar-header">
                   <span className="news-events-sidebar-title-main">
                     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" style={{ marginRight: 6, verticalAlign: 'middle' }}>
-                      <rect width="18" height="18" rx="4" fill="#0C7C92" />
+                      <rect width="18" height="18" rx="4" fill="var(--primary)" />
                       <path d="M7 12.5l2.5 2.5 5-5" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     Latest News
@@ -1085,7 +1142,7 @@ const NewsEvents: React.FC = () => {
                 <div className="news-events-sidebar-header mt-4">
                   <span className="news-events-sidebar-title-main">
                     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" style={{ marginRight: 6, verticalAlign: 'middle' }}>
-                      <rect width="18" height="18" rx="4" fill="#6EC9C4" />
+                      <rect width="18" height="18" rx="4" fill="var(--accent)" />
                       <path d="M12 7v5l3 3" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     Upcoming Events

@@ -2,14 +2,14 @@
 
 :root {
 	/* Ethiopian IT Park Strict Brand Colors */
-	--brand-primary: #0C7C92;
+	--brand-primary: var(--primary);
 	/* Primary Blue */
-	--brand-secondary: #16284F;
+	--brand-secondary: var(--secondary);
 	/* Secondary Blue */
-	--brand-accent: #6EC9C4;
+	--brand-accent: var(--accent);
 	/* Accent Teal */
-	--brand-white: #FFFFFF;
-	--brand-black: #000000;
+	--brand-white: var(--bg-card);
+	--brand-black: var(--text-main);
 
 	/* Legacy variable mapping for backward compatibility */
 	--primary-color: var(--brand-primary);
@@ -18,10 +18,10 @@
 	--white-color: var(--brand-white);
 
 	/* Utility colors */
-	--text-color: #f4f4f4;
-	--divider-color: #313131;
-	--dark-divider-color: #FFFFFF33;
-	--error-color: rgb(230, 87, 87);
+	--text-color: var(--text-main);
+	--divider-color: var(--border-color);
+	--dark-divider-color: var(--border-color);
+	--error-color: #ef4444;
 
 	/* Ethiopian IT Park Strict Typography */
 	--brand-font: "Roboto", sans-serif;
@@ -37,9 +37,9 @@
 body {
 	font-family: var(--default-font);
 	font-size: 17px;
-	font-weight: 300;
+	font-weight: 400;
 	line-height: 1.6em;
-	color: var(--text-color);
+	color: var(--text-main);
 }
 
 p {
@@ -55,9 +55,9 @@ h5,
 h6 {
 	margin: 0;
 	font-family: var(--accent-font);
-	font-weight: 300;
-	line-height: 1.1em;
-	color: var(--white-color);
+	font-weight: 700;
+	line-height: 1.2em;
+	color: var(--text-main);
 }
 
 img {
@@ -320,7 +320,7 @@ body {
 
 .working-process-step {
 	position: relative;
-	background: white;
+	background: var(--bg-card);
 	height: calc(100% - 30px);
 	margin-bottom: 30px;
 	padding: 30px 30px 30px 40px;
@@ -370,8 +370,8 @@ body {
 	font-size: 18px;
 	font-weight: 600;
 	line-height: normal;
-	background-color: var(--white-color);
-	color: var(--secondary-color);
+	background-color: var(--bg-main);
+	color: var(--secondary);
 	border-radius: 50%;
 	width: 26px;
 	height: 26px;

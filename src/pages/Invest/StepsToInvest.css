@@ -11,8 +11,86 @@
   background-color: var(--invest-bg);
   min-height: 100vh;
   padding-bottom: 120px;
-  overflow-x: hidden;
   font-family: 'Inter', sans-serif;
+}
+
+[data-theme='dark'] {
+  --invest-bg: var(--bg-main);
+  --primary-deep: var(--text-main);
+  --primary-teal: var(--primary);
+  --invest-gradient: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+}
+
+[data-theme='dark'] .sti-hero-premium {
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='dark'] .sti-hero-accent {
+  color: var(--accent) !important;
+}
+
+[data-theme='dark'] .sti-step-content,
+[data-theme='dark'] .sti-btn-primary,
+[data-theme='dark'] .sti-resource-card-premium,
+[data-theme='dark'] .sti-feature-card,
+[data-theme='dark'] .sti-support-card {
+  background: var(--bg-card) !important;
+  color: var(--text-main);
+  border-color: var(--border-color) !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+}
+
+[data-theme='dark'] .sti-btn-primary:hover,
+[data-theme='dark'] .sti-btn-primary-dark:hover {
+  background: var(--bg-main) !important;
+  border-color: var(--primary) !important;
+}
+
+[data-theme='dark'] .sti-btn-primary-dark {
+  background: var(--primary) !important;
+  color: white !important;
+}
+
+[data-theme='dark'] .sti-feature-icon,
+[data-theme='dark'] .sti-support-icon {
+  color: var(--primary) !important;
+}
+
+[data-theme='dark'] .sti-step-desc,
+[data-theme='dark'] .sti-feature-desc,
+[data-theme='dark'] .text-muted {
+  color: var(--text-muted) !important;
+}
+
+[data-theme='dark'] .sti-support-section {
+  background: var(--bg-main) !important;
+}
+
+[data-theme='dark'] .sti-step-marker {
+  background: var(--bg-card);
+  color: var(--text-main);
+  box-shadow: 0 0 0 8px rgba(0, 0, 0, 0.3), 0 10px 30px rgba(0, 0, 0, 0.5);
+  border-color: var(--border-color);
+}
+
+[data-theme='dark'] .sti-doc-link {
+  background: var(--bg-main);
+  color: var(--primary);
+}
+
+[data-theme='dark'] .sti-doc-link:hover {
+  background: var(--primary);
+  color: white;
+}
+
+[data-theme='dark'] .sti-btn-outline {
+  border-color: var(--text-main);
+  color: var(--text-main);
+}
+
+[data-theme='dark'] .sti-btn-outline:hover {
+  background: var(--text-main);
+  color: var(--bg-main);
 }
 
 /* Hero Section */
@@ -62,6 +140,10 @@
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.sti-hero-accent {
+  color: #68d3ea;
 }
 
 .sti-hero-subtitle {
@@ -121,6 +203,19 @@
   color: #fff;
 }
 
+.sti-btn-primary-dark {
+  background: var(--primary-deep);
+  color: #fff;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.sti-btn-primary-dark:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  background: var(--primary-teal);
+}
+
 /* Stepper Section */
 .sti-stepper {
   position: relative;
@@ -176,7 +271,7 @@
   top: 0;
   width: 50px;
   height: 50px;
-  background: #fff;
+  background: var(--bg-card);
   border: 4px solid var(--primary-teal);
   border-radius: 50%;
   display: flex;
@@ -185,7 +280,7 @@
   font-weight: 800;
   color: var(--primary-deep);
   z-index: 2;
-  box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.8), 0 10px 30px rgba(12, 124, 146, 0.3);
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--bg-card), transparent 20%), 0 10px 30px rgba(12, 124, 146, 0.3);
 }
 
 .sti-step-premium:nth-child(odd) .sti-step-marker {
@@ -233,7 +328,7 @@
   font-weight: 700;
   font-size: 0.9rem;
   text-decoration: none;
-  background: #f0f9ff;
+  background: color-mix(in srgb, var(--primary-teal), transparent 92%);
   padding: 8px 16px;
   border-radius: 8px;
   transition: all 0.3s;
@@ -247,7 +342,7 @@
 
 /* Resources Grid */
 .sti-resource-card-premium {
-  background: linear-gradient(145deg, #ffffff, #f1f5f9);
+  background: var(--bg-card);
   border-radius: 20px;
   padding: 30px;
   text-align: center;
@@ -260,7 +355,7 @@
 .sti-resource-card-premium:hover {
   transform: translateY(-10px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-  background: #fff;
+  background: var(--bg-card);
 }
 
 .sti-resource-icon {
@@ -325,4 +420,43 @@
     border-bottom-right-radius: 40px;
     padding: 100px 0 60px;
   }
+}
+
+.sti-feature-card {
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+
+.sti-feature-icon {
+  font-size: 2.5rem;
+  color: var(--primary-teal);
+  margin-bottom: 15px;
+}
+
+.sti-feature-title {
+  font-weight: 800;
+  color: var(--primary-deep);
+}
+
+.sti-feature-desc {
+  color: #64748b;
+}
+
+.sti-support-section {
+  background: #fff;
+}
+
+.sti-support-card {
+  background: #f8fafc;
+  border-radius: 30px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.02);
+}
+
+.sti-support-icon {
+  font-size: 3rem;
+  color: var(--primary-deep);
+  margin-bottom: 20px;
 }

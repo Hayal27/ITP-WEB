@@ -483,10 +483,10 @@ const LeadershipTeam: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-inter pb-20 overflow-x-hidden">
+    <div className="min-h-screen bg-[var(--bg-main)] font-inter pb-20 overflow-x-hidden">
 
       {/* Hero Section */}
-      <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center bg-white mb-20 overflow-hidden">
+      <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center bg-[var(--bg-main)] mb-20 overflow-hidden">
         <div className="absolute inset-0 rounded-b-[4rem] overflow-hidden shadow-2xl z-0">
           <div className="absolute inset-0 bg-gradient-to-br from-[#16284F] via-[#1a365d] to-[#0C7C92] opacity-95"></div>
         </div>
@@ -553,7 +553,7 @@ const LeadershipTeam: React.FC = () => {
                 ease: [0.22, 1, 0.36, 1], // Custom Ease Out Quint
                 delay: index * 0.1
               }}
-              className="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden w-full max-w-2xl border border-gray-100/50 group hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] transition-all duration-500"
+              className="bg-[var(--bg-card)] rounded-[2.5rem] shadow-2xl overflow-hidden w-full max-w-2xl border border-gray-100/50 group hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] transition-all duration-500"
             >
               <div className="flex flex-col md:flex-row h-full relative">
                 <div className="absolute top-0 right-0 p-6 z-30 opacity-10 group-hover:opacity-100 transition-opacity duration-500">
@@ -575,16 +575,16 @@ const LeadershipTeam: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="w-full md:w-7/12 p-10 flex flex-col justify-center bg-gradient-to-br from-white to-slate-50">
+                <div className="w-full md:w-7/12 p-10 flex flex-col justify-center bg-gradient-to-br from-[var(--bg-card)] to-[var(--bg-main)]">
                   <div className="mb-auto"></div> {/* Spacer */}
 
                   <div>
-                    <h3 className="text-3xl font-bold text-[#16284F] mb-2">{leader.name}</h3>
-                    <p className="text-[#0C7C92] font-semibold text-lg mb-6 flex items-center gap-2">
+                    <h3 className="text-3xl font-bold text-[var(--accent)] mb-2">{leader.name}</h3>
+                    <p className="text-[var(--primary)] font-semibold text-lg mb-6 flex items-center gap-2">
                       {leader.title}
                       <span className="h-px flex-1 bg-gray-200"></span>
                     </p>
-                    <p className="text-slate-600 mb-8 text-base leading-relaxed">{leader.desc}</p>
+                    <p className="text-[var(--text-muted)] mb-8 text-base leading-relaxed">{leader.desc}</p>
                   </div>
 
                   <div className="flex gap-4 pt-6 border-t border-gray-100">
@@ -614,10 +614,10 @@ const LeadershipTeam: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <span className="text-[#0C7C92] font-semibold tracking-wider text-sm uppercase block mb-3">Our Structure</span>
-          <h2 className="text-4xl font-bold text-[#16284F] mb-6">Organizational Chart</h2>
-          <div className="h-1.5 w-24 bg-gradient-to-r from-[#16284F] to-[#0C7C92] mx-auto rounded-full"></div>
-          <p className="text-gray-500 mt-6 max-w-2xl mx-auto text-lg">
+          <span className="text-[var(--primary)] font-semibold tracking-wider text-sm uppercase block mb-3">Our Structure</span>
+          <h2 className="text-4xl font-bold text-[var(--accent)] mb-6">Organizational Chart</h2>
+          <div className="h-1.5 w-24 bg-gradient-to-r from-[var(--accent)] to-[var(--primary)] mx-auto rounded-full"></div>
+          <p className="text-[var(--text-muted)] mt-6 max-w-2xl mx-auto text-lg">
             A hierarchical view of our operational management, showing how our departments collaborate to achieve our vision.
           </p>
         </motion.div>
@@ -627,7 +627,7 @@ const LeadershipTeam: React.FC = () => {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="bg-white rounded-[2rem] shadow-2xl overflow-hidden border border-gray-200 p-2 md:p-8 relative"
+          className="bg-[var(--bg-card)] rounded-[2.5rem] shadow-2xl overflow-hidden border border-[var(--border-color)] p-2 md:p-8 relative"
           style={{ height: '75vh' }}
         >
           {/* Decorative background element for the chart container */}
@@ -651,7 +651,7 @@ const LeadershipTeam: React.FC = () => {
             initial={{ scale: 0.9, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0, y: 20 }}
-            className="bg-white rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden relative"
+            className="bg-[var(--bg-card)] rounded-2xl shadow-2xl max-w-sm w-full overflow-hidden relative"
             onClick={e => e.stopPropagation()}
           >
             <div className="h-28 bg-gradient-to-br from-[#16284F] to-[#0C7C92] relative overflow-hidden">
@@ -667,11 +667,11 @@ const LeadershipTeam: React.FC = () => {
                 <div className="absolute bottom-1 right-1 w-5 h-5 bg-green-500 border-4 border-white rounded-full"></div>
               </div>
 
-              <h3 className="text-2xl font-bold text-[#16284F] mb-1 leading-tight">{selectedMember.title}</h3>
-              <p className="text-[#0C7C92] font-semibold text-sm mb-5 uppercase tracking-wide">{selectedMember.dept}</p>
+              <h3 className="text-2xl font-bold text-[var(--accent)] mb-1 leading-tight">{selectedMember.title}</h3>
+              <p className="text-[var(--primary)] font-semibold text-sm mb-5 uppercase tracking-wide">{selectedMember.dept}</p>
 
-              <div className="bg-slate-50 rounded-xl p-4 mb-6 border border-slate-100">
-                <p className="text-slate-600 text-sm leading-relaxed">{selectedMember.desc || "A key leadership role driving departmental success and strategic initiatives."}</p>
+              <div className="bg-[var(--neutral)] rounded-xl p-4 mb-6 border border-[var(--border-color)]">
+                <p className="text-[var(--text-muted)] text-sm leading-relaxed">{selectedMember.desc || "A key leadership role driving departmental success and strategic initiatives."}</p>
               </div>
 
               <button

@@ -1,15 +1,7 @@
 import React from 'react';
 import { FaPlusCircle, FaTrash, FaBriefcase, FaBuilding, FaCalendarAlt } from 'react-icons/fa';
 
-export interface WorkExperience {
-  id: string;
-  companyName: string;
-  jobTitle: string;
-  startDate: string;
-  endDate: string;
-  isCurrent: boolean;
-  responsibilities: string;
-}
+import { WorkExperience } from '../types';
 
 interface WorkExperienceStepProps {
   data: WorkExperience[];
@@ -41,18 +33,18 @@ const WorkExperienceStep: React.FC<WorkExperienceStepProps> = ({ data, onChange 
   return (
     <div className="space-y-8 fade-up">
       {data.map((exp, index) => (
-        <div key={exp.id} className="relative bg-slate-50/50 rounded-[2rem] p-8 border border-slate-100 transition-all hover:bg-white hover:shadow-xl hover:shadow-blue-500/5 group">
+        <div key={exp.id} className="relative bg-[var(--bg-main)] rounded-[2rem] p-8 border border-[var(--border-color)] transition-all hover:bg-[var(--bg-card)] hover:shadow-xl hover:shadow-black/5 group">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
+              <div className="w-10 h-10 rounded-xl bg-[var(--primary)] flex items-center justify-center text-white shadow-lg shadow-[var(--primary)]/20">
                 <FaBriefcase size={14} />
               </div>
-              <h5 className="font-black text-xs uppercase tracking-widest text-slate-400">Position #{index + 1}</h5>
+              <h5 className="font-black text-xs uppercase tracking-widest text-[var(--text-muted)]">Position #{index + 1}</h5>
             </div>
             <button
               type="button"
               onClick={() => removeExperience(index)}
-              className="bg-red-50 text-red-500 p-3 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"
+              className="bg-red-500/10 text-red-500 p-3 rounded-xl hover:bg-red-500 hover:text-white transition-all shadow-sm"
               title="Remove Experience"
             >
               <FaTrash size={12} />
@@ -113,9 +105,9 @@ const WorkExperienceStep: React.FC<WorkExperienceStepProps> = ({ data, onChange 
               id={`isCurrent-${index}`}
               checked={exp.isCurrent}
               onChange={(e) => handleExperienceChange(index, 'isCurrent', e.target.checked)}
-              className="w-5 h-5 rounded-lg border-gray-300 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer"
+              className="w-5 h-5 rounded-lg border-[var(--border-color)] text-[var(--primary)] focus:ring-[var(--primary)] transition-all cursor-pointer bg-[var(--bg-main)]"
             />
-            <label htmlFor={`isCurrent-${index}`} className="text-sm font-bold text-gray-600 cursor-pointer select-none">I currently work here</label>
+            <label htmlFor={`isCurrent-${index}`} className="text-sm font-bold text-[var(--text-main)] cursor-pointer select-none">I currently work here</label>
           </div>
 
           <div>
@@ -134,7 +126,7 @@ const WorkExperienceStep: React.FC<WorkExperienceStepProps> = ({ data, onChange 
       <button
         type="button"
         onClick={addExperience}
-        className="w-full py-6 rounded-[2rem] border-2 border-dashed border-gray-200 text-gray-400 hover:border-blue-500 hover:text-blue-500 hover:bg-blue-50/10 transition-all flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest"
+        className="w-full py-6 rounded-[2rem] border-2 border-dashed border-[var(--border-color)] text-[var(--text-muted)] hover:border-[var(--primary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5 transition-all flex items-center justify-center gap-3 font-black text-xs uppercase tracking-widest"
       >
         <FaPlusCircle /> Add Professional Experience
       </button>

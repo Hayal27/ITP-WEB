@@ -46,7 +46,7 @@ const opportunities: InvestmentOpportunity[] = [
     link: '/services/building-space',
     image: buildingImage,
     Icon: BuildingOffice2Icon,
-    gradient: 'linear-gradient(135deg, #16284F 0%, #0C7C92 100%)'
+    gradient: 'linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%)'
   },
   {
     id: 2,
@@ -62,7 +62,7 @@ const opportunities: InvestmentOpportunity[] = [
     link: '/services/serviced-land',
     image: landImage,
     Icon: GlobeAltIcon,
-    gradient: 'linear-gradient(135deg, #0C7C92 0%, #16284F 100%)'
+    gradient: 'linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)'
   },
   {
     id: 3,
@@ -78,7 +78,7 @@ const opportunities: InvestmentOpportunity[] = [
     link: '/services/vsat-internet',
     image: vsatImage,
     Icon: SignalIcon,
-    gradient: 'linear-gradient(135deg, #16284F 0%, #0C7C92 100%)'
+    gradient: 'linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%)'
   },
   {
     id: 4,
@@ -94,7 +94,7 @@ const opportunities: InvestmentOpportunity[] = [
     link: '/services/consulting',
     image: consultingImage,
     Icon: LightBulbIcon,
-    gradient: 'linear-gradient(135deg, #0C7C92 0%, #16284F 100%)'
+    gradient: 'linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%)'
   },
   {
     id: 5,
@@ -110,7 +110,7 @@ const opportunities: InvestmentOpportunity[] = [
     link: '/services/bpo',
     image: bpoImage,
     Icon: UserGroupIcon,
-    gradient: 'linear-gradient(135deg, #16284F 0%, #0C7C92 100%)'
+    gradient: 'linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%)'
   }
 ];
 
@@ -294,7 +294,7 @@ const InvestmentCard: React.FC<{ opportunity: InvestmentOpportunity; index: numb
                 animate={isInView ? "visible" : "hidden"}
                 whileHover={{
                   x: isImageLeft ? 6 : -6,
-                  backgroundColor: "rgba(12, 124, 146, 0.06)"
+                  backgroundColor: "var(--neutral)"
                 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >

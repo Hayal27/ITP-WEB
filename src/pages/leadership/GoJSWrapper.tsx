@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import * as go from 'gojs';
 import { FaCompress, FaExpand, FaMinus, FaPlus, FaRedo } from 'react-icons/fa';
+import { useTheme } from '../../context/ThemeContext';
 
 interface GoJSWrapperProps {
   teamData: any[];
@@ -11,6 +12,8 @@ const GoJSWrapper: React.FC<GoJSWrapperProps> = ({ teamData, setSelectedMember }
   const diagramRef = useRef<HTMLDivElement>(null);
   const [diagram, setDiagram] = useState<go.Diagram | null>(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   // Toggle Full Screen Mode
   const toggleFullScreen = () => {
@@ -67,15 +70,15 @@ const GoJSWrapper: React.FC<GoJSWrapperProps> = ({ teamData, setSelectedMember }
 
     // Define Colors based on Department Level or Type
     const getBrushColor = (dept: string) => {
-      if (!dept) return "#FFFFFF";
-      if (dept.includes("Board")) return "#16284F"; // Dark Blue
-      if (dept.includes("Executive Leadership")) return "#0C7C92"; // Teal
-      if (dept.includes("General Management")) return "#4F46E5"; // Indigo
-      if (dept.includes("IT")) return "#8B5CF6"; // Purple
-      if (dept.includes("Construction")) return "#F59E0B"; // Amber
-      if (dept.includes("Corporate")) return "#10B981"; // Emerald
-      if (dept.includes("Legal")) return "#EF4444"; // Red
-      return "#64748B"; // Slate Default
+      if (!dept) return isDark ? "#1e293b" : "#FFFFFF";
+      if (dept.includes("Board")) return isDark ? "#6EC9C4" : "#16284F"; // Swapped or lightened for dark
+      if (dept.includes("Executive Leadership")) return "#0C7C92";
+      if (dept.includes("General Management")) return "#4F46E5";
+      if (dept.includes("IT")) return "#8B5CF6";
+      if (dept.includes("Construction")) return "#F59E0B";
+      if (dept.includes("Corporate")) return "#10B981";
+      if (dept.includes("Legal")) return "#EF4444";
+      return isDark ? "#94a3b8" : "#64748B"; // Slate Default
     };
 
     myDiagram.nodeTemplate = $(
@@ -121,12 +124,12 @@ const GoJSWrapper: React.FC<GoJSWrapperProps> = ({ teamData, setSelectedMember }
       $(go.Shape, "RoundedRectangle",
         {
           name: "SHAPE",
-          fill: "#ffffff",
+          fill: isDark ? "#1e293b" : "#ffffff",
           strokeWidth: 0, // Default no border
           stroke: null,
           parameter1: 10, // Corner radius
         },
-        new go.Binding("fill", "highlight", (h) => h ? "#F0FDFA" : "#ffffff")
+        new go.Binding("fill", "highlight", (h) => h ? (isDark ? "#334155" : "#F0FDFA") : (isDark ? "#1e293b" : "#ffffff"))
       ),
       $(
         go.Panel,
@@ -169,7 +172,7 @@ const GoJSWrapper: React.FC<GoJSWrapperProps> = ({ teamData, setSelectedMember }
             {
               row: 0,
               font: "bold 14px 'Inter', sans-serif",
-              stroke: "#1e293b",
+              stroke: isDark ? "#f8fafc" : "#1e293b",
               wrap: go.TextBlock.WrapFit,
               width: 200,
               textAlign: "center",
@@ -193,7 +196,7 @@ const GoJSWrapper: React.FC<GoJSWrapperProps> = ({ teamData, setSelectedMember }
             {
               row: 2,
               font: "500 12px 'Inter', sans-serif",
-              stroke: "#64748b",
+              stroke: isDark ? "#94a3b8" : "#64748b",
               wrap: go.TextBlock.WrapFit,
               width: 200,
               textAlign: "center",
@@ -216,8 +219,8 @@ const GoJSWrapper: React.FC<GoJSWrapperProps> = ({ teamData, setSelectedMember }
         corner: 20,
         selectable: false
       },
-      $(go.Shape, { strokeWidth: 2, stroke: "#cbd5e1" }), // Link Line
-      $(go.Shape, { toArrow: "Standard", fill: "#cbd5e1", stroke: null }) // Arrowhead
+      $(go.Shape, { strokeWidth: 2, stroke: isDark ? "#475569" : "#cbd5e1" }), // Link Line
+      $(go.Shape, { toArrow: "Standard", fill: isDark ? "#475569" : "#cbd5e1", stroke: null }) // Arrowhead
     );
 
     myDiagram.model = $(go.TreeModel, { nodeDataArray: teamData });
@@ -233,7 +236,7 @@ const GoJSWrapper: React.FC<GoJSWrapperProps> = ({ teamData, setSelectedMember }
       document.removeEventListener("fullscreenchange", handleFullScreenChange);
       myDiagram.div = null;
     };
-  }, [teamData, setSelectedMember]);
+  }, [teamData, setSelectedMember, isDark]);
 
   return (
     <div className={`relative bg-gray-50 rounded-2xl overflow-hidden border border-gray-200 shadow-xl transition-all duration-300 group ${isFullScreen ? 'fixed inset-0 z-[100] h-screen w-screen rounded-none' : 'w-full max-w-[90vw] h-[75vh]'}`}>

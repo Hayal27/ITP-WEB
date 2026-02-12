@@ -1,8 +1,18 @@
 .custom-cursor-container {
     position: fixed;
     inset: 0;
-    z-index: 99999;
+    z-index: 9999999;
+    /* Extremely high to stay above all popups */
     pointer-events: none;
+    /* Hide on mobile/touch devices */
+    display: none;
+}
+
+/* Only show on non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+    .custom-cursor-container {
+        display: block;
+    }
 }
 
 .cursor-ring {

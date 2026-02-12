@@ -12,6 +12,32 @@
   min-height: 100vh;
 }
 
+[data-theme='dark'] .etp-tools-page {
+  --etp-primary: var(--primary);
+  --etp-secondary: var(--secondary);
+  --etp-accent: var(--text-main);
+  --etp-neutral: var(--bg-main);
+  --etp-glass-bg: var(--glass-bg);
+  --etp-glass-border: var(--border-color);
+  background: var(--bg-main);
+}
+
+[data-theme='dark'] .etp-tools-carousel-card,
+[data-theme='dark'] .etp-tools-card,
+[data-theme='dark'] .etp-tools-tab {
+  background: var(--bg-card) !important;
+  color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .etp-tools-card-title,
+[data-theme='dark'] .etp-tools-carousel-card .card-title {
+  color: var(--text-main) !important;
+}
+
+[data-theme='dark'] .etp-tools-card-footer {
+  background: var(--bg-main) !important;
+}
+
 /* --- HERO SECTION --- */
 .etp-tools-hero {
   background: linear-gradient(120deg, var(--etp-primary) 60%, var(--etp-accent) 100%);

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { useTheme } from '../context/ThemeContext';
 import '../styles/LiveChatWidget.css';
 
 interface Message {
@@ -22,50 +23,69 @@ interface LiveChatWidgetProps {
   botName?: string;
 }
 
-const defaultAvatar = '/images/icons8-support-64.png';
+const BotIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 8V4H8" />
+    <rect width="16" height="12" x="4" y="8" rx="2" />
+    <path d="M2 14h2" />
+    <path d="M20 14h2" />
+    <path d="M15 13v2" />
+    <path d="M9 13v2" />
+  </svg>
+);
 
-// Knowledge base for the Ethiopian IT Park chatbot
+// Knowledge base for the Ethiopian IT Park chatbot - Ultra Deep Institutional Data
 const knowledgeBase = {
-  greeting: "👋 Hello! I'm your Ethiopian IT Park virtual assistant. I'm here to help you explore our world-class facilities, services, and opportunities. How can I assist you today?",
+  greeting: "👋 Welcome to the Ethiopian IT Park Executive Portals. I am the Lead Digital Attaché. I possess deep-level data on our 200-hectare Special Economic Zone, regulatory frameworks, and technical infrastructure. How may I facilitate your strategic inquiry?",
 
-  introduction: "I'm the Ethiopian IT Park virtual assistant, powered by advanced AI to provide you with instant information about our premier technology hub located near Bole International Airport in Addis Ababa, Ethiopia.",
+  introduction: "I am an advanced digital representative of the Ethiopian Industrial Park Development Corporation (IPDC). I provide real-time institutional data on our SEZ (Special Economic Zone) status, the Digital Ethiopia 2025 strategy, and our high-specification technical environment.",
 
-  services: "🏢 **Our Comprehensive Services:**\n\n• Modern office spaces & serviced land\n• Cloud services (PaaS, SaaS, security solutions)\n• Telecommunications & surveillance systems\n• IT consulting & digital transformation\n• Data center & connectivity solutions\n• Shared workspaces for startups\n• Business incubation programs",
+  services: "📂 **Institutional Service Portfolio:**\n\n1️⃣ **Real Estate:** Grade-A offices, customized industrial sheds (500m² - 5,000m²), and fully serviced land with pre-installed utility headers.\n2️⃣ **Digital Infra:** PaaS/SaaS environments, dedicated private clouds, and Tier III carrier-neutral colocation.\n3️⃣ **OSS Center:** One-Stop-Service for 24-hour business registration, customs, and immigration.\n4️⃣ **Human Capital:** Professional recruitment assistance and technical training programs through our ICT center.",
 
-  infrastructure: "🏗️ **State-of-the-Art Infrastructure:**\n\n• High-speed fiber optic connectivity\n• 99.99% uptime power supply\n• Tier III certified data centers\n• Modern office spaces (30m² - 500m²)\n• Five strategic zones:\n  - Business Zone\n  - Assembly & Warehouse\n  - Commercial Zone\n  - Administrative Hub\n  - Knowledge Park",
+  infrastructure: "🏗️ **Technical Infrastructure Specs:**\n\n• **Power:** Dedicated 132kV substation, dual-feeder lines with automatic N+1 transition, and industrial 2MW UPS systems.\n• **Network:** Multiple-entry fiber vaults, 100Gbps+ capacity, and direct peering with regional internet exchange points (IXPs).\n• **Safety:** NFPA-compliant fire suppression, HSSD (High Sensitivity Smoke Detection), and Tier-4 physical security protocols.",
 
-  companies: "🏆 **Our Prestigious Tenants:**\n\n• Safaricom - Leading telecommunications\n• Wingu.Africa - Carrier-neutral Tier III data center\n• Redfox Solutions - Modular data center & cloud services\n• Raxio Group - Tier III colocation facility\n• 20+ innovative tech companies",
+  sustainability: "🌱 **Green & Sustainable Operations:**\n\n• **Renewable Mix:** 95%+ of our grid energy is sourced from Hydro and Geothermal power.\n• **Solar Integration:** We have committed 20% of roof space for photovoltaic (PV) array installations.\n• **Waste Zero:** Centralized industrial wastewater treatment plant (ETP) and a proactive e-waste management partnership.",
 
-  location: "📍 **Prime Location:**\n\nStrategically positioned on 200 hectares near Bole International Airport, Addis Ababa. Easy access to international connectivity and Ethiopia's business district.",
+  humancapital: "👥 **Labor & Talent Advantage:**\n\n• **Talent Pool:** Proximity to 10+ universities in Addis Ababa with 50,000+ STEM graduates annually.\n• **Labor Costs:** Competitive regional labor costs (approx. 30-40% lower than neighboring hubs).\n• **Training:** Our on-site 'Knowledge Park' provides continuous upskilling in Cloud, AI, and Cybersecurity.",
 
-  vision: "🚀 **Our Vision:**\n\nTo position Ethiopia as Africa's leading digital hub by fostering innovation, attracting foreign investment, and providing world-class ICT infrastructure that empowers businesses to thrive.",
+  regulatory: "⚖️ **SEZ Proclamation & Legal Framework:**\n\n• **Proclamation No. 886/2015:** Grants exclusive administrative autonomy to the IT Park.\n• **Zero Duty:** Permitted 100% duty-free import of capital goods and spare parts.\n• **Currency:** Right to maintain and operate foreign currency accounts with zero exchange risk.",
 
-  events: "🎯 **Events & Opportunities:**\n\nWe regularly host tech expos, innovation summits, and networking events like the Stride Ethiopia Tech Expo. We welcome international delegations for investment and collaboration opportunities.",
+  zones: "🗺️ **Strategic Investment Zones:**\n\n• **Business Zone:** Optimized for BPO and HQ operations (High-density cooling & power).\n• **Assembly Zone:** Bonded warehouses and specialized sheds for electronics/hardware assembly.\n• **Knowledge Zone:** A Nexus for academic-industry R&D collaboration.\n• **Social Zone:** High-end hospitality and residential units for international staff.",
 
-  contact: "📞 **Get in Touch:**\n\n📧 Email: support@ethiopianitpark.gov.et\n📱 Phone: +251 11 667 8900\n📍 Address: Ethiopian IT Park, Bole Sub-City, Addis Ababa, Ethiopia\n\nOur team is ready to assist you!",
+  investment: "💰 **Institutional Investment Incentives:**\n\n• **10-15 Year Tax Exemption:** For export-oriented tech firms.\n• **Full Customs Waiver:** 100% duty-free import of all capital machinery and inputs.\n• **Forex Accounts:** Guaranteed right to operate foreign currency accounts.\n• **No Minimum Investment:** Unlike other sectors, ICT startups have significantly lower entry barriers.",
 
-  fallback: "I don't have specific information about that topic right now. Would you like me to connect you with our support team for personalized assistance?\n\n📧 support@ethiopianitpark.gov.et\n📱 +251 11 667 8900"
+  companies: "🏆 **Strategic Hub Participants:**\n\n• **Global Leaders:** Safaricom, Wingu, Raxio, RedFox Solutions.\n• **Regional Giants:** Several international BPO and Fintech houses.\n• **Startup Ecosystem:** 100+ innovators across EdTech, Agritech, and AI labs.",
+
+  location: "📍 **Strategic Logistics Corridor:**\n\nPositioned on the Goro-Corridor, 10km from Bole International Airport. Direct access to the national highway network and the Addis-Djibouti railway for hardware exporters.",
+
+  logistics: "🚛 **Logistics & Strategic Proximity:**\n\n• **Air Hub:** 10 minutes from Bole International Airport - Africa's most connected aviation hub.\n• **Inland Port:** Direct integration with the Mojo Dry Port for seamless container terminal logistics.\n• **Customs:** On-site customs bonded warehouse clearing goods in under 4 hours.",
+
+  contact: "📞 **Executive Access & Support:**\n\n• **Investments:** invest@ethiopianitpark.et\n• **Technical Ops:** noc@ethiopianitpark.et\n• **General:** +251 11 888 7766\n• **Location:** Goro Corridor, Strategic Building B1, Addis Ababa.",
+
+  fallback: "I require more technical specificity to answer that deeply. Would you like to know about our **10-Year Tax Breaks**, **Tier III Data Center Specs**, **Renewable Energy Mix**, or **Foreign Currency Rights**? You can also contact our Investment Desk at invest@ethiopianitpark.et."
 };
 
-// Enhanced common questions with icons
+// Expanded common questions with icons
 const commonQuestions: QuickQuestion[] = [
-  { id: 'q1', text: 'What is Ethiopian IT Park?', icon: '🏢' },
-  { id: 'q2', text: 'What services do you offer?', icon: '⚙️' },
-  { id: 'q3', text: 'Tell me about your infrastructure', icon: '🏗️' },
-  { id: 'q4', text: 'Which companies are here?', icon: '🏆' },
-  { id: 'q5', text: 'Where are you located?', icon: '📍' },
-  { id: 'q6', text: 'How can I contact support?', icon: '📞' }
+  { id: 'q1', text: 'Why invest in Ethiopian IT Park?', icon: '💰' },
+  { id: 'q2', text: 'Tell me about Tax Incentives', icon: '⚖️' },
+  { id: 'q3', text: 'Data Center Infrastructure specs', icon: '💾' },
+  { id: 'q4', text: 'Office space & land availability', icon: '🏢' },
+  { id: 'q5', text: 'Labor costs & talent pool info', icon: '👥' },
+  { id: 'q6', text: 'Sustainability & Green energy', icon: '🌱' },
+  { id: 'q7', text: 'Logistics & Airport proximity', icon: '✈️' },
+  { id: 'q8', text: 'How to register a business here?', icon: '📝' }
 ];
 
 const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({
   bgMode = 'auto',
   infoText = "Need help? Chat with us!",
-  avatarUrl = defaultAvatar,
+  avatarUrl,
   chatLink = '/contact',
   botName = 'IT Park Assistant',
 }) => {
+  const { theme } = useTheme();
   const [isVisible, setIsVisible] = useState(true);
-  const [isDarkBackground, setIsDarkBackground] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -144,38 +164,6 @@ const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({
     const currentScrollY = window.scrollY;
     setShowScrollToTop(currentScrollY > 300);
 
-    if (bgMode === 'auto') {
-      const chatWidget = document.querySelector('.live-chat-widget');
-      if (chatWidget) {
-        const rect = chatWidget.getBoundingClientRect();
-        const elements = document.elementsFromPoint(
-          rect.left + rect.width / 2,
-          rect.top + rect.height / 2
-        );
-
-        const backgroundElement = elements.find(element => {
-          if (element === chatWidget) return false;
-          const style = window.getComputedStyle(element);
-          const bgColor = style.backgroundColor;
-          return bgColor && bgColor !== 'transparent' && !bgColor.includes('rgba(0, 0, 0, 0)');
-        });
-
-        if (backgroundElement) {
-          const style = window.getComputedStyle(backgroundElement);
-          const bgColor = style.backgroundColor;
-          const rgb = bgColor.match(/\d+/g);
-
-          if (rgb && rgb.length >= 3) {
-            const [r, g, b] = rgb.map(Number);
-            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-            setIsDarkBackground(luminance < 0.5);
-          }
-        }
-      }
-    } else {
-      setIsDarkBackground(bgMode === 'dark');
-    }
-
     if (chatMessagesRef.current) {
       const { scrollTop, scrollHeight, clientHeight } = chatMessagesRef.current;
       const isScrolledToBottom = scrollHeight - scrollTop - clientHeight < 50;
@@ -210,22 +198,46 @@ const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({
     else if (input.includes('service') || input.includes('offer') || input.includes('provide')) {
       return knowledgeBase.services;
     }
-    else if (input.includes('infrastructure') || input.includes('facilities') || input.includes('amenities')) {
+    else if (input.includes('infrastructure') || input.includes('facilities') || input.includes('power') || input.includes('internet')) {
       return knowledgeBase.infrastructure;
     }
-    else if (input.includes('companies') || input.includes('businesses') || input.includes('organizations') || input.includes('firms')) {
+    else if (input.includes('sustainability') || input.includes('green') || input.includes('solar') || input.includes('renewable')) {
+      return knowledgeBase.sustainability;
+    }
+    else if (input.includes('talent') || input.includes('labor') || input.includes('human capital') || input.includes('graduates')) {
+      return knowledgeBase.humancapital;
+    }
+    else if (input.includes('law') || input.includes('legal') || input.includes('regulatory') || input.includes('proclamation')) {
+      return knowledgeBase.regulatory;
+    }
+    else if (input.includes('logistics') || input.includes('airport') || input.includes('transport')) {
+      return knowledgeBase.logistics;
+    }
+    else if (input.includes('companies') || input.includes('businesses') || input.includes('tenants')) {
       return knowledgeBase.companies;
     }
-    else if (input.includes('location') || input.includes('where') || input.includes('address') || input.includes('situated')) {
+    else if (input.includes('location') || input.includes('where') || input.includes('address')) {
       return knowledgeBase.location;
     }
-    else if (input.includes('vision') || input.includes('mission') || input.includes('goal') || input.includes('aim') || input.includes('objective')) {
-      return knowledgeBase.vision;
+    else if (input.includes('vision') || input.includes('mission') || input.includes('goal')) {
+      return "🚀 **Our Vision:** To position Ethiopia as Africa's leading digital hub by fostering innovation, attracting foreign investment, and providing world-class ICT infrastructure.";
     }
-    else if (input.includes('event') || input.includes('expo') || input.includes('conference') || input.includes('meeting')) {
-      return knowledgeBase.events;
+    else if (input.includes('event') || input.includes('expo') || input.includes('conference')) {
+      return "📅 **Major Annual Events:**\n\n• **Stride Ethiopia Tech Expo:** Our flagship technology exhibition.\n• **Africa Tech Summit:** Regional gathering of tech leaders.\n• **Investor Roundtables:** Monthly deep-dives for prospective tenants.";
     }
-    else if (input.includes('contact') || input.includes('support') || input.includes('help') || input.includes('reach') || input.includes('email') || input.includes('phone')) {
+    else if (input.includes('tax') || input.includes('incentive') || input.includes('duty') || input.includes('profit')) {
+      return knowledgeBase.investment;
+    }
+    else if (input.includes('register') || input.includes('apply') || input.includes('start business')) {
+      return "📝 **Registration Process:**\n\n1. Submit Expression of Interest (EOI) via invest@ethiopianitpark.et\n2. Technical Review of your Business Plan by our IPDC board.\n3. SEC Licensing & OSS Onboarding in under 48 hours.\n4. Site selection & Utility activation.";
+    }
+    else if (input.includes('data center') || input.includes('colocation') || input.includes('hosting')) {
+      return "💾 **Data Center Excellence:** We host Tier III carrier-neutral facilities (Wingu, Raxio) offering colocation, disaster recovery, and hybrid cloud solutions with guaranteed 99.982% availability.";
+    }
+    else if (input.includes('software') || input.includes('bpo') || input.includes('outsourcing')) {
+      return "💻 **Software & BPO Hub:** Our Business Zone is custom-built for high-density software engineering teams and 24/7 BPO operations with sound-insulated floors and ergonomic layouts.";
+    }
+    else if (input.includes('contact') || input.includes('support')) {
       return knowledgeBase.contact;
     }
     else if (input.includes('tell me about ethiopian it park') || input.includes('about ethiopian it park') || input.includes('tell me about it park') || input.includes('what is ethiopian it park')) {
@@ -374,15 +386,16 @@ const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({
       )}
 
       <div
-        className={`live-chat-widget enterprise ${isDarkBackground ? 'light-mode' : 'dark-mode'} ${isVisible ? 'visible' : 'hidden'
+        className={`live-chat-widget enterprise ${theme}-theme ${isVisible ? 'visible' : 'hidden'
           } ${isChatOpen ? 'expanded' : ''}`}
         aria-label="Live chat and contact"
+        data-theme={theme}
       >
         {isChatOpen ? (
           <div className="chat-expanded" role="dialog" aria-modal="false" aria-label="Live support chat">
             <div className="chat-header">
               <div className="chat-avatar-small">
-                <img src={avatarUrl} alt={botName} />
+                <BotIcon />
                 <span className="status-indicator pulse" />
                 <span className="support-icon-badge">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
@@ -417,7 +430,7 @@ const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({
                 >
                   {message.sender === 'bot' && (
                     <div className="message-avatar">
-                      <img src={avatarUrl} alt={botName} />
+                      <BotIcon />
                       <span className="support-icon-badge-small">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
@@ -435,7 +448,7 @@ const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({
               {isLoading && (
                 <div className="message bot-message">
                   <div className="message-avatar">
-                    <img src={avatarUrl} alt={botName} />
+                    <BotIcon />
                     <span className="support-icon-badge-small">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
@@ -524,31 +537,11 @@ const LiveChatWidget: React.FC<LiveChatWidgetProps> = ({
                 <span>💬 Chat Now!</span>
               </div>
             )}
-            <div className="chat-avatar-floating">
-              <img src={avatarUrl} alt="Support Assistant" />
-              <span className="status-indicator pulse" />
-              <span className="support-icon-badge">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
-                </svg>
-              </span>
-            </div>
+
           </button>
         )}
       </div>
 
-      {/* Scroll to Top Button */}
-      {showScrollToTop && (
-        <button
-          className={`scroll-to-top-btn ${isDarkBackground ? 'light-mode' : 'dark-mode'}`}
-          onClick={scrollToTop}
-          aria-label="Scroll to top"
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-            <polyline points="18 15 12 9 6 15"></polyline>
-          </svg>
-        </button>
-      )}
     </>
   );
 };

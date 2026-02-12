@@ -7,23 +7,36 @@
    CSS CUSTOM PROPERTIES (Design Tokens)
    ============================================ */
 :root {
-  --brand-primary: #0C7C92;
-  --brand-secondary: #16284F;
+  --brand-primary: var(--primary);
+  --brand-secondary: var(--secondary);
   /* Updated to brand accent */
-  --brand-accent: #16284F;
-  --brand-dark: #16284F;
+  --brand-accent: var(--accent);
+  --brand-dark: var(--text-main);
 
-  --neutral-50: #FAFAFA;
-  --neutral-100: #F5F5F5;
-  --neutral-200: #E5E5E5;
-  --neutral-800: #262626;
-  --neutral-900: #171717;
+  --neutral-50: var(--bg-main);
+  --neutral-100: var(--neutral);
+  --neutral-200: var(--border-color);
+  --neutral-800: var(--text-muted);
+  --neutral-900: var(--bg-card);
 
-  --shadow-premium: 0 25px 50px -12px rgba(12, 124, 146, 0.25);
-  --shadow-hover: 0 35px 60px -15px rgba(12, 124, 146, 0.35);
+  --shadow-premium: 0 25px 50px -12px color-mix(in srgb, var(--primary), transparent 85%);
+  --shadow-hover: 0 35px 60px -15px color-mix(in srgb, var(--primary), transparent 75%);
 
   --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+[data-theme='dark'] {
+  --brand-dark: var(--text-main);
+  --neutral-50: var(--bg-main);
+  --neutral-100: var(--neutral);
+  --neutral-200: var(--border-color);
+  --neutral-800: var(--text-muted);
+  --neutral-900: var(--bg-card);
+  --bg-card: var(--bg-card);
+  --bg-main: var(--bg-main);
+  --shadow-premium: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --shadow-hover: 0 35px 60px -15px rgba(0, 0, 0, 0.6);
 }
 
 /* ============================================
@@ -33,10 +46,7 @@
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: linear-gradient(180deg,
-      var(--neutral-50) 0%,
-      #FFFFFF 50%,
-      var(--neutral-50) 100%);
+  background: transparent;
 }
 
 .investment-showcase-container {
@@ -71,9 +81,9 @@
   border-radius: 0;
   padding: 1px;
   background: linear-gradient(135deg,
-      rgba(12, 124, 146, 0.1) 0%,
-      rgba(110, 201, 196, 0.05) 50%,
-      rgba(12, 124, 146, 0.1) 100%);
+      color-mix(in srgb, var(--primary), transparent 90%) 0%,
+      color-mix(in srgb, var(--accent), transparent 95%) 50%,
+      color-mix(in srgb, var(--primary), transparent 90%) 100%);
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -125,11 +135,11 @@
   position: relative;
   height: 460px;
   overflow: hidden;
-  background: var(--neutral-900);
+  background: var(--bg-card);
   border-radius: 80px 20px 80px 20px;
   /* Sophisticated asymmetrical curve */
   box-shadow: var(--shadow-premium);
-  border: 10px solid #FFFFFF;
+  border: 10px solid var(--bg-card);
   transition: border-radius 0.6s var(--transition-smooth), transform 0.6s var(--transition-smooth);
 }
 
@@ -162,8 +172,8 @@
   position: absolute;
   inset: 0;
   background: linear-gradient(135deg,
-      rgba(22, 40, 79, 0.85) 0%,
-      rgba(12, 124, 146, 0.65) 100%);
+      color-mix(in srgb, var(--secondary), transparent 15%) 0%,
+      color-mix(in srgb, var(--primary), transparent 35%) 100%);
   mix-blend-mode: multiply;
   opacity: 0.85;
   transition: opacity 0.6s var(--transition-smooth);
@@ -183,12 +193,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.12);
+  background: color-mix(in srgb, var(--primary), transparent 80%);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
-  color: #FFFFFF;
+  border: 1.5px solid color-mix(in srgb, var(--primary), transparent 60%);
+  color: var(--text-main);
   transform: translateY(0);
   transition: transform 0.5s var(--transition-bounce),
     box-shadow 0.5s var(--transition-smooth);
@@ -227,8 +237,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle at 20% 30%, rgba(12, 124, 146, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 70%, rgba(110, 201, 196, 0.03) 0%, transparent 50%);
+    radial-gradient(circle at 20% 30%, color-mix(in srgb, var(--primary), transparent 97%) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, color-mix(in srgb, var(--accent), transparent 97%) 0%, transparent 50%);
   pointer-events: none;
 }
 
@@ -251,11 +261,11 @@
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
-  color: #FFFFFF;
+  color: var(--text-inverted);
   padding: 6px 16px;
   border-radius: 50px;
   margin-bottom: 16px;
-  box-shadow: 0 4px 12px rgba(12, 124, 146, 0.3);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--primary), transparent 70%);
   transform: translateX(0);
   transition: transform 0.4s var(--transition-bounce);
 }
@@ -359,7 +369,7 @@
 }
 
 .investment-feature-item:hover {
-  background: rgba(12, 124, 146, 0.04);
+  background: var(--neutral);
   transform: translateX(6px);
 }
 
@@ -395,13 +405,13 @@
   align-items: center;
   gap: 8px;
   padding: 12px 28px;
-  background: var(--brand-primary);
-  color: #FFFFFF;
+  background: var(--primary);
+  color: var(--text-inverted);
   font-size: 0.9375rem;
   font-weight: 600;
   text-decoration: none;
   border-radius: 50px;
-  box-shadow: 0 8px 20px rgba(12, 124, 146, 0.25);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--primary), transparent 75%);
   position: relative;
   overflow: hidden;
   transition: transform 0.3s var(--transition-smooth),
@@ -424,7 +434,7 @@
 
 .investment-cta:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(12, 124, 146, 0.35);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--primary), transparent 65%);
 }
 
 .investment-cta span,
@@ -450,7 +460,7 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 1;
+  z-index: 0;
   overflow: hidden;
 }
 
@@ -458,7 +468,7 @@
   position: absolute;
   border-radius: 50%;
   background: radial-gradient(circle,
-      rgba(12, 124, 146, 0.08) 0%,
+      color-mix(in srgb, var(--primary), transparent 92%) 0%,
       transparent 70%);
   animation: float 20s ease-in-out infinite;
 }
@@ -478,7 +488,7 @@
   right: -15%;
   animation-delay: 5s;
   background: radial-gradient(circle,
-      rgba(110, 201, 196, 0.06) 0%,
+      color-mix(in srgb, var(--accent), transparent 94%) 0%,
       transparent 70%);
 }
 
@@ -570,6 +580,7 @@
   }
 
   .investment-image-panel {
+    width: 100%;
     min-height: 400px;
     border-radius: 40px 15px 40px 15px;
     border-width: 6px;

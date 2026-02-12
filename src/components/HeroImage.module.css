@@ -46,9 +46,8 @@
 .hi_particles {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 2;
   pointer-events: none;
-  transform: translateZ(-1px) scale(1.2);
 }
 
 .hi_inner {

@@ -2,23 +2,25 @@
 
 /* Glassmorphism Effect */
 .glass-effect {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid var(--border-color);
 }
 
 /* Hero Section Patterns */
 .hero-pattern {
-  background-image: radial-gradient(#16284f 0.5px, transparent 0.5px);
+  background-image: radial-gradient(var(--secondary) 0.5px, transparent 0.5px);
   background-size: 20px 20px;
-  background-color: #f8fafc;
+  background-color: var(--bg-main);
 }
 
 /* Premium Card Transitions */
 .partner-card,
 .investor-card {
   transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  background: var(--bg-card);
+  border-color: var(--border-color);
 }
 
 .partner-card:hover,
@@ -35,10 +37,11 @@ table {
 
 tbody tr {
   transition: all 0.2s ease;
+  background: transparent;
 }
 
 tbody tr:hover {
-  background: rgba(248, 250, 252, 1);
+  background: var(--neutral);
   transform: scale(1.002);
   z-index: 10;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
@@ -54,12 +57,14 @@ tbody tr:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(22, 40, 79, 0.1);
+  background: var(--secondary);
+  opacity: 0.1;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(12, 124, 146, 0.3);
+  background: var(--primary);
+  opacity: 0.3;
 }
 
 /* Typography Enhancements */
@@ -67,6 +72,7 @@ h1,
 h2,
 h3 {
   letter-spacing: -0.02em;
+  color: var(--text-main);
 }
 
 /* Logo & Image Shine Effect */
@@ -180,13 +186,13 @@ h3 {
   font-size: 0.75rem;
   font-weight: 600;
   margin-left: 8px;
-  background: rgba(12, 124, 146, 0.2);
-  color: #16284F;
+  background: var(--neutral);
+  color: var(--text-main);
   transition: all 0.3s ease;
 }
 
 /* Section Dividers */
 .section-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(22, 40, 79, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, var(--border-color), transparent);
 }

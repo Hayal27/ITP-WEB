@@ -1,6 +1,7 @@
 import { Container } from '@mantine/core';
 import classes from './HeroImage.module.css';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface HeroProps {
   images: string[];
@@ -10,16 +11,7 @@ interface HeroProps {
 
 export default function Hero({ images, title, description }: HeroProps) {
   const [active, setActive] = useState(0);
-  const [prevActive, setPrevActive] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(true);
-
-  // Track the previous active index to ensure gapless transitions
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPrevActive(active);
-    }, 600); // Clear prevActive after transition completes
-    return () => clearTimeout(timer);
-  }, [active]);
+  const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
   const [hovering, setHovering] = useState(false);
   const [displayedTitle, setDisplayedTitle] = useState('');
   const [displayedText, setDisplayedText] = useState('');
@@ -84,117 +76,125 @@ export default function Hero({ images, title, description }: HeroProps) {
     return () => clearInterval(typingInterval);
   }, [description, isDescTyping]);
 
-  // Auto-advance logic with faster transitions
+  // Auto-advance logic for sliding
   useEffect(() => {
-    if (!isPlaying || hovering || images.length <= 1) return;
+    if (hovering || images.length <= 1) return;
 
     const id = setInterval(() => {
+      setDirection(1);
       setActive((p) => (p + 1) % images.length);
-    }, 3500); // 3.5 seconds per image (faster)
+    }, 5000); // 5 seconds per image for premium feel
 
     return () => clearInterval(id);
-  }, [isPlaying, hovering, images.length]);
+  }, [hovering, images.length]);
 
   const goTo = useCallback((index: number) => {
     if (index === active) return;
+    setDirection(index > active ? 1 : -1);
     setActive(index);
   }, [active]);
+
+  const variants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? '100%' : '-100%',
+      opacity: 1
+    }),
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => ({
+      zIndex: 0,
+      x: direction < 0 ? '100%' : '-100%',
+      opacity: 1
+    })
+  };
 
   return (
     <section
       aria-label="Hero – primary brand introduction"
-      className="relative flex flex-col justify-end text-white overflow-hidden min-h-screen pt-16 sm:pt-20 lg:pt-24"
+      className="hero relative flex flex-col pt-16 sm:pt-20 lg:pt-24 bg-[var(--bg-main)]"
       onMouseEnter={() => setHovering(true)}
       onMouseLeave={() => setHovering(false)}
     >
+      {/* 1. Immersive Header Slider Section */}
+      <div className="relative w-full h-[70vh] sm:h-[80vh] lg:h-[88vh] overflow-hidden bg-[var(--bg-main)]">
+        {/* Background Images with Sliding Transition */}
+        <AnimatePresence initial={false} custom={direction}>
+          <motion.img
+            key={active}
+            src={images[active]}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{
+              x: { type: "spring", stiffness: 300, damping: 30 },
+              opacity: { duration: 0.5 }
+            }}
+            alt={`Hero Background ${active + 1}`}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </AnimatePresence>
 
-      {/* Background Images with Gapless Cross-Fade Transition */}
-      {images.map((img, idx) => (
-        <img
-          key={idx}
-          src={img}
-          alt={idx === 0 ? "Ethiopian IT Park - Premier Technology Hub" : `Hero Background ${idx + 1}`}
-          width={1920}
-          height={1080}
-          fetchPriority={idx === 0 ? "high" : "low"}
-          loading={idx === 0 ? "eager" : "lazy"}
-          decoding="async"
-          aria-hidden={idx !== active}
-          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-[600ms] ease-in-out ${idx === active ? 'opacity-100 z-[2]' : idx === prevActive ? 'opacity-100 z-[1]' : 'opacity-0 z-0'
-            }`}
-        />
-      ))}
+        {/* Refined Right-Aligned Text Overlay (No Background) */}
+        <div className="absolute inset-y-0 right-0 z-[5] flex flex-col items-end justify-center text-right p-6 sm:p-10 md:p-16 lg:p-24 w-full md:w-[50%] lg:w-[40%]">
+          <Container size="xl" className="w-full mr-0 pr-0">
+            <div className="space-y-8 relative">
+              {/* Refined Indigo Vertical Branding Bar */}
+              <div
+                className="absolute -right-4 md:-right-8 top-0 bottom-0 w-2 rounded-l-full shadow-[0_0_20px_rgba(79,70,229,0.3)]"
+                style={{ background: '#4F46E5' }}
+              />
 
-      {/* Enhanced Gradient Overlay - Better text readability */}
-      <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-[1]" />
-
-
-
-      {/* Content Container - Enhanced spacing */}
-      <Container size="xl" className="relative z-[3] pb-20 sm:pb-28 lg:pb-36">
-        <div className="relative flex flex-col items-start justify-end w-full px-6 sm:px-10 lg:px-16">
-
-          {/* Text Content with professional spacing */}
-          <div className="max-w-5xl space-y-5 sm:space-y-7 lg:space-y-8">
-
-            {/* Title with Writing Animation and Start Cursor */}
-            <div className="relative flex items-start">
-              {/* Brand Cursor that appears at the start ONLY after writing is complete */}
-              {(!isTitleTyping && !isDescTyping && displayedText === description) && (
-                <span className="inline-block w-0.5 sm:w-1 h-8 sm:h-10 md:h-12 lg:h-16 xl:h-20 bg-[#0C7C92] mr-2 sm:mr-3 animate-blink shadow-lg shadow-[#0C7C92]/40 shrink-0" />
-              )}
-
-              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-black tracking-tight leading-[1.2] sm:leading-[1.1]">
-                {/* Static full title for screen readers and SEO */}
-                <span className="sr-only">{extractText(title, false)}</span>
-
-                {/* Animated typing title for visual users, hidden from screen readers */}
-                <span aria-hidden="true" className="bg-gradient-to-r from-white via-blue-50 to-cyan-100 bg-clip-text text-transparent drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)] filter brightness-110">
+              {/* Dynamic Typing Title - Stark White & Modern Size */}
+              <div className="space-y-4">
+                <motion.h1
+                  initial={{ x: 60, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1] text-white drop-shadow-lg"
+                  style={{ fontFamily: "'Inter', sans-serif" }}
+                >
                   {displayedTitle}
-                  {isTitleTyping && (
-                    <span className="inline-block w-0.5 sm:w-1 h-8 sm:h-10 md:h-12 lg:h-16 xl:h-20 bg-[#0C7C92] ml-1.5 sm:ml-2 animate-blink shadow-lg shadow-[#0C7C92]/40" />
-                  )}
-                </span>
-              </h1>
-            </div>
+                  <span className="inline-block w-2 h-8 sm:h-12 lg:h-16 bg-[#4F46E5] ml-4 animate-blink align-middle" />
+                </motion.h1>
+              </div>
 
-            {/* Description with Typing Animation and Professional Styling */}
-            <div className="relative">
-              <p className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl leading-relaxed sm:leading-relaxed lg:leading-loose text-white/98 font-normal max-w-4xl drop-shadow-[0_1px_8px_rgba(0,0,0,0.9)] backdrop-blur-[0.5px]">
+              {/* Dynamic Typing Description - Clean & Readable */}
+              <motion.p
+                initial={{ x: 60, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="text-base sm:text-lg md:text-xl lg:text-2xl leading-relaxed text-white font-bold max-w-xl ml-auto tracking-wide drop-shadow-md"
+                style={{ fontFamily: "'Inter', sans-serif" }}
+              >
                 {displayedText}
-                {isDescTyping && (
-                  <span className="inline-block w-0.5 h-4 sm:h-5 md:h-6 lg:h-7 xl:h-8 bg-[#0C7C92] ml-1 animate-blink shadow-lg shadow-[#0C7C92]/40" />
-                )}
-              </p>
+              </motion.p>
             </div>
-          </div>
+          </Container>
         </div>
-      </Container>
 
-      {/* Slider indicators - Sleek Design */}
-      {images.length > 1 && (
-        <div
-          className="absolute left-1/2 bottom-6 sm:bottom-8 lg:bottom-10 -translate-x-1/2 flex gap-2 sm:gap-2.5 lg:gap-3 z-10 bg-black/40 backdrop-blur-lg px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 lg:py-3 rounded-full border border-white/25 shadow-lg shadow-black/30"
-          role="tablist"
-          aria-label="Hero background selector"
-        >
-          {images.map((_, idx) => (
-            <button
-              key={idx}
-              role="tab"
-              aria-selected={active === idx}
-              aria-current={active === idx ? 'true' : 'false'}
-              aria-label={`Show slide ${idx + 1}`}
-              tabIndex={active === idx ? 0 : -1}
-              onClick={() => goTo(idx)}
-              className={`h-1.5 sm:h-2 rounded-full transition-all duration-500 ease-out outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/50 ${active === idx
-                ? 'w-10 sm:w-12 lg:w-14 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 shadow-lg shadow-cyan-500/50'
-                : 'w-1.5 sm:w-2 bg-white/60 hover:bg-white/80 hover:w-2.5 sm:hover:w-3'
-                }`}
-            />
-          ))}
-        </div>
-      )}
+        {/* Slider indicators - Enhanced Modern Style */}
+        {images.length > 1 && (
+          <div className="absolute left-1/2 bottom-8 -translate-x-1/2 flex gap-3 z-10 p-2 bg-[var(--bg-main)]/20 backdrop-blur-md rounded-full border border-[var(--border-color)]">
+            {images.map((_, idx) => (
+              <button
+                key={idx}
+                role="tab"
+                aria-selected={active === idx}
+                aria-current={active === idx ? 'true' : 'false'}
+                aria-label={`Show slide ${idx + 1}`}
+                onClick={() => goTo(idx)}
+                style={active === idx ? { background: 'var(--brand-gradient-horizontal)' } : {}}
+                className={`h-1.5 rounded-full transition-all duration-500 ${active === idx ? 'w-12 shadow-lg shadow-[var(--primary)]/50' : 'w-2 bg-[var(--text-main)]/20 hover:bg-[var(--text-main)]/40'}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </section>
   );
 }

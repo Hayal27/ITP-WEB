@@ -4,7 +4,8 @@ import './assets/css/slicknav.min.css';
 import './assets/css/swiper-bundle.min.css';
 import './assets/css/animate.css';
 import './assets/css/custom.css';
-import React, { Suspense } from 'react';
+import './assets/css/mobile-fix.css'; // Emergency mobile navigation fix
+import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import Loading from './components/Loading';
@@ -39,8 +40,27 @@ const CloudInfrastructure = React.lazy(() => import('./pages/Services/cloudInfra
 const LiveEventsPage = React.lazy(() => import('./pages/LiveEvents'));
 const ContactUs = React.lazy(() => import('./pages/ContactUs'));
 const InvestorLanding = React.lazy(() => import('./pages/InvestorLanding/InvestorLanding'));
+const VerifyEmployeePage = React.lazy(() => import('./pages/Verify/VerifyEmployeePage'));
 
 const App: React.FC = () => {
+  useEffect(() => {
+    document.body.style.cursor = 'auto';
+
+    // Emergency fix: Ensure touch events work on mobile
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+      // Ensure all links are clickable
+      const style = document.createElement('style');
+      style.textContent = `
+        a, button, [role="button"] {
+          pointer-events: auto !important;
+          touch-action: manipulation !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }, []);
+
   return (
     <Router>
       <MainLayout>
@@ -104,6 +124,7 @@ const App: React.FC = () => {
             <Route path="/live-events" element={<LiveEventsPage />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/ceo-card" element={<InvestorLanding />} />
+            <Route path="/verify-id/:idNumber" element={<VerifyEmployeePage />} />
 
             {/* Add more routes here as needed */}
           </Routes>

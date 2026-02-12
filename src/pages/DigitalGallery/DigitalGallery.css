@@ -15,13 +15,15 @@
 
 /* Dark Mode Overrides */
 .dark .itpc-digital-gallery,
-[data-bs-theme="dark"] .itpc-digital-gallery {
-  --gallery-bg: #020617;
-  --gallery-card-bg: rgba(15, 23, 42, 0.8);
-  --gallery-glass: rgba(30, 41, 59, 0.4);
-  --gallery-text-dark: #f1f5f9;
-  --gallery-text-light: #94a3b8;
-  --gallery-border: rgba(255, 255, 255, 0.05);
+[data-bs-theme="dark"] .itpc-digital-gallery,
+[data-theme='dark'] .itpc-digital-gallery {
+  --gallery-bg: var(--bg-main);
+  --gallery-card-bg: var(--bg-card);
+  --gallery-glass: rgba(255, 255, 255, 0.05);
+  --gallery-text-dark: var(--text-main);
+  --gallery-text-light: var(--text-muted);
+  --gallery-border: var(--border-color);
+  --gallery-primary: var(--primary);
 }
 
 .itpc-digital-gallery {

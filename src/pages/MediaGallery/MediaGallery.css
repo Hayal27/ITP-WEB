@@ -13,15 +13,24 @@
 }
 
 /* Dark Theme Overrides */
+[data-theme='dark'],
 .dark,
-[data-bs-theme="dark"],
+[data-bs-theme="dark"] {
+  --mg-bg-page: var(--bg-main);
+  --mg-bg-card: var(--bg-card);
+  --mg-text-main: var(--text-main);
+  --mg-text-muted: var(--text-muted);
+  --mg-border-color: var(--border-color);
+  --mg-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --mg-bg-page: #0f172a;
-    --mg-bg-card: #1e293b;
-    --mg-text-main: #f1f5f9;
-    --mg-text-muted: #94a3b8;
-    --mg-border-color: #334155;
+    --mg-bg-page: var(--bg-main);
+    --mg-bg-card: var(--bg-card);
+    --mg-text-main: var(--text-main);
+    --mg-text-muted: var(--text-muted);
+    --mg-border-color: var(--border-color);
     --mg-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
   }
 }

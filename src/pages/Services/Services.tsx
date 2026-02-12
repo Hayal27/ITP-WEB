@@ -6,6 +6,8 @@ import { BsArrowRight } from 'react-icons/bs';
 import './Services.css';
 import { Link } from 'react-router-dom';
 
+import { getZones, ZoneData } from '../../services/apiService';
+
 // Service categories data
 const serviceCategories = [
   {
@@ -76,34 +78,6 @@ const serviceCategories = [
   },
 ];
 
-// Zonal services data
-const zonalServices = [
-  {
-    id: 1,
-    title: 'BPO Zone',
-    description: 'Shared infrastructure and support for business process outsourcing',
-    features: ['Call center facilities', 'Shared workspaces', 'Training rooms', 'Support services']
-  },
-  {
-    id: 2,
-    title: 'Software Zone',
-    description: 'Development labs and tools for software companies',
-    features: ['DevOps tools', 'Testing grounds', 'Collaboration spaces', 'Tech support']
-  },
-  {
-    id: 3,
-    title: 'Innovation Zone',
-    description: 'Research and innovation facilities',
-    features: ['Research grants', 'University partnerships', 'Prototyping labs', 'Mentorship']
-  },
-  {
-    id: 4,
-    title: 'Emerging Tech Zone',
-    description: 'Facilities for cutting-edge technologies',
-    features: ['Blockchain labs', 'Fintech support', 'AI/ML facilities', 'IoT labs']
-  }
-];
-
 // Target audience data
 const targetAudience = [
   {
@@ -133,6 +107,8 @@ const targetAudience = [
 ];
 
 const Services: React.FC = () => {
+  const [zones, setZones] = useState<ZoneData[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
   const [stats, setStats] = useState({
     zones: 0,
@@ -143,11 +119,25 @@ const Services: React.FC = () => {
   });
 
   useEffect(() => {
+    const fetchZones = async () => {
+      try {
+        const data = await getZones();
+        setZones(data);
+      } catch (error) {
+        console.error("Failed to fetch zones:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchZones();
+  }, []);
+
+  useEffect(() => {
     // Animate stats
     const interval = setInterval(() => {
       setStats(prev => ({
         zones: Math.min(prev.zones + 1, 5),
-        companies: Math.min(prev.companies + 5, 60),
+        companies: Math.min(prev.companies + 5, 80),
         services: Math.min(prev.services + 1, 15),
         partners: Math.min(prev.partners + 1, 12),
         youth: Math.min(prev.youth + 50, 1000)
@@ -162,7 +152,7 @@ const Services: React.FC = () => {
       {/* Hero Section with Fixed Header Spacing */}
       <section className="itpc-services-hero">
         <div className="itpc-services-hero-content">
-          <motion.div 
+          <motion.div
             className="itpc-services-hero-text"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -170,10 +160,10 @@ const Services: React.FC = () => {
           >
             <h1 className="itpc-services-hero-title">IT Services</h1>
             <p className="itpc-services-hero-subtitle">
-              At <span className="font-bold" style={{ color: '#16284F' }}>Ethiopian IT Park</span>, we provide innovative and reliable IT solutions to help organizations stay ahead in the digital era. From system development to cloud computing, our expert team delivers tailored services designed to meet your unique business needs.
+              At <span className="font-bold" style={{ color: 'var(--secondary)' }}>Ethiopian IT Park</span>, we provide innovative and reliable IT solutions to help organizations stay ahead in the digital era. From system development to cloud computing, our expert team delivers tailored services designed to meet your unique business needs.
             </p>
           </motion.div>
-          <motion.div 
+          <motion.div
             className="itpc-services-hero-image"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -245,36 +235,38 @@ const Services: React.FC = () => {
             <p className="itpc-services-section-text">Specialized areas designed for different tech sectors</p>
           </div>
           <div className="itpc-services-zones-tabs">
-            {zonalServices.map((zone, index) => (
+            {zones.map((zone, index) => (
               <motion.button
-                key={zone.id}
+                key={index}
                 className={`itpc-services-tab-btn ${activeTab === index ? 'itpc-services-tab-active' : ''}`}
                 onClick={() => setActiveTab(index)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {zone.title}
+                {zone.name}
               </motion.button>
             ))}
           </div>
-          <motion.div 
-            className="itpc-services-zone-content"
-            key={activeTab}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h3 className="itpc-services-zone-title">{zonalServices[activeTab].title}</h3>
-            <p className="itpc-services-zone-text">{zonalServices[activeTab].description}</p>
-            <ul className="itpc-services-zone-list">
-              {zonalServices[activeTab].features.map((feature, index) => (
-                <li key={index} className="itpc-services-zone-item">
-                  <span className="itpc-services-checkmark">✓</span>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-          </motion.div>
+          {zones.length > 0 && (
+            <motion.div
+              className="itpc-services-zone-content"
+              key={activeTab}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <h3 className="itpc-services-zone-title">{zones[activeTab].name}</h3>
+              <p className="itpc-services-zone-text">{zones[activeTab].summary}</p>
+              <ul className="itpc-services-zone-list">
+                {zones[activeTab].details.features.map((feature, index) => (
+                  <li key={index} className="itpc-services-zone-item">
+                    <span className="itpc-services-checkmark">✓</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -317,12 +309,13 @@ const Services: React.FC = () => {
             <h2 className="itpc-services-cta-title">Need Help Choosing the Right Service?</h2>
             <p className="itpc-services-cta-text">Our service advisors are here to help you make the best choice for your needs.</p>
             <div className="itpc-services-cta-buttons">
-              <motion.button 
+              <motion.button
                 className="itpc-services-cta-btn-secondary"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                Contact Now <Link to="/contact" />
+                {/* link to contact page */}
+                <Link to="/contact">Contact Now</Link>
               </motion.button>
             </div>
           </div>

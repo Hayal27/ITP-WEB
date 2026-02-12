@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import './Board.css';
 import { getBoardMembers, BoardMember } from '../../services/apiService';
 
+
 const Board: React.FC = () => {
   const [boardMembers, setBoardMembers] = useState<BoardMember[]>([]);
   const [selectedMember, setSelectedMember] = useState<BoardMember | null>(null);
@@ -72,6 +73,7 @@ const Board: React.FC = () => {
 
   return (
     <div className="board-premium-container">
+
       {/* Hero Section */}
       <motion.div
         className="board-hero"
@@ -306,13 +308,6 @@ const Board: React.FC = () => {
             </div>
           </div>
         </motion.div>
-      </div>
-
-      {/* Decorative Elements */}
-      <div className="decorative-shapes">
-        <div className="shape shape-1"></div>
-        <div className="shape shape-2"></div>
-        <div className="shape shape-3"></div>
       </div>
     </div>
   );

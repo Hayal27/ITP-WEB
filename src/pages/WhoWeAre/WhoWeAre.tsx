@@ -3,15 +3,13 @@ import {
   FaLinkedin,
   FaTwitter,
   FaFacebook,
-  FaGlobe,
   FaBuilding,
-  FaChartBar,
-  FaHandshake,
   FaLightbulb,
   FaUsers,
+  FaHandshake,
   FaRocket
 } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import './WhoWeAre.css';
 import { getWhoWeAreSections, WhoWeAreSection } from '../../services/apiService';
 
@@ -20,7 +18,15 @@ interface FeatureItem {
   desc: string;
 }
 
-// Reusable section component for alternating layout
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
 const WhoSection = ({
   image,
   alt,
@@ -32,7 +38,13 @@ const WhoSection = ({
   children: React.ReactNode;
   reverse?: boolean;
 }) => (
-  <div className={`who-image-block ${reverse ? 'who-image-right' : 'who-image-left'}`}>
+  <motion.div
+    className={`who-image-block ${reverse ? 'who-image-right' : 'who-image-left'}`}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, margin: "-100px" }}
+    variants={itemVariants}
+  >
     <div className="who-image-container">
       <img src={image} alt={alt} />
       <div className="who-image-overlay">
@@ -43,15 +55,10 @@ const WhoSection = ({
         </div>
       </div>
     </div>
-    <motion.div
-      className="who-text-container"
-      initial={{ opacity: 0, x: reverse ? -40 : 40 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.8 }}
-    >
+    <div className="who-text-container">
       {children}
-    </motion.div>
-  </div>
+    </div>
+  </motion.div>
 );
 
 const WhoWeAre: React.FC = () => {
@@ -72,40 +79,21 @@ const WhoWeAre: React.FC = () => {
     fetchSections();
   }, []);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('who-visible');
-            entry.target.classList.remove('who-hidden');
-          } else {
-            entry.target.classList.remove('who-visible');
-            entry.target.classList.add('who-hidden');
-          }
-        });
-      },
-      {
-        threshold: 0.2,
-        rootMargin: '0px 0px -50px 0px'
-      }
-    );
-
-    const elements = document.querySelectorAll('.who-image-block, .who-voice, .who-cta');
-    elements.forEach((el) => observer.observe(el));
-    return () => {
-      elements.forEach((el) => observer.unobserve(el));
-      observer.disconnect();
-    };
-  }, [sections]);
-
   if (loading) {
     return (
-      <section className="who-park">
-        <div className="who-wrapper">
-          <h2>Loading...</h2>
+      <div className="flex items-center justify-center min-h-[60vh] who-park">
+        <div className="relative">
+          <div className="w-16 h-16 border-4 border-[var(--who-secondary)] border-t-transparent rounded-full animate-spin"></div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ repeat: Infinity, duration: 1.5, repeatType: "reverse" }}
+            className="mt-4 text-[var(--who-primary)] font-bold tracking-widest text-xs uppercase text-center"
+          >
+            Loading Story
+          </motion.div>
         </div>
-      </section>
+      </div>
     );
   }
 
@@ -119,88 +107,107 @@ const WhoWeAre: React.FC = () => {
       <div className="who-wrapper">
         <motion.header
           className="who-header"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
           <div className="who-header-row">
-            <FaRocket className="who-main-title-icon" />
+            <div className="who-main-title-icon">
+              <FaRocket />
+            </div>
             <h2>{heroSection?.title || 'We Are Ethiopian IT Park'}</h2>
           </div>
-          <motion.p className="who-intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2, duration: 1 }}>
-            <strong>We Are</strong> {heroSection?.subtitle || 'the beating heart of Ethiopia\'s digital revolution — a world-class technology hub empowering innovation, entrepreneurship, and economic growth.'}
+          <motion.p
+            className="who-intro"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3, duration: 1 }}
+          >
+            {heroSection?.subtitle || 'The beating heart of Ethiopia\'s digital revolution — a world-class technology hub empowering innovation, entrepreneurship, and economic growth.'}
           </motion.p>
+        </motion.header>
 
-          {regularSections.map((section, index) => {
-            const isReverse = index % 2 !== 0;
-            const IconComponent = index === 0 ? FaUsers : index === 1 ? FaLightbulb : index === 2 ? FaHandshake : FaRocket;
+        {regularSections.map((section, index) => {
+          const isReverse = index % 2 !== 0;
+          const IconComponent = index === 0 ? FaUsers : index === 1 ? FaLightbulb : index === 2 ? FaHandshake : FaRocket;
 
-            return (
-              <WhoSection
-                key={section.id}
-                image={section.image_url || '/images/default.jpg'}
-                alt={section.title || 'Section Image'}
-                reverse={isReverse}
-              >
-                <h3>
-                  <IconComponent style={{ color: 'var(--who-secondary)', marginRight: 8 }} />
-                  {section.title}
-                </h3>
-                {section.content && (
-                  <div
-                    className="who-general"
-                    dangerouslySetInnerHTML={{ __html: section.content }}
-                  />
-                )}
-              </WhoSection>
-            );
-          })}
-
-          {featuresSection && (
+          return (
             <WhoSection
-              image={featuresSection.image_url || '/images/default.jpg'}
-              alt="What Makes Us Unique"
-              reverse={false}
+              key={section.id}
+              image={section.image_url || '/images/default.jpg'}
+              alt={section.title || 'Section Image'}
+              reverse={isReverse}
             >
               <h3>
-                <FaHandshake style={{ color: 'var(--who-accent)', marginRight: 8 }} />
-                {featuresSection.title}
+                <IconComponent style={{ color: 'var(--who-secondary)' }} />
+                {section.title}
               </h3>
-              <div className="who-features-table grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                {featuresSection.content && (() => {
-                  try {
-                    const features: FeatureItem[] = JSON.parse(featuresSection.content);
-                    return features.map((f, i) => (
-                      <div
-                        key={i}
-                        className="who-feature-row bg-white rounded-md shadow-sm p-2 border border-gray-100 flex flex-col hover:shadow-md transition-shadow"
-                      >
-                        <span className="who-feature-title font-semibold text-[color:var(--who-primary)] text-base mb-1">{f.title}</span>
-                        <span className="who-feature-desc text-gray-600">{f.desc}</span>
-                      </div>
-                    ));
-                  } catch {
-                    return <p>Unable to load features</p>;
-                  }
-                })()}
-              </div>
+              {section.content && (
+                <div
+                  className="who-general"
+                  dangerouslySetInnerHTML={{ __html: section.content }}
+                />
+              )}
             </WhoSection>
-          )}
+          );
+        })}
 
-          {voiceSection && (
-            <div className="who-voice">
-              <motion.blockquote initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.8 }}>
-                {voiceSection.subtitle || '"We are here to lead Ethiopia\'s future with innovation, knowledge, and collaboration."'}
-              </motion.blockquote>
+        {featuresSection && (
+          <WhoSection
+            image={featuresSection.image_url || '/images/default.jpg'}
+            alt="What Makes Us Unique"
+            reverse={false}
+          >
+            <h3>
+              <FaHandshake style={{ color: 'var(--who-accent)' }} />
+              {featuresSection.title}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+              {featuresSection.content && (() => {
+                try {
+                  const features: FeatureItem[] = JSON.parse(featuresSection.content);
+                  return features.map((f, i) => (
+                    <motion.div
+                      key={i}
+                      whileHover={{ y: -5 }}
+                      className="bg-[var(--who-muted-bg)] dark:bg-[var(--who-white)] rounded-2xl p-5 border border-[var(--who-border)] flex flex-col transition-shadow hover:shadow-xl"
+                    >
+                      <span className="font-black uppercase tracking-widest text-[var(--who-primary)] text-[10px] mb-2">{f.title}</span>
+                      <span className="text-[var(--who-text-light)] text-sm font-medium leading-relaxed">{f.desc}</span>
+                    </motion.div>
+                  ));
+                } catch {
+                  return <p>Unable to load features</p>;
+                }
+              })()}
             </div>
-          )}
+          </WhoSection>
+        )}
 
-          <div className="who-cta">
-            <motion.a href="#" className="who-cta-btn who-primary" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.6 }}>Join the Movement</motion.a>
-            <motion.a href="#" className="who-cta-btn who-secondary" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0, duration: 0.6 }}>Explore Innovation</motion.a>
-            <motion.a href="#" className="who-cta-btn who-accent" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1, duration: 0.6 }}>Partner With Us</motion.a>
-          </div>
-        </motion.header>
+        {voiceSection && (
+          <motion.div
+            className="who-voice"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+          >
+            <blockquote dangerouslySetInnerHTML={{ __html: voiceSection.subtitle || '&ldquo;We are here to lead Ethiopia&rsquo;s future with innovation, knowledge, and collaboration.&rdquo;' }}>
+            </blockquote>
+          </motion.div>
+        )}
+
+        <motion.div
+          className="who-cta"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <a href="#" className="who-cta-btn who-primary">Join the Movement</a>
+          <a href="#" className="who-cta-btn who-secondary">Explore Innovation</a>
+          <a href="#" className="who-cta-btn who-accent">Partner With Us</a>
+        </motion.div>
       </div>
     </section>
   );

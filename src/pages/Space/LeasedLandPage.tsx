@@ -22,18 +22,11 @@ const LeasedLandPage: React.FC = () => {
   return (
     <div className="enterprise-page green-theme">
       <div className="top-utility-bar">
-        <div className="breadcrumbs-minimal">
-          <span>Home</span> / <span>Space</span> / <span className="active">Leased Land</span>
-        </div>
+
 
         <div className="utility-actions">
           <div className="export-container">
-            <button
-              className="btn-utility"
-              onClick={() => setShowExportOptions(!showExportOptions)}
-            >
-              <FaFileExport /> Export
-            </button>
+          
             <AnimatePresence>
               {showExportOptions && (
                 <motion.div
@@ -48,7 +41,6 @@ const LeasedLandPage: React.FC = () => {
               )}
             </AnimatePresence>
           </div>
-          <button className="btn-utility-icon"><FaQuestionCircle /></button>
         </div>
       </div>
 

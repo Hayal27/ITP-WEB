@@ -1,5 +1,5 @@
 import React from 'react';
-import { ApplicationFormData } from '../ApplicationForm';
+import { ApplicationFormData } from '../types';
 
 interface PersonalDetailsStepProps {
   data: ApplicationFormData['personalDetails'];
@@ -20,7 +20,7 @@ const PersonalDetailsStep: React.FC<PersonalDetailsStepProps> = ({ data, onChang
           <input
             type="text" id="fullName" name="fullName"
             value={data.fullName} onChange={handleChange}
-            className="itpc-input" required
+            className="itpc-input" required maxLength={100}
           />
           {errors.fullName && <p className="error-hint">{errors.fullName}</p>}
         </div>
@@ -29,7 +29,7 @@ const PersonalDetailsStep: React.FC<PersonalDetailsStepProps> = ({ data, onChang
           <input
             type="email" id="email" name="email"
             value={data.email} onChange={handleChange}
-            className="itpc-input" required
+            className="itpc-input" required maxLength={100}
           />
           {errors.email && <p className="error-hint">{errors.email}</p>}
         </div>
@@ -41,7 +41,7 @@ const PersonalDetailsStep: React.FC<PersonalDetailsStepProps> = ({ data, onChang
           <input
             type="tel" id="phone" name="phone"
             value={data.phone} onChange={handleChange}
-            className="itpc-input" required
+            className="itpc-input" required maxLength={15}
           />
           {errors.phone && <p className="error-hint">{errors.phone}</p>}
         </div>
@@ -62,23 +62,26 @@ const PersonalDetailsStep: React.FC<PersonalDetailsStepProps> = ({ data, onChang
 
       <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
         <div>
-          <label className="itpc-label" htmlFor="address">Location / Address</label>
+          <label className="itpc-label" htmlFor="address">Location / Address *</label>
           <input
             type="text" id="address" name="address"
             value={data.address} onChange={handleChange}
             className="itpc-input"
             placeholder="City, Region, Or Specific Address"
+            maxLength={200}
           />
+          {errors.address && <p className="error-hint">{errors.address}</p>}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-50">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[var(--border-color)]">
         <div>
           <label className="itpc-label" htmlFor="linkedin">LinkedIn Profile URL</label>
           <input
             type="url" id="linkedin" name="linkedin"
             value={data.linkedin || ''} onChange={handleChange}
             className="itpc-input" placeholder="linkedin.com/in/..."
+            maxLength={200}
           />
         </div>
         <div>
@@ -87,6 +90,7 @@ const PersonalDetailsStep: React.FC<PersonalDetailsStepProps> = ({ data, onChang
             type="url" id="portfolio" name="portfolio"
             value={data.portfolio || ''} onChange={handleChange}
             className="itpc-input" placeholder="portfolio.com/..."
+            maxLength={200}
           />
         </div>
       </div>

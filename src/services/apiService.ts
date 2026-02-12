@@ -9,6 +9,7 @@ export async function request<T>(url: string, options: AxiosRequestConfig = {}):
   try {
     const response = await axios({
       url: `${BACKEND_URL}/api${url}`,
+      withCredentials: true,
       ...options,
       headers: {
         // Authorization headers or other common headers can be added here
@@ -21,7 +22,7 @@ export async function request<T>(url: string, options: AxiosRequestConfig = {}):
     if (axiosError.response) {
       const errorData = axiosError.response.data as { message?: string; error?: string };
       console.error('API Error Response:', errorData);
-      throw new Error(errorData?.message || errorData?.error || `Request failed with status ${axiosError.response.status}`);
+      throw new Error(errorData?.error || errorData?.message || `Request failed with status ${axiosError.response.status}`);
     } else if (axiosError.request) {
       console.error('API No Response:', axiosError.request);
       throw new Error('No response received from server. Please check your network connection and backend server.');
@@ -35,9 +36,37 @@ export async function request<T>(url: string, options: AxiosRequestConfig = {}):
 // Helper to ensure image URLs are fully qualified
 export const fixImageUrl = (url: string | null | undefined): string | null => {
   if (!url) return null;
-  if (url.startsWith('http')) return url;
-  if (url.startsWith('/uploads')) return `${BACKEND_URL}${url}`;
-  return url;
+
+  let cleanUrl = String(url).trim();
+
+  // 1. Handle JSON string arrays from database (e.g., '["/uploads/file.jpg"]')
+  if (cleanUrl.startsWith('[') && cleanUrl.endsWith(']')) {
+    try {
+      const parsed = JSON.parse(cleanUrl);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        cleanUrl = parsed[0]; // Get first image from array
+      }
+    } catch (e) {
+      console.warn('[fixImageUrl] Failed to parse JSON:', cleanUrl);
+    }
+  }
+
+  // 2. Remove any accidental surrounding quotes
+  cleanUrl = cleanUrl.replace(/^['"]|['"]$/g, '');
+
+  // 3. Handle production domain replacement for local development
+  if (cleanUrl.includes('api.ethiopianitpark.et')) {
+    cleanUrl = cleanUrl.replace(/https?:\/\/api\.ethiopianitpark\.et/, '');
+  }
+
+  // 4. If it's already an absolute URL, return it
+  if (cleanUrl.startsWith('http')) return cleanUrl;
+
+  // 5. If it starts with /uploads, prepend backend URL
+  if (cleanUrl.startsWith('/uploads')) return `${BACKEND_URL}${cleanUrl}`;
+
+  // 6. Otherwise return as-is (for frontend public assets)
+  return cleanUrl;
 };
 
 // Updated Comment interface
@@ -118,61 +147,10 @@ export type EventFormData = Omit<EventItem, 'id' | 'comments' | 'image' | 'creat
 };
 
 
-// Helper to build FormData for News
-const buildNewsFormData = (newsData: Partial<NewsFormData>): FormData => {
-  const formData = new FormData();
-  (Object.keys(newsData) as Array<keyof Partial<NewsFormData>>).forEach(key => {
-    // Skip imageFiles and tags as they are handled separately
-    if (key === 'imageFiles' || key === 'tags') return;
-
-    const value = newsData[key];
-    if (value !== undefined && value !== null) {
-      if (key === 'youtubeUrl' && value === '') { // Don't append empty youtubeUrl
-        return;
-      }
-      formData.append(key, typeof value === 'boolean' ? String(value) : String(value));
-    }
-  });
-
-  if (newsData.tags && newsData.tags.length > 0) {
-    newsData.tags.forEach(tag => formData.append('tags', tag));
-  } else if (newsData.tags === undefined || (Array.isArray(newsData.tags) && newsData.tags.length === 0)) {
-    // No action needed if tags are empty or undefined, unless backend requires explicit empty value
-  }
-
-  if (newsData.imageFiles && newsData.imageFiles.length > 0) {
-    newsData.imageFiles.forEach(file => {
-      formData.append('newsImages', file, file.name); // Backend expects 'newsImages'
-    });
-  }
-  return formData;
-};
-
-// Helper to build FormData for Events (remains for single image)
-const buildEventFormData = (eventData: Partial<EventFormData>): FormData => {
-  const formData = new FormData();
-  (Object.keys(eventData) as Array<keyof Partial<EventFormData>>).forEach(key => {
-    if (key === 'imageFiles' || key === 'tags') return;
-    const value = eventData[key];
-    if (value !== undefined && value !== null) {
-      formData.append(key, String(value));
-    }
-  });
-  if (eventData.tags && eventData.tags.length > 0) {
-    eventData.tags.forEach(tag => formData.append('tags', tag));
-  }
-
-  if (eventData.imageFiles && eventData.imageFiles.length > 0) {
-    eventData.imageFiles.forEach(file => {
-      formData.append('imageFiles', file, file.name); // Backend expects 'imageFiles'
-    });
-  }
-  return formData;
-};
 
 // --- NEWS API ---
 export const getNews = async (): Promise<NewsItem[]> => {
-  const response = await request<{ success: boolean, news: NewsItem[] }>('/newsf', { method: 'GET' });
+  const response = await request<{ success: boolean, news: NewsItem[] }>('/news', { method: 'GET' });
   if (response.success) {
     return response.news.map(n => ({
       ...n,
@@ -193,7 +171,7 @@ export const getNews = async (): Promise<NewsItem[]> => {
 
 // --- EVENTS API ---
 export const getEvents = async (): Promise<EventItem[]> => {
-  const response = await request<{ success: boolean, events: EventItem[] }>('/eventsf', { method: 'GET' });
+  const response = await request<{ success: boolean, events: EventItem[] }>('/events', { method: 'GET' });
   if (response.success) {
     return response.events.map(e => ({
       ...e,
@@ -207,33 +185,14 @@ export const getEvents = async (): Promise<EventItem[]> => {
   throw new Error("Failed to fetch events or backend response was not successful.");
 };
 
-export const updateEventItem = async (id: string | number, eventData: Partial<EventFormData>): Promise<EventItem> => {
-  const formData = buildEventFormData(eventData);
-  const updatedItem = await request<EventItem>(`/editEvent/${id}`, {
-    method: 'PUT',
-    data: formData,
-  });
-  return {
-    ...updatedItem,
-    date: updatedItem.date ? updatedItem.date.split('T')[0] : '',
-    tags: Array.isArray(updatedItem.tags) ? updatedItem.tags : [],
-    image: Array.isArray(updatedItem.image)
-      ? updatedItem.image.map(img => fixImageUrl(img) as string)
-      : (updatedItem.image ? [fixImageUrl(updatedItem.image) as string] : []),
-  };
-};
-
-export const deleteEventItem = async (id: string | number): Promise<void> => {
-  await request<{ success: boolean, message?: string }>(`/deleteEvent/${id}`, { method: 'DELETE' });
-};
-
 // --- COMMENTS API ---
 
 export interface CommentPayload {
   name: string;
-  email: string; // Kept email here as it's part of the submission form
+  email: string;
   text: string;
-  parentId?: string | number | null; // Updated to match Comment interface
+  parentId?: string | number | null;
+  website?: string; // Honeypot field
 }
 
 // Interface for the result of calculateCommentCounts
@@ -287,7 +246,7 @@ export const postNewsComment = async (
  * Sorts comments and their replies by date, newest first.
  */
 export const getCommentsForPost = async (postId: string | number): Promise<Comment[]> => {
-  const response = await request<{ success: boolean, comments: any[] }>(`/newsf/${postId}/comments`, { method: 'GET' });
+  const response = await request<{ success: boolean, comments: any[] }>(`/news/${postId}/comments`, { method: 'GET' });
 
   if (response.success && Array.isArray(response.comments)) {
     const mapAndSortComments = (comments: any[]): Comment[] => {
@@ -362,25 +321,13 @@ export interface ContactMessage {
   created_at: string;
 }
 
-export const submitContactForm = async (formData: { name: string; email: string; phone?: string; message: string }): Promise<{ success: boolean; message: string }> => {
+export const submitContactForm = async (formData: { name: string; email: string; phone?: string; subject: string; message: string; website?: string }): Promise<{ success: boolean; message: string }> => {
   return await request<{ success: boolean; message: string }>('/contact', {
     method: 'POST',
     data: formData,
   });
 };
 
-export const getContactMessages = async (): Promise<ContactMessage[]> => {
-  const response = await request<{ success: boolean; data: ContactMessage[] }>('/admin/messages', { method: 'GET' });
-  return response.data;
-};
-
-export const markMessageAsRead = async (id: number): Promise<{ success: boolean; message: string }> => {
-  return await request<{ success: boolean; message: string }>(`/admin/messages/${id}/read`, { method: 'PUT' });
-};
-
-export const deleteMessage = async (id: number): Promise<{ success: boolean; message: string }> => {
-  return await request<{ success: boolean; message: string }>(`/admin/messages/${id}`, { method: 'DELETE' });
-};
 
 // --- INVESTOR INQUIRY API ---
 export interface InvestorInquiry {
@@ -393,17 +340,13 @@ export interface InvestorInquiry {
   created_at: string;
 }
 
-export const submitInvestorInquiry = async (formData: { fullName: string; email: string; organization?: string; areaOfInterest?: string }): Promise<{ success: boolean; message: string }> => {
+export const submitInvestorInquiry = async (formData: { fullName: string; email: string; organization?: string; areaOfInterest?: string; website?: string }): Promise<{ success: boolean; message: string }> => {
   return await request<{ success: boolean; message: string }>('/investor-inquiries/submit', {
     method: 'POST',
     data: formData,
   });
 };
 
-export const getInvestorInquiries = async (): Promise<InvestorInquiry[]> => {
-  const response = await request<{ success: boolean; data: InvestorInquiry[] }>('/investor-inquiries/admin/inquiries', { method: 'GET' });
-  return response.data;
-};
 
 // --- OFFICE & BUILDING API ---
 export interface Building {
@@ -520,12 +463,6 @@ export const getAllLiveEvents = async (): Promise<LiveEventConfig[]> => {
   return await request<LiveEventConfig[]>('/live-events', { method: 'GET' });
 };
 
-export const updateSignaling = async (id: number, data: string): Promise<void> => {
-  return await request<void>(`/live-events/${id}/signaling`, {
-    method: 'POST',
-    data: { signaling_data: data }
-  });
-};
 
 export const getLiveEvent = async (id: number): Promise<LiveEventConfig> => {
   return await request<LiveEventConfig>(`/live-events/${id}`, { method: 'GET' });
@@ -583,7 +520,7 @@ export const trackApplication = async (code: string): Promise<TrackingStatus> =>
 
 // --- MEDIA API ---
 export const getMediaItems = async (): Promise<MediaItem[]> => {
-  const response = await request<{ success: boolean, mediaItems: MediaItem[] }>('/mediaf', { method: 'GET' });
+  const response = await request<{ success: boolean, mediaItems: MediaItem[] }>('/media', { method: 'GET' });
   if (response.success) {
     return response.mediaItems.map(item => ({
       ...item,
@@ -667,41 +604,6 @@ export const getInvestors = async (): Promise<Investor[]> => {
   }));
 };
 
-export const createPartner = async (partnerData: Partial<Partner>): Promise<any> => {
-  return await request<any>('/partners-investors/partners', {
-    method: 'POST',
-    data: partnerData
-  });
-};
-
-export const updatePartner = async (id: number, partnerData: Partial<Partner>): Promise<any> => {
-  return await request<any>(`/partners-investors/partners/${id}`, {
-    method: 'PUT',
-    data: partnerData
-  });
-};
-
-export const deletePartner = async (id: number): Promise<any> => {
-  return await request<any>(`/partners-investors/partners/${id}`, { method: 'DELETE' });
-};
-
-export const createInvestor = async (investorData: Partial<Investor>): Promise<any> => {
-  return await request<any>('/partners-investors/investors', {
-    method: 'POST',
-    data: investorData
-  });
-};
-
-export const updateInvestor = async (id: number, investorData: Partial<Investor>): Promise<any> => {
-  return await request<any>(`/partners-investors/investors/${id}`, {
-    method: 'PUT',
-    data: investorData
-  });
-};
-
-export const deleteInvestor = async (id: number): Promise<any> => {
-  return await request<any>(`/partners-investors/investors/${id}`, { method: 'DELETE' });
-};
 
 // --- INCUBATION API ---
 export interface IncubationProgram {
@@ -764,6 +666,94 @@ export const getTrainings = async (): Promise<TrainingWorkshop[]> => {
   }));
 };
 
+// --- ZONES API ---
+export interface ZoneData {
+  name: string;
+  summary: string;
+  images: string[];
+  color: string;
+  details: {
+    purpose: string;
+    features: string[];
+  };
+  position: {
+    left: string;
+    top: string;
+  };
+}
+
+export const getZones = async (): Promise<ZoneData[]> => {
+  // Mock data as specified in Zones.tsx and Services.tsx
+  return [
+    {
+      name: "ICT Business Zone",
+      summary: "High-speed fiber & secure data centers for BPOs and tech firms.",
+      images: ["https://res.cloudinary.com/yesuf/image/upload/v1747135437/bpo_ckg1ys.png"],
+      color: "bg-blue-600",
+      details: {
+        purpose: "To provide a world-class environment for IT and BPO services.",
+        features: ["High-speed fiber connectivity", "Secure data centers", "24/7 power backup", "Modern office spaces"]
+      },
+      position: { left: "20%", top: "30%" }
+    },
+    {
+      name: "Manufacturing Zone",
+      summary: "Electronics assembly and hardware production facilities.",
+      images: ["https://res.cloudinary.com/yesuf/image/upload/v1747135430/swdevelop_tc9anx.png"],
+      color: "bg-orange-600",
+      details: {
+        purpose: "To facilitate local production and assembly of technology hardware.",
+        features: ["Plug-and-play factories", "Special economic zone benefits", "Logistics support", "Waste management"]
+      },
+      position: { left: "40%", top: "50%" }
+    },
+    {
+      name: "Knowledge Zone",
+      summary: "Academic-industry partnerships and R&D innovation hubs.",
+      images: ["https://res.cloudinary.com/yesuf/image/upload/v1747135446/reaseach_ew642q.png"],
+      color: "bg-green-600",
+      details: {
+        purpose: "To foster innovation through research and development.",
+        features: ["Research laboratories", "Collaboration spaces", "Incubation centers", "Library and information hub"]
+      },
+      position: { left: "60%", top: "20%" }
+    },
+    {
+      name: "Commercial Zone",
+      summary: "Retail, banking, and business support services.",
+      images: ["https://res.cloudinary.com/yesuf/image/upload/v1747135441/mk_wd3mtf.png"],
+      color: "bg-purple-600",
+      details: {
+        purpose: "To provide essential services to the Park community.",
+        features: ["Banking facilities", "Retail outlets", "Restaurants and cafes", "Conference centers"]
+      },
+      position: { left: "80%", top: "40%" }
+    },
+    {
+      name: "Residential Zone",
+      summary: "Comfortable living spaces for Park professionals.",
+      images: ["https://res.cloudinary.com/yesuf/image/upload/v1747135429/raxio_vgz5ev.png"],
+      color: "bg-pink-600",
+      details: {
+        purpose: "To provide convenient housing options within the Park.",
+        features: ["Modern apartments", "Green spaces", "Security", "Community centers"]
+      },
+      position: { left: "30%", top: "70%" }
+    },
+    {
+      name: "Skill & Training Zone",
+      summary: "Capacity building and technical skill development.",
+      images: ["https://res.cloudinary.com/yesuf/image/upload/v1747135433/Incubation_euahej.png"],
+      color: "bg-red-600",
+      details: {
+        purpose: "To develop a skilled workforce for the IT industry.",
+        features: ["Training classrooms", "Certification labs", "Workshops", "Skill assessment centers"]
+      },
+      position: { left: "70%", top: "80%" }
+    }
+  ];
+};
+
 // --- INVESTMENT API ---
 export interface InvestmentStep {
   id: number;
@@ -796,14 +786,6 @@ export const getInvestmentResources = async (): Promise<InvestmentResource[]> =>
     ...r,
     file_url: fixImageUrl(r.file_url) as string
   }));
-};
-
-// --- SUBSCRIPTION API ---
-export const subscribeToNewsletter = async (email: string): Promise<{ success: boolean; message: string }> => {
-  return await request<{ success: boolean; message: string }>('/subscribe', {
-    method: 'POST',
-    data: { email },
-  });
 };
 
 // --- BOARD MEMBERS & WHO WE ARE API ---
@@ -850,4 +832,43 @@ export const getWhoWeAreSections = async (): Promise<WhoWeAreSection[]> => {
     }));
   }
   throw new Error("Failed to fetch who we are sections");
+};
+
+
+// --- NEWSLETTER SUBSCRIPTION API ---
+export const subscribeToNewsletter = async (email: string): Promise<{ success: boolean; message: string }> => {
+  return await request<{ success: boolean; message: string }>('/subscribe', {
+    method: 'POST',
+    data: { email }
+  });
+};
+
+// --- ID CARD PUBLIC API ---
+export interface IdCardPerson {
+  id?: number;
+  id_number?: string;
+  fname: string;
+  lname: string;
+  full_name?: string;
+  position?: string;
+  position_am?: string;
+  department?: string;
+  fname_am?: string;
+  lname_am?: string;
+  nationality?: string;
+  email?: string;
+  phone?: string;
+  sex?: 'M' | 'F';
+  date_of_birth?: string;
+  date_of_issue?: string;
+  expiry_date?: string;
+  photo_url?: string;
+  signature_url?: string;
+  qr_data?: string;
+  status?: 'active' | 'inactive' | 'expired';
+}
+
+export const getPublicEmployeeData = async (idNumber: string): Promise<IdCardPerson> => {
+  const response = await request<{ success: boolean; data: IdCardPerson }>(`/id-card-persons/public/${idNumber}`, { method: 'GET' });
+  return response.data;
 };

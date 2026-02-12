@@ -1,12 +1,12 @@
 :root {
   /* Brand Colors */
-  --color-primary: #0C7C92;
-  --color-secondary: #6EC9C4;
-  --color-accent: #16284F;
-  --color-text: #2D3748;
-  --color-text-light: #4A5568;
-  --color-muted-bg: #EDF2F7;
-  --color-white: #FFFFFF;
+  --color-primary: var(--primary);
+  --color-secondary: var(--accent);
+  --color-accent: var(--secondary);
+  --color-text: var(--text-main);
+  --color-text-light: var(--text-muted);
+  --color-muted-bg: var(--neutral);
+  --color-white: var(--bg-card);
   --color-shadow: rgba(0, 0, 0, 0.1);
   --color-shadow-hover: rgba(0, 0, 0, 0.15);
 
@@ -30,12 +30,17 @@
   --card-shadow-hover: 0 10px 15px -3px var(--color-shadow-hover);
 }
 
+[data-theme='dark'] {
+  --color-shadow: rgba(0, 0, 0, 0.4);
+  --color-shadow-hover: rgba(0, 0, 0, 0.5);
+}
+
 /*======================================
   Base Styles
 ======================================*/
 .about-park {
   position: relative;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: var(--nav-bg);
   /* semi-transparent for particle visibility */
   color: var(--color-text);
   padding: var(--section-padding) var(--gutter);
@@ -87,6 +92,7 @@
   font-weight: 700;
   background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   color: var(--color-text);
   line-height: 1.1;
@@ -179,10 +185,7 @@
 
 .text-container {
   flex: 1;
-  background: linear-gradient(135deg,
-      rgba(237, 242, 247, 0.7) 0%,
-      /* var(--color-muted-bg) with opacity */
-      rgba(255, 255, 255, 0.7) 100%);
+  background: var(--glass-bg);
   padding: 2rem;
   border-radius: var(--radius);
   border-left: 4px solid var(--color-primary);

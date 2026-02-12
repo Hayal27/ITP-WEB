@@ -23,43 +23,43 @@ const steps: ProcessStep[] = [
     title: 'Ideation',
     desc: 'We nurture bold ideas through collaboration, market research, and ecosystem insights to identify real-world tech challenges and opportunities.',
     icon: iconClasses[0],
-    color: '#0C7C92',
+    color: 'var(--primary)',
   },
   {
     title: 'Validation',
     desc: 'Concepts are tested through stakeholder feedback, feasibility studies, and early prototyping to ensure relevance and sustainability.',
     icon: iconClasses[1],
-    color: '#6EC9C4',
+    color: 'var(--accent)',
   },
   {
     title: 'Planning',
     desc: 'We define clear objectives, align resources, and create agile roadmaps that guide project execution from start to scale.',
     icon: iconClasses[2],
-    color: '#0C7C92',
+    color: 'var(--primary)',
   },
   {
     title: 'Development',
     desc: 'Our resident experts, startups, and partners collaborate to build solutions using modern technologies and continuous innovation practices.',
     icon: iconClasses[3],
-    color: '#16284F',
+    color: 'var(--secondary)',
   },
   {
     title: 'Testing & Improvement',
     desc: 'We rigorously test, refine, and improve through iterations, user feedback, and quality assurance to ensure excellence.',
     icon: iconClasses[4],
-    color: '#6EC9C4',
+    color: 'var(--accent)',
   },
   {
     title: 'Launch & Acceleration',
     desc: 'Solutions are launched with strategic support — from investment readiness to marketing and global scaling — powered by IT Park infrastructure.',
     icon: iconClasses[5],
-    color: '#0C7C92',
+    color: 'var(--primary)',
   },
   {
     title: 'Growth & Impact',
     desc: 'We support ongoing growth, monitor impact, and facilitate expansion across Ethiopia and beyond, strengthening the national digital economy.',
     icon: iconClasses[6],
-    color: '#0C7C92',
+    color: 'var(--primary)',
   },
 ];
 
@@ -134,7 +134,7 @@ const WorkingProcess: React.FC = () => {
         <div className="flex flex-col lg:flex-row items-center justify-between mb-12">
           <div className="lg:w-2/3 mb-6 lg:mb-0">
             <div className="section-title">
-              <span className="process-subtitle block mb-2 wow fadeInUp text-primary font-bold uppercase tracking-wider text-sm">
+              <span className="process-subtitle block mb-2 wow fadeInUp text-[var(--primary)] font-bold uppercase tracking-wider text-sm">
                 From Idea to Impact at Ethiopian IT Park
               </span>
               <h2 className="process-main-title wow fadeInUp" data-wow-delay="0.25s">

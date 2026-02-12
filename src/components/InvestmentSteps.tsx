@@ -75,7 +75,7 @@ const InvestmentSteps = () => {
   };
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden bg-gradient-to-b from-slate-50 to-white">
+    <section className="py-12 sm:py-16 md:py-20 relative overflow-hidden bg-gradient-to-b from-[var(--bg-main)] to-[var(--bg-card)]">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
@@ -97,7 +97,7 @@ const InvestmentSteps = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
               viewport={{ once: true }}
-              className="text-xs sm:text-sm font-bold uppercase tracking-widest text-[#0C7C92] mb-2"
+              className="text-xs sm:text-sm font-bold uppercase tracking-widest text-[var(--primary)] mb-2"
             >
               Investment Journey
             </motion.h3>
@@ -106,7 +106,7 @@ const InvestmentSteps = () => {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               viewport={{ once: true }}
-              className="text-2xl sm:text-3xl md:text-4xl font-black text-gray-900 leading-tight"
+              className="text-2xl sm:text-3xl md:text-4xl font-black text-[var(--text-main)] leading-tight"
             >
               Steps to Investing in Ethiopia
             </motion.h2>
@@ -158,7 +158,7 @@ const InvestmentSteps = () => {
                 onMouseLeave={() => setHoveredCard(null)}
               >
                 <motion.div
-                  className="relative h-full bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200/50 overflow-hidden group/card"
+                  className="relative h-full bg-[var(--bg-card)] backdrop-blur-sm rounded-2xl border border-[var(--border-color)] overflow-hidden group/card"
                   whileHover={{ y: -8, boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
                   transition={{ duration: 0.3 }}
                 >
@@ -173,22 +173,22 @@ const InvestmentSteps = () => {
                   {/* Content */}
                   <div className="relative p-5 sm:p-6">
                     <motion.h3
-                      className="text-base sm:text-lg font-black text-gray-900 mb-2 pr-12 leading-tight"
-                      animate={{ color: hoveredCard === i ? '#0C7C92' : '#111827' }}
+                      className="text-base sm:text-lg font-black text-[var(--text-main)] mb-2 pr-12 leading-tight"
+                      animate={{ color: hoveredCard === i ? 'var(--primary)' : 'var(--text-main)' }}
                       transition={{ duration: 0.3 }}
                     >
                       {step.title}
                     </motion.h3>
-                    <p className="text-xs sm:text-sm text-gray-600 leading-relaxed line-clamp-3">
+                    <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed line-clamp-3">
                       {step.desc}
                     </p>
 
                     {/* Progress Indicator */}
-                    <div className="mt-4 pt-4 border-t border-gray-100">
+                    <div className="mt-4 pt-4 border-t border-[var(--border-color)]">
                       <div className="flex items-center gap-2">
-                        <div className="flex-1 h-1 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="flex-1 h-1 bg-[var(--neutral)] rounded-full overflow-hidden">
                           <motion.div
-                            className="h-full bg-gradient-to-r from-[#16284F] to-[#0C7C92]"
+                            className="h-full bg-gradient-to-r from-[var(--accent)] to-[var(--primary)]"
                             initial={{ width: 0 }}
                             whileInView={{ width: `${((i + 1) / steps.length) * 100}%` }}
                             transition={{ duration: 1, delay: 0.3 }}
@@ -235,7 +235,7 @@ const InvestmentSteps = () => {
                 setCurrentSlide((prev) => Math.max(0, prev - 1));
               }
             }}
-            className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full shadow-xl items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10 border border-gray-200"
+            className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-3 w-10 h-10 bg-[var(--bg-card)] backdrop-blur-sm rounded-full shadow-xl items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10 border border-[var(--border-color)]"
             whileHover={{ scale: 1.1, backgroundColor: '#eff6ff' }}
             whileTap={{ scale: 0.95 }}
             aria-label="Previous investment steps"
@@ -252,7 +252,7 @@ const InvestmentSteps = () => {
                 setCurrentSlide((prev) => Math.min(totalSlides - 1, prev + 1));
               }
             }}
-            className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full shadow-xl items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10 border border-gray-200"
+            className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-3 w-10 h-10 bg-[var(--bg-card)] backdrop-blur-sm rounded-full shadow-xl items-center justify-center opacity-0 group-hover:opacity-100 transition-all z-10 border border-[var(--border-color)]"
             whileHover={{ scale: 1.1, backgroundColor: '#eff6ff' }}
             whileTap={{ scale: 0.95 }}
             aria-label="Next investment steps"

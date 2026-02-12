@@ -30,7 +30,8 @@ import {
   IconQuestionMark
 } from '@tabler/icons-react';
 import './Header.css';
-import ParticleBackground from '../../ParticleBackground';
+
+import ThemeToggle from '../../ThemeToggle';
 
 type MenuItem = {
   label: string;
@@ -127,7 +128,7 @@ const menuData: MenuItem[] = [
 const ChevronIcon: React.FC<{ open: boolean }> = ({ open }) => (
   <IconChevronDown
     size={16}
-    className={`mobile-arrow-icon transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+    className={`mobile-arrow-icon transition-transform duration-300 ${open ? 'rotate-180 open' : ''}`}
   />
 );
 
@@ -328,8 +329,9 @@ const Header: React.FC = () => {
                   aria-label={`${mobileSubMenus[key] ? 'Collapse' : 'Expand'} ${item.label}`}
                   tabIndex={0}
                   type="button"
+                  style={{ zIndex: 10 }}
                 >
-                  <span className="mobile-submenu-toggle-icon-wrapper">
+                  <span className="mobile-submenu-toggle-icon-wrapper pointer-events-none">
                     <ChevronIcon open={!!mobileSubMenus[key]} />
                   </span>
                 </button>
@@ -370,7 +372,7 @@ const Header: React.FC = () => {
     <>
       {/* Main Header */}
       <div className={`site-header ${isScrolled ? 'scrolled' : ''}`}>
-        <ParticleBackground />
+
         <div className="site-header-inner container mx-auto px-4
             sm:px-8 md:px-12 lg:px-16 xl:px-20
             2xl:px-24 3xl:px-32 4xl:px-40 5xl:px-52
@@ -396,8 +398,8 @@ const Header: React.FC = () => {
 
             {/* Desktop Navigation */}
             <nav className="navigator">
-              <ul className="menu flex gap-2 sm:gap-3 md:gap-4 lg:gap-6 xl:gap-8 2xl:gap-10 3xl:gap-12 4xl:gap-16 5xl:gap-20
-                  text-base sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl 3xl:text-3xl 4xl:text-4xl 5xl:text-5xl
+              <ul className="menu flex gap-1 md:gap-2 lg:gap-4 xl:gap-6 2xl:gap-8
+                  text-sm md:text-sm lg:text-base xl:text-lg
                 ">
                 {menuData.map((item, idx) => (
                   <li
@@ -476,6 +478,7 @@ const Header: React.FC = () => {
 
             {/* Extras - Search & Language on Right */}
             <div className="extras">
+              <ThemeToggle />
               <div className="search-container" ref={searchBoxRef}>
                 <motion.button
                   className="search-trigger"

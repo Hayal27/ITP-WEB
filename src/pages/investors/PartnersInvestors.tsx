@@ -140,18 +140,18 @@ const PartnersInvestors: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="min-h-screen bg-[var(--bg-main)]">
       {/* Premium Hero Section */}
       <section className="relative h-[60vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-[#16284F] opacity-90 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-[var(--secondary)] opacity-90 mix-blend-multiply"></div>
           <motion.div
             initial={{ scale: 1.1 }}
             animate={{ scale: 1 }}
             transition={{ duration: 10, repeat: Infinity, repeatType: "reverse" }}
             className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"
           ></motion.div>
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#16284F]/50 to-[#F8FAFC]"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--secondary)]/50 to-[var(--bg-main)]"></div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 text-center">
@@ -174,7 +174,7 @@ const PartnersInvestors: React.FC = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed"
+            className="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed"
           >
             The engine of innovation at the Ethiopian IT Park. Explore the visionary organizations powering our digital transformation.
           </motion.p>
@@ -182,55 +182,55 @@ const PartnersInvestors: React.FC = () => {
 
         {/* Floating Shapes */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
-          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[100px] text-[#F8FAFC] fill-current">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none" className="relative block w-full h-[100px] text-[var(--bg-main)] fill-current">
             <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C58.05,110.44,117.58,121.1,178.55,108.02A389.06,389.06,0,0,0,321.39,56.44Z"></path>
           </svg>
         </div>
       </section>
 
       {/* Control Bar */}
-      <div className="sticky top-20 z-30 bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm">
+      <div className="sticky top-20 z-30 bg-[var(--bg-card)]/80 backdrop-blur-xl border-b border-[var(--border-color)] shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center space-x-2 bg-gray-100 p-1 rounded-xl">
+          <div className="flex items-center space-x-2 bg-[var(--neutral)] dark:bg-white/5 p-1 rounded-xl">
             <button
               onClick={() => setActiveTab('partners')}
-              className={`flex items-center space-x-2 px-6 py-2 rounded-lg transition-all ${activeTab === 'partners' ? 'bg-white shadow-md text-[#16284F] font-bold' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`flex items-center space-x-2 px-6 py-2 rounded-lg transition-all ${activeTab === 'partners' ? 'bg-[var(--bg-card)] shadow-md text-[var(--primary)] font-bold' : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'}`}
             >
               <FaHandshake /> <span>Partners</span>
-              <span className="ml-2 bg-gray-200 px-2 py-0.5 rounded-md text-xs">{partners.length}</span>
+              <span className="ml-2 bg-[var(--neutral)] dark:bg-white/10 px-2 py-0.5 rounded-md text-xs">{partners.length}</span>
             </button>
             <button
               onClick={() => setActiveTab('investors')}
-              className={`flex items-center space-x-2 px-6 py-2 rounded-lg transition-all ${activeTab === 'investors' ? 'bg-white shadow-md text-[#16284F] font-bold' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`flex items-center space-x-2 px-6 py-2 rounded-lg transition-all ${activeTab === 'investors' ? 'bg-[var(--bg-card)] shadow-md text-[var(--primary)] font-bold' : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'}`}
             >
               <FaBuilding /> <span>Investors</span>
-              <span className="ml-2 bg-gray-200 px-2 py-0.5 rounded-md text-xs">{investors.length}</span>
+              <span className="ml-2 bg-[var(--neutral)] dark:bg-white/10 px-2 py-0.5 rounded-md text-xs">{investors.length}</span>
             </button>
           </div>
 
           <div className="flex items-center gap-4 w-full md:w-auto">
             <div className="relative flex-grow">
-              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
               <input
                 type="text"
                 placeholder={`Search ${activeTab}...`}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none transition-all"
+                className="w-full pl-10 pr-4 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl focus:ring-2 focus:ring-teal-500 outline-none transition-all text-[var(--text-main)]"
               />
             </div>
 
-            <div className="flex items-center border border-gray-200 rounded-xl overflow-hidden p-1 bg-white">
+            <div className="flex items-center border border-[var(--border-color)] rounded-xl overflow-hidden p-1 bg-[var(--bg-card)]">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-teal-50 text-teal-600' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'grid' ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-600' : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'}`}
                 title="Grid View"
               >
                 <FaThLarge />
               </button>
               <button
                 onClick={() => setViewMode('table')}
-                className={`p-2 rounded-lg transition-all ${viewMode === 'table' ? 'bg-teal-50 text-teal-600' : 'text-gray-400 hover:text-gray-600'}`}
+                className={`p-2 rounded-lg transition-all ${viewMode === 'table' ? 'bg-teal-50 dark:bg-teal-900/20 text-teal-600' : 'text-[var(--text-muted)] hover:text-[var(--text-main)]'}`}
                 title="Table View"
               >
                 <FaList />
@@ -244,7 +244,7 @@ const PartnersInvestors: React.FC = () => {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <div className="w-16 h-16 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="mt-4 text-gray-500 font-medium">Loading ecosystem data...</p>
+            <p className="mt-4 text-[var(--text-muted)] font-medium">Loading ecosystem data...</p>
           </div>
         ) : (
           <AnimatePresence mode="wait">
@@ -289,10 +289,10 @@ const PartnersInvestors: React.FC = () => {
                 key={`${activeTab}-table`}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100"
+                className="bg-[var(--bg-card)] rounded-2xl shadow-xl overflow-hidden border border-[var(--border-color)]"
               >
                 <table className="w-full text-left">
-                  <thead className="bg-gray-50/50 border-b border-gray-100">
+                  <thead className="bg-[var(--neutral)] dark:bg-white/5 border-b border-[var(--border-color)]">
                     <tr>
                       <th className="px-6 py-4 text-sm font-bold text-gray-400 uppercase tracking-wider">Company</th>
                       <th className="px-6 py-4 text-sm font-bold text-gray-400 uppercase tracking-wider">Industry</th>
@@ -301,7 +301,7 @@ const PartnersInvestors: React.FC = () => {
                       <th className="px-6 py-4 text-sm font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-50">
+                  <tbody className="divide-y divide-[var(--border-color)]">
                     {activeTab === 'partners' ? (
                       filteredPartners.map(p => (
                         <TableRow key={p.id} item={p} type="partner" onSelect={() => setSelectedPartner(p.id)} getImageUrl={getImageUrl} getIndustryIcon={getIndustryIcon} />
@@ -345,7 +345,7 @@ const GridCard = ({ item, type, selected, onSelect, getImageUrl, getIndustryIcon
     <motion.div
       variants={{ hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } }}
       whileHover={{ y: -8, transition: { duration: 0.2 } }}
-      className="group bg-white rounded-3xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-100/50 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.1)] transition-all duration-300 relative overflow-hidden flex flex-col h-full"
+      className="group bg-[var(--bg-card)] rounded-3xl p-6 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-[var(--border-color)] hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.1)] transition-all duration-300 relative overflow-hidden flex flex-col h-full"
     >
       <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
         <button onClick={onSelect} className="w-8 h-8 rounded-full bg-teal-500/10 text-teal-600 flex items-center justify-center hover:bg-teal-500 hover:text-white transition-colors">
@@ -354,7 +354,7 @@ const GridCard = ({ item, type, selected, onSelect, getImageUrl, getIndustryIcon
       </div>
 
       <div className="flex items-center space-x-4 mb-6">
-        <div className="w-16 h-16 rounded-2xl bg-[#F8FAFC] flex items-center justify-center border border-gray-100 p-2 overflow-hidden shadow-inner group-hover:scale-110 transition-transform duration-500">
+        <div className="w-16 h-16 rounded-2xl bg-[var(--neutral)] dark:bg-white/5 flex items-center justify-center border border-[var(--border-color)] p-2 overflow-hidden shadow-inner group-hover:scale-110 transition-transform duration-500">
           <img
             src={getImageUrl(isPartner ? item.logo : item.image, isPartner ? 'logo' : 'image')}
             alt={item.company_name}
@@ -363,7 +363,7 @@ const GridCard = ({ item, type, selected, onSelect, getImageUrl, getIndustryIcon
           />
         </div>
         <div>
-          <h3 className="text-xl font-bold text-[#16284F] group-hover:text-teal-600 transition-colors leading-tight">{item.company_name}</h3>
+          <h3 className="text-xl font-bold text-[var(--text-main)] group-hover:text-teal-600 transition-colors leading-tight">{item.company_name}</h3>
           <p className="text-xs text-teal-500 font-bold uppercase tracking-widest mt-1">
             {isPartner ? item.partnership_type : item.investor_id}
           </p>
@@ -371,21 +371,21 @@ const GridCard = ({ item, type, selected, onSelect, getImageUrl, getIndustryIcon
       </div>
 
       <div className="space-y-4 mb-6 flex-grow">
-        <div className="flex items-center text-sm text-gray-500">
-          <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center mr-3 text-teal-600">
+        <div className="flex items-center text-sm text-[var(--text-muted)]">
+          <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center mr-3 text-teal-600">
             {getIndustryIcon(item.industry_type)}
           </div>
-          <span className="font-medium">{item.industry_type || 'Technology Services'}</span>
+          <span className="font-medium text-[var(--text-main)]">{item.industry_type || 'Technology Services'}</span>
         </div>
-        <div className="flex items-center text-sm text-gray-500">
-          <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center mr-3 text-teal-600">
+        <div className="flex items-center text-sm text-[var(--text-muted)]">
+          <div className="w-8 h-8 rounded-lg bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center mr-3 text-teal-600">
             <MdLocationOn />
           </div>
-          <span className="font-medium">{item.zone}, {item.country}</span>
+          <span className="font-medium text-[var(--text-main)]">{item.zone}, {item.country}</span>
         </div>
       </div>
 
-      <div className="pt-6 border-t border-gray-50 flex items-center justify-between">
+      <div className="pt-6 border-t border-[var(--border-color)] flex items-center justify-between">
         <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-tighter ${item.status === 'Active' || item.availability_status === 'Operational'
           ? 'bg-teal-500/10 text-teal-600'
           : 'bg-amber-500/10 text-amber-600'
@@ -394,7 +394,7 @@ const GridCard = ({ item, type, selected, onSelect, getImageUrl, getIndustryIcon
         </span>
         <button
           onClick={onSelect}
-          className="text-sm font-bold text-[#16284F] flex items-center hover:translate-x-1 transition-transform"
+          className="text-sm font-bold text-[var(--primary)] flex items-center hover:translate-x-1 transition-transform"
         >
           View Details <FaChevronRight className="ml-1 w-2 h-2" />
         </button>
@@ -407,12 +407,12 @@ const TableRow = ({ item, type, onSelect, getImageUrl, getIndustryIcon }: any) =
   const isPartner = type === 'partner';
   return (
     <motion.tr
-      whileHover={{ backgroundColor: "rgba(248, 250, 252, 1)" }}
-      className="group border-b border-gray-50 last:border-0"
+      whileHover={{ backgroundColor: "var(--neutral)" }}
+      className="group border-b border-[var(--border-color)] last:border-0"
     >
       <td className="px-6 py-4">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-lg bg-gray-50 p-1 border border-gray-100 overflow-hidden flex-shrink-0">
+          <div className="w-10 h-10 rounded-lg bg-[var(--neutral)] p-1 border border-[var(--border-color)] overflow-hidden flex-shrink-0">
             <img
               src={getImageUrl(isPartner ? item.logo : item.image, isPartner ? 'logo' : 'image')}
               alt=""
@@ -420,11 +420,11 @@ const TableRow = ({ item, type, onSelect, getImageUrl, getIndustryIcon }: any) =
               onError={(e: any) => e.target.src = "https://via.placeholder.com/40?text=" + item.company_name[0]}
             />
           </div>
-          <span className="font-bold text-[#16284F]">{item.company_name}</span>
+          <span className="font-bold text-[var(--text-main)]">{item.company_name}</span>
         </div>
       </td>
       <td className="px-6 py-4">
-        <div className="flex items-center text-sm text-gray-500 font-medium">
+        <div className="flex items-center text-sm text-[var(--text-muted)] font-medium">
           {getIndustryIcon(item.industry_type)} {item.industry_type}
         </div>
       </td>
@@ -439,7 +439,7 @@ const TableRow = ({ item, type, onSelect, getImageUrl, getIndustryIcon }: any) =
       <td className="px-6 py-4 text-right">
         <button
           onClick={onSelect}
-          className="p-2 rounded-lg hover:bg-[#16284F] hover:text-white text-[#16284F] transition-all border border-gray-100"
+          className="p-2 rounded-lg hover:bg-[var(--primary)] hover:text-white text-[var(--primary)] transition-all border border-[var(--border-color)]"
         >
           <FaInfoCircle />
         </button>
@@ -499,7 +499,7 @@ const DetailModal = ({ id, type, partners, investors, onClose, getImageUrl, form
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[1000] flex items-center justify-center p-4 md:p-8 bg-[#0F172A]/80 backdrop-blur-xl"
+        className="fixed inset-0 z-[1000] flex items-center justify-center p-4 md:p-8 bg-[var(--secondary)]/80 backdrop-blur-xl"
         onClick={onClose}
       >
         <motion.div
@@ -508,7 +508,7 @@ const DetailModal = ({ id, type, partners, investors, onClose, getImageUrl, form
           animate="visible"
           exit="exit"
           onClick={(e) => e.stopPropagation()}
-          className="bg-white dark:bg-slate-900 rounded-[2.5rem] w-full max-w-5xl max-h-[95vh] overflow-hidden flex flex-col md:flex-row shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border border-white/10 relative"
+          className="bg-[var(--bg-card)] rounded-[2.5rem] w-full max-w-5xl max-h-[95vh] overflow-hidden flex flex-col md:flex-row shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border border-[var(--border-color)] relative"
         >
           {/* Progress Bar */}
           <motion.div
@@ -528,7 +528,7 @@ const DetailModal = ({ id, type, partners, investors, onClose, getImageUrl, form
 
           {/* Left Sidebar: Brand Identity */}
           <div className="md:w-5/12 relative h-80 md:h-auto overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-[#16284F] via-[#16284F]/90 to-teal-900/50 mix-blend-multiply z-10"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-[var(--secondary)] via-[var(--secondary)]/90 to-teal-900/50 mix-blend-multiply z-10"></div>
 
             <motion.img
               initial={{ scale: 1.3, filter: 'blur(10px)' }}
@@ -539,7 +539,7 @@ const DetailModal = ({ id, type, partners, investors, onClose, getImageUrl, form
               alt={data.company_name}
             />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-[#0F172A]/20 to-transparent z-20"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--secondary)] via-[var(--secondary)]/20 to-transparent z-20"></div>
 
             <div className="absolute bottom-12 left-10 right-10 z-30">
               <motion.div variants={itemVariants} className="space-y-4">
@@ -555,40 +555,40 @@ const DetailModal = ({ id, type, partners, investors, onClose, getImageUrl, form
           </div>
 
           {/* Right Content: Premium Details */}
-          <div className="md:w-7/12 p-8 md:p-14 overflow-y-auto bg-slate-50/10 dark:bg-[#0B1120] custom-scrollbar selection:bg-teal-500/30">
+          <div className="md:w-7/12 p-8 md:p-14 overflow-y-auto bg-[var(--bg-main)] custom-scrollbar selection:bg-teal-500/30">
 
             <div className="space-y-12">
 
               {/* Refined Metadata - No Cards */}
-              <motion.div variants={itemVariants} className="grid grid-cols-2 gap-y-8 gap-x-12 pb-8 border-b border-slate-200/50 dark:border-white/5">
+              <motion.div variants={itemVariants} className="grid grid-cols-2 gap-y-8 gap-x-12 pb-8 border-b border-[var(--border-color)]">
                 <div className="space-y-1">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center">
+                  <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest flex items-center">
                     <MdLocationOn className="mr-2 text-teal-500" size={16} /> HQ / ZONE
                   </p>
-                  <p className="text-[#16284F] dark:text-white font-bold text-sm tracking-tight">{data.zone}</p>
+                  <p className="text-[var(--text-main)] font-bold text-sm tracking-tight">{data.zone}</p>
                 </div>
 
                 <div className="space-y-1">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center">
+                  <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest flex items-center">
                     <FaIndustry className="mr-2 text-blue-500" size={14} /> DOMAIN
                   </p>
-                  <p className="text-[#16284F] dark:text-white font-bold text-sm tracking-tight truncate">{data.industry_type || 'Technology Services'}</p>
+                  <p className="text-[var(--text-main)] font-bold text-sm tracking-tight truncate">{data.industry_type || 'Technology Services'}</p>
                 </div>
 
                 <div className="space-y-1">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center">
+                  <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest flex items-center">
                     <FaCalendarAlt className="mr-2 text-indigo-500" size={14} /> {isPartner ? 'PARTNERSHIP' : 'ESTABLISHED'}
                   </p>
-                  <p className="text-[#16284F] dark:text-white font-bold text-sm tracking-tight">
+                  <p className="text-[var(--text-main)] font-bold text-sm tracking-tight">
                     {isPartner ? `${formatDate(data.agreement_start_date)}` : formatDate(data.established_date)}
                   </p>
                 </div>
 
                 <div className="space-y-1">
-                  <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">STATUS</p>
+                  <p className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-widest">STATUS</p>
                   <div className="flex items-center">
                     <span className="w-2 h-2 rounded-full bg-teal-500 mr-2 shadow-[0_0_8px_rgba(20,184,166,0.6)]" />
-                    <p className="text-[#16284F] dark:text-white font-bold text-sm tracking-tight uppercase">
+                    <p className="text-[var(--text-main)] font-bold text-sm tracking-tight uppercase">
                       {data.status || data.availability_status}
                     </p>
                   </div>
@@ -597,8 +597,8 @@ const DetailModal = ({ id, type, partners, investors, onClose, getImageUrl, form
 
               {/* Narrative Overview */}
               <motion.div variants={itemVariants}>
-                <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">The Strategic Perspective</h3>
-                <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm font-medium">
+                <h3 className="text-[10px] font-black text-[var(--text-muted)] uppercase tracking-[0.2em] mb-4">The Strategic Perspective</h3>
+                <p className="text-[var(--text-main)] dark:text-slate-300 leading-relaxed text-sm font-medium opacity-80">
                   {data.description || "Driving the future of technology in Ethiopia through strategic collaboration and visionary investment at the ITPC ecosystem."}
                 </p>
               </motion.div>
@@ -609,7 +609,7 @@ const DetailModal = ({ id, type, partners, investors, onClose, getImageUrl, form
                   <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-5">Core Capabilities</h3>
                   <div className="flex flex-wrap gap-2">
                     {data.services_provided.map((s: string, idx: number) => (
-                      <span key={idx} className="px-4 py-2 bg-slate-100 dark:bg-white/5 text-[#1E293B] dark:text-slate-200 text-[10px] font-black rounded-lg hover:bg-teal-500 hover:text-white transition-all cursor-default uppercase tracking-wider">
+                      <span key={idx} className="px-4 py-2 bg-[var(--neutral)] dark:bg-white/5 text-[var(--text-main)] text-[10px] font-black rounded-lg hover:bg-teal-500 hover:text-white transition-all cursor-default uppercase tracking-wider">
                         {s}
                       </span>
                     ))}
@@ -690,7 +690,7 @@ const DetailModal = ({ id, type, partners, investors, onClose, getImageUrl, form
 
                 <div className="flex space-x-4">
                   {isPartner ? (
-                    <a href={`mailto:${data.contact_email}`} className="bg-[#16284F] text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:shadow-xl transition-all">
+                    <a href={`mailto:${data.contact_email}`} className="bg-[var(--secondary)] text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:shadow-xl transition-all">
                       Inquire Partner
                     </a>
                   ) : (

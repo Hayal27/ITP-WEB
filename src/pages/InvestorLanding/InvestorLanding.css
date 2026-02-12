@@ -11,6 +11,60 @@
     overflow-x: hidden;
 }
 
+[data-theme='dark'] .investor-landing-container {
+    --executive-dark: var(--bg-main);
+    --executive-blue: var(--bg-card);
+    --itpc-primary: var(--primary);
+    --itpc-accent: var(--accent);
+    background: var(--bg-main);
+    color: var(--text-main);
+}
+
+[data-theme='dark'] .investor-hero {
+    background: linear-gradient(135deg, var(--bg-main) 0%, var(--bg-card) 100%);
+}
+
+[data-theme='dark'] .value-proposition,
+[data-theme='dark'] .park-profile-summary,
+[data-theme='dark'] .card-preview-section,
+[data-theme='dark'] .prop-card:hover,
+[data-theme='dark'] .prop-icon,
+[data-theme='dark'] .leader-landing-card,
+[data-theme='dark'] .contact-card-premium,
+[data-theme='dark'] .contact-form-minimal input:focus,
+[data-theme='dark'] .contact-form-minimal textarea:focus {
+    background: var(--bg-card);
+    color: var(--text-main);
+}
+
+[data-theme='dark'] .prop-card,
+[data-theme='dark'] .why-invest-now,
+[data-theme='dark'] .zone-card-mini,
+[data-theme='dark'] .executive-leadership,
+[data-theme='dark'] .leader-btns a,
+[data-theme='dark'] .investor-contact,
+[data-theme='dark'] .contact-form-minimal input,
+[data-theme='dark'] .contact-form-minimal textarea,
+[data-theme='dark'] .landing-footer {
+    background: var(--bg-main);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+[data-theme='dark'] .section-title h2,
+[data-theme='dark'] .prop-card h3,
+[data-theme='dark'] .why-text h4,
+[data-theme='dark'] .why-num,
+[data-theme='dark'] .zone-card-mini p,
+[data-theme='dark'] .leader-details p,
+[data-theme='dark'] .success-message h4 {
+    color: var(--text-main);
+}
+
+[data-theme='dark'] .zone-card-mini:hover {
+    background: var(--bg-card);
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -27,6 +81,16 @@
     color: white;
     padding: 4rem 0;
     overflow: hidden;
+}
+
+#investor-hero-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none !important;
 }
 
 .hero-background {
@@ -649,7 +713,7 @@
     font-size: 0.9rem;
 }
 
-/* Mobile */
+/* Responsive Design Refinements */
 @media (max-width: 1200px) {
     .profile-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -661,17 +725,47 @@
 }
 
 @media (max-width: 991px) {
+    .container {
+        padding: 0 2rem;
+    }
+
+    .investor-hero {
+        min-height: auto;
+        padding: 6rem 0;
+        text-align: center;
+    }
+
+    .hero-header {
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .hero-content h1 {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-content .tagline {
+        margin: 0 auto 2.5rem;
+    }
+
+    .cta-group {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 
     .why-now-grid,
     .highlights-content,
     .contact-grid,
     .leaders-grid {
         grid-template-columns: 1fr;
+        gap: 3rem;
     }
 
     .business-card-display {
         flex-direction: column;
         align-items: center;
+        gap: 3rem;
     }
 
     .leader-landing-card {
@@ -681,5 +775,122 @@
     .leader-img-box,
     .leader-details {
         width: 100%;
+    }
+
+    .contact-info,
+    .contact-form-minimal {
+        padding: 4rem 2rem;
+    }
+
+    .input-group {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .investor-landing-container section {
+        padding: 5rem 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content .tagline {
+        font-size: 1.1rem;
+    }
+
+    .section-title h2 {
+        font-size: 2.2rem;
+    }
+
+    .proposition-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .profile-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .the-card {
+        width: 100%;
+        max-width: 380px;
+        height: auto;
+        min-height: 240px;
+        padding: 2rem;
+    }
+
+    .qr-section {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .qr-placeholder img {
+        width: 120px;
+    }
+
+    .why-now-box,
+    .highlights-image {
+        padding: 3rem 1.5rem;
+    }
+
+    .high-impact-tool h3 {
+        font-size: 1.7rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1.25rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 0.75rem;
+    }
+
+    .section-title h2 {
+        font-size: 1.8rem;
+    }
+
+    .cta-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-primary-premium,
+    .btn-secondary-premium {
+        width: 100%;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .investor-landing-container section {
+        padding: 4rem 0;
+    }
+
+    .card-names h3 {
+        font-size: 1.3rem;
+    }
+
+    .contact-form-minimal h3 {
+        font-size: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .leader-details {
+        padding: 2rem 1.5rem;
+    }
+
+    .contact-link {
+        font-size: 0.95rem;
+        gap: 1rem;
     }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     FaCalendarCheck,
@@ -18,17 +18,22 @@ import {
     FaSpinner
 } from 'react-icons/fa';
 import './InvestorLanding.css';
+
 import { submitInvestorInquiry } from '../../services/apiService';
+import Captcha, { CaptchaHandle } from '../../components/Captcha/Captcha';
 
 const InvestorLanding: React.FC = () => {
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
         organization: '',
-        areaOfInterest: ''
+        areaOfInterest: '',
+        website: '' // Honeypot field
     });
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [message, setMessage] = useState('');
+    const [isCaptchaVerified, setIsCaptchaVerified] = useState(false);
+    const captchaRef = useRef<CaptchaHandle>(null);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -40,13 +45,20 @@ const InvestorLanding: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (!isCaptchaVerified) {
+            setStatus('error');
+            setMessage('Please verify the security captcha.');
+            return;
+        }
         setStatus('loading');
         try {
             const response = await submitInvestorInquiry(formData);
             if (response.success) {
                 setStatus('success');
                 setMessage(response.message);
-                setFormData({ fullName: '', email: '', organization: '', areaOfInterest: '' });
+                setFormData({ fullName: '', email: '', organization: '', areaOfInterest: '', website: '' });
+                setIsCaptchaVerified(false);
+                captchaRef.current?.reset();
             } else {
                 setStatus('error');
                 setMessage(response.message || 'Something went wrong.');
@@ -101,6 +113,7 @@ const InvestorLanding: React.FC = () => {
         <div className="investor-landing-container">
             {/* Hero Section */}
             <section className="investor-hero">
+
                 <div className="hero-background"></div>
                 <div className="container">
                     <motion.div
@@ -421,6 +434,17 @@ const InvestorLanding: React.FC = () => {
                                         </motion.div>
                                     ) : (
                                         <form onSubmit={handleSubmit}>
+                                            {/* Honeypot field - hidden from users */}
+                                            <div style={{ display: 'none' }} aria-hidden="true">
+                                                <input
+                                                    type="text"
+                                                    name="website"
+                                                    value={formData.website}
+                                                    onChange={handleChange}
+                                                    tabIndex={-1}
+                                                    autoComplete="off"
+                                                />
+                                            </div>
                                             <div className="input-group">
                                                 <input
                                                     type="text"
@@ -457,6 +481,11 @@ const InvestorLanding: React.FC = () => {
                                                 onChange={handleChange}
                                                 disabled={status === 'loading'}
                                             ></textarea>
+
+                                            <div className="mb-4">
+                                                <label className="text-sm font-medium text-gray-300 block mb-2">Security Verification</label>
+                                                <Captcha ref={captchaRef} onVerify={setIsCaptchaVerified} />
+                                            </div>
 
                                             {status === 'error' && <p className="error-text" style={{ color: '#ef4444', marginBottom: '1rem' }}>{message}</p>}
 

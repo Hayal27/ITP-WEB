@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { FiMessageCircle, FiMail, FiPhone, FiArrowRight } from 'react-icons/fi';
 
 const FAQHelp: React.FC = () => {
@@ -44,25 +45,29 @@ const FAQHelp: React.FC = () => {
 
                 <div className="faqPageHelpOptions">
                     {options.map((option, index) => (
-                        <motion.a
+                        <Link
                             key={index}
-                            href={option.link}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.1 }}
-                            whileHover={{ y: -10, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)' }}
-                            className="faqPageHelpOption"
+                            to={option.link}
+                            className="faqPageHelpOption block no-underline"
                         >
-                            <div className="helpIconWrapper" style={{ backgroundColor: `${option.color}20`, color: option.color }}>
-                                {option.icon}
-                            </div>
-                            <h3>{option.title}</h3>
-                            <p>{option.desc}</p>
-                            <div className="learnMore">
-                                <span>Connect Now</span>
-                                <FiArrowRight />
-                            </div>
-                        </motion.a>
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: index * 0.1 }}
+                                whileHover={{ y: -10, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)' }}
+                                style={{ height: '100%', width: '100%' }} // Ensure it fills the Link
+                            >
+                                <div className="helpIconWrapper" style={{ backgroundColor: `${option.color}20`, color: option.color }}>
+                                    {option.icon}
+                                </div>
+                                <h3>{option.title}</h3>
+                                <p>{option.desc}</p>
+                                <div className="learnMore">
+                                    <span>Connect Now</span>
+                                    <FiArrowRight />
+                                </div>
+                            </motion.div>
+                        </Link>
                     ))}
                 </div>
             </motion.div>

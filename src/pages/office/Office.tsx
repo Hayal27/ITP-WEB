@@ -185,11 +185,12 @@ const Office: React.FC = () => {
     <div className="office-experience-container">
       {/* Hero Section */}
       <section className="office-hero">
+        <div className="hero-background"></div>
+        <div className="workspace-badge">Workspace Portal</div>
         <div className="hero-content">
           <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
             Enterprise Workspace Solutions
           </motion.h1>
-          <p>Find the perfect environment for your innovation at Ethiopia's premier ICT Hub.</p>
         </div>
 
         <div className="stats-grid">
@@ -331,9 +332,9 @@ const Office: React.FC = () => {
                           </div>
                         </div>
                         <div className="card-footer">
-                          <button className="btn-details" onClick={() => setSelectedOffice(office)}>View Details</button>
+                          <button className="btn-utility" style={{ borderRadius: '12px', padding: '0.6rem 1.2rem' }} onClick={() => setSelectedOffice(office)}>Details</button>
                           {office.status === 'Available' && (
-                            <button className="btn-apply" onClick={() => handleApply(office)}>Inquire</button>
+                            <button className="btn-primary-premium" style={{ padding: '0.6rem 1.2rem', borderRadius: '12px' }} onClick={() => handleApply(office)}>Inquire</button>
                           )}
                         </div>
                       </motion.div>
@@ -399,7 +400,7 @@ const Office: React.FC = () => {
                   <FaSearch />
                   <h3>No matching results</h3>
                   <p>Try broadening your filter criteria or changing keywords.</p>
-                  <button onClick={clearFilters} className="btn-reset-inline">Reset All Filters</button>
+                  <button onClick={clearFilters} className="btn-primary-premium">Reset All Filters</button>
                 </div>
               )}
             </div>
@@ -471,15 +472,15 @@ const Office: React.FC = () => {
 
                   <div className="cta-group">
                     {selectedOffice.status === 'Available' ? (
-                      <button className="btn-premium-action" onClick={() => handleApply(selectedOffice)}>
+                      <button className="btn-primary-premium" style={{ width: '100%', justifyContent: 'center' }} onClick={() => handleApply(selectedOffice)}>
                         Contact Leasing Agent <FaArrowRight />
                       </button>
                     ) : (
-                      <button className="btn-premium-disabled" disabled>
+                      <button className="btn-premium-disabled" disabled style={{ width: '100%', opacity: 0.5 }}>
                         Currently Unavailable
                       </button>
                     )}
-                    <button className="btn-outline-action" onClick={() => setSelectedOffice(null)}>
+                    <button className="btn-secondary-premium" style={{ width: '100%', justifyContent: 'center' }} onClick={() => setSelectedOffice(null)}>
                       Back to Listings
                     </button>
                   </div>

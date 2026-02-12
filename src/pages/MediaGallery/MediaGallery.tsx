@@ -214,8 +214,8 @@ const MediaGallery: React.FC = () => {
       <Row className="media-gallery-grid g-4">
         {filteredMediaItems.map(item => {
           const youtubeEmbedUrl = item.youtubeUrl ? getYoutubeEmbedUrl(item.youtubeUrl) : null;
-          const itemPosterUrl = item.poster ? getFullImageUrl(BACKEND_URL, item.poster) : '/images/gallery/video-placeholder.jpg';
-          const itemSrcUrl = item.src ? getFullImageUrl(BACKEND_URL, item.src) : '/images/gallery/image-placeholder.jpg';
+          const itemPosterUrl = item.poster ? getFullImageUrl(BACKEND_URL, item.poster) : 'https://placehold.co/600x400/0c7c92/white?text=Video+Loading...';
+          const itemSrcUrl = item.src ? getFullImageUrl(BACKEND_URL, item.src) : 'https://placehold.co/600x400/0c7c92/white?text=Media+Image';
 
           return (
             <Col key={item.id.toString()} xs={12} sm={6} md={4} lg={3} className="media-gallery-item">
@@ -254,7 +254,7 @@ const MediaGallery: React.FC = () => {
                     src={itemSrcUrl}
                     alt={item.title || 'Media image'}
                     className="media-gallery-card-img"
-                    onError={(e) => (e.currentTarget.src = '/images/gallery/image-placeholder.jpg')}
+                    onError={(e) => (e.currentTarget.src = 'https://placehold.co/600x400/0c7c92/white?text=Media+Image')}
                   />
                 )}
                 <Card.Body className="d-flex flex-column">
