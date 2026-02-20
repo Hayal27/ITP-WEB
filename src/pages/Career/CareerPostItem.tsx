@@ -52,7 +52,11 @@ const CareerPostItem: React.FC<CareerPostItemProps> = ({ job, onApplyNow }) => {
                 {job.deadline && (
                   <div className="flex items-center gap-2">
                     <span className="text-red-500 text-xs sm:text-sm font-bold">Deadline:</span>
-                    <span className={`text-xs sm:text-sm ${new Date(job.deadline) < new Date() ? 'text-red-600 line-through' : 'text-[var(--text-main)]'}`}>
+                    <span className={`text-xs sm:text-sm ${(() => {
+                      const d = new Date(job.deadline);
+                      d.setHours(23, 59, 59, 999);
+                      return d < new Date();
+                    })() ? 'text-red-600 line-through' : 'text-[var(--text-main)]'}`}>
                       {new Date(job.deadline).toLocaleDateString()}
                     </span>
                   </div>
@@ -62,7 +66,11 @@ const CareerPostItem: React.FC<CareerPostItemProps> = ({ job, onApplyNow }) => {
           </div>
 
           <div className="flex items-center gap-4 self-start md:self-center">
-            {job.deadline && new Date(job.deadline) < new Date() ? (
+            {job.deadline && (() => {
+              const d = new Date(job.deadline);
+              d.setHours(23, 59, 59, 999);
+              return d < new Date();
+            })() ? (
               <button
                 disabled
                 className="bg-[var(--bg-main)] text-[var(--text-muted)] px-8 h-12 rounded-2xl font-black text-[10px] uppercase tracking-widest cursor-not-allowed flex items-center gap-3 border border-[var(--border-color)]"

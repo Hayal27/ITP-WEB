@@ -11,6 +11,7 @@ import LiveChatWidget from '../../components/LiveChatWidget';
 import Service from '../../components/Service';
 import NewsEventsHighlights from '../../components/NewsEventsHighlights';
 import InvestmentSteps from '../../components/InvestmentSteps';
+import PartnersInvestorsCarousel from '../../components/PartnersInvestorsCarousel';
 import SEO from '../../components/SEO/SEO';
 import { Text } from '@mantine/core';
 import FAQAccordion from '../FAQs/components/FAQAccordion';
@@ -165,6 +166,21 @@ const Home: React.FC = () => {
             </p>
           </div>
           <Investment />
+        </div>
+      </section>
+
+      {/* Partners & Investors Section */}
+      <section id="partners-investors" className="py-24 bg-gradient-to-b from-[var(--bg-main)] to-[var(--neutral)]">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-black text-[var(--accent)] mb-4">
+              Our <span className="text-[var(--primary)]">Partners & Investors</span>
+            </h2>
+            <p className="text-[var(--text-muted)] max-w-2xl mx-auto">
+              Collaborating with local and global leaders to build a resilient and innovative digital future.
+            </p>
+          </div>
+          <PartnersInvestorsCarousel />
         </div>
       </section>
 

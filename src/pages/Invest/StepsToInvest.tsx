@@ -4,8 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   FaGlobeAfrica, FaChartLine, FaShieldAlt, FaHandsHelping,
   FaMoneyBillWave, FaUserTie, FaFileAlt, FaFileSignature,
-  FaGavel, FaMapMarkedAlt, FaRegLightbulb, FaDownload, FaChevronRight
+  FaGavel, FaMapMarkedAlt, FaRegLightbulb, FaDownload, FaChevronRight,
+  FaFile // Added FaFile
 } from "react-icons/fa";
+import { FiMap } from "react-icons/fi"; // Added FiMap as it is used in DB
 import { Container, Row, Col } from "react-bootstrap";
 import { getInvestmentSteps, getInvestmentResources, InvestmentStep, InvestmentResource, BACKEND_URL } from "../../services/apiService";
 import "./StepsToInvest.css";
@@ -17,6 +19,8 @@ const IconMap: { [key: string]: React.ReactNode } = {
   FaGavel: <FaGavel />,
   FaMapMarkedAlt: <FaMapMarkedAlt />,
   FaRegLightbulb: <FaRegLightbulb />,
+  FaFile: <FaFile />,
+  FiMap: <FiMap />,
   default: <FaFileAlt />
 };
 
@@ -117,7 +121,7 @@ const StepsToInvest: React.FC = () => {
           <div className="sti-timeline-premium">
             {loading ? (
               <div className="text-center py-5">Loading roadmap...</div>
-            ) : (
+            ) : steps.length > 0 ? (
               steps.map((step, idx) => (
                 <motion.div
                   key={step.id}
@@ -132,13 +136,15 @@ const StepsToInvest: React.FC = () => {
                     <h3 className="sti-step-title">{step.title}</h3>
                     <p className="sti-step-desc">{step.description}</p>
                     {step.doc_url && (
-                      <a href={step.doc_url.startsWith('http') ? step.doc_url : `${BACKEND_URL}${step.doc_url}`} className="sti-doc-link" target="_blank" rel="noopener noreferrer">
+                      <a href={step.doc_url} className="sti-doc-link" target="_blank" rel="noopener noreferrer">
                         <FaDownload /> Resources
                       </a>
                     )}
                   </div>
                 </motion.div>
               ))
+            ) : (
+              <div className="text-center py-5 text-muted">No investment steps available at this moment.</div>
             )}
           </div>
         </Container>
@@ -155,19 +161,25 @@ const StepsToInvest: React.FC = () => {
             viewport={{ once: true }}
             className="row g-4"
           >
-            {resources.map((res) => (
-              <Col md={3} sm={6} key={res.id}>
-                <motion.div variants={itemVariants} className="sti-resource-card-premium">
-                  <div className="sti-resource-icon">
-                    {IconMap[res.icon] || IconMap.default}
-                  </div>
-                  <h5 className="sti-resource-label">{res.label}</h5>
-                  <a href={res.file_url.startsWith('http') ? res.file_url : `${BACKEND_URL}${res.file_url}`} className="sti-download-btn" target="_blank" rel="noopener noreferrer">
-                    Download <FaChevronRight />
-                  </a>
-                </motion.div>
+            {resources.length > 0 ? (
+              resources.map((res) => (
+                <Col md={3} sm={6} key={res.id}>
+                  <motion.div variants={itemVariants} className="sti-resource-card-premium">
+                    <div className="sti-resource-icon">
+                      {IconMap[res.icon] || IconMap.default}
+                    </div>
+                    <h5 className="sti-resource-label">{res.label}</h5>
+                    <a href={res.file_url} className="sti-download-btn" target="_blank" rel="noopener noreferrer">
+                      Download <FaChevronRight />
+                    </a>
+                  </motion.div>
+                </Col>
+              ))
+            ) : (
+              <Col xs={12}>
+                <div className="text-center py-5 text-muted">No resources available in the toolkit yet.</div>
               </Col>
-            ))}
+            )}
           </motion.div>
         </Container>
       </section>

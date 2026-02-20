@@ -5,6 +5,7 @@ import { FiSearch, FiX, FiImage, FiVideo, FiMaximize2, FiActivity } from 'react-
 import './DigitalGallery.css';
 import LiveChatWidget from '../../components/LiveChatWidget';
 import { getMediaItems, MediaItem } from '../../services/apiService';
+import { sanitizeHtml } from '../../utils/sanitize';
 
 const DigitalGallery: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('all');
@@ -170,7 +171,7 @@ const DigitalGallery: React.FC = () => {
                         <h3 className="itpc-digital-gallery__card-title">{item.title}</h3>
                         <div
                           className="itpc-digital-gallery__card-description"
-                          dangerouslySetInnerHTML={{ __html: item.description || '' }}
+                          dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.description || '') }}
                         />
                         <div className="itpc-digital-gallery__tags">
                           {item.tags?.map((tag: string) => (
@@ -255,7 +256,7 @@ const DigitalGallery: React.FC = () => {
                 <h3 className="itpc-digital-gallery__modal-title">{selectedItem.title}</h3>
                 <div
                   className="itpc-digital-gallery__modal-description"
-                  dangerouslySetInnerHTML={{ __html: selectedItem.description || '' }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(selectedItem.description || '') }}
                 />
                 <div className="itpc-digital-gallery__modal-tags mb-6">
                   {selectedItem.tags?.map((tag: string) => (

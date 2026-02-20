@@ -2,7 +2,7 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 
 
-export const BACKEND_URL = "https://api.ethiopianitpark.et";
+export const BACKEND_URL = "http://localhost:5005";
 
 // Generic request function using axios
 export async function request<T>(url: string, options: AxiosRequestConfig = {}): Promise<T> {
@@ -21,14 +21,14 @@ export async function request<T>(url: string, options: AxiosRequestConfig = {}):
     const axiosError = error as AxiosError;
     if (axiosError.response) {
       const errorData = axiosError.response.data as { message?: string; error?: string };
-      console.error('API Error Response:', errorData);
-      throw new Error(errorData?.error || errorData?.message || `Request failed with status ${axiosError.response.status}`);
+      // console.error('[SECURITY] API Error Masked');
+      throw new Error(errorData?.error || errorData?.message || `Request failed`);
     } else if (axiosError.request) {
-      console.error('API No Response:', axiosError.request);
-      throw new Error('No response received from server. Please check your network connection and backend server.');
+      // console.error('[SECURITY] Network Issue');
+      throw new Error('Connection error. Please try again later.');
     } else {
-      console.error('API Request Setup Error:', axiosError.message);
-      throw new Error(axiosError.message || 'An unknown error occurred during the request setup.');
+      // console.error('[SECURITY] Setup Error');
+      throw new Error('An unexpected error occurred.');
     }
   }
 }
@@ -307,7 +307,11 @@ export interface FAQItem {
 }
 
 export const getFAQs = async (): Promise<FAQItem[]> => {
-  return await request<FAQItem[]>('/faqs', { method: 'GET' });
+  const response = await request<{ success: boolean; faqs: FAQItem[] }>('/faqs', { method: 'GET' });
+  if (response.success) {
+    return response.faqs;
+  }
+  throw new Error("Failed to fetch FAQs or backend response was not successful.");
 };
 
 // --- CONTACT API ---
@@ -376,11 +380,19 @@ export interface Office {
 }
 
 export const getBuildings = async (): Promise<Building[]> => {
-  return await request<Building[]>('/offices/buildings', { method: 'GET' });
+  const response = await request<{ success: boolean; buildings: Building[] }>('/offices/buildings', { method: 'GET' });
+  if (response.success) {
+    return response.buildings;
+  }
+  throw new Error("Failed to fetch buildings or backend response was not successful.");
 };
 
 export const getOffices = async (): Promise<Office[]> => {
-  return await request<Office[]>('/offices', { method: 'GET' });
+  const response = await request<{ success: boolean; offices: Office[] }>('/offices', { method: 'GET' });
+  if (response.success) {
+    return response.offices;
+  }
+  throw new Error("Failed to fetch offices or backend response was not successful.");
 };
 
 // --- LEASED LAND & ZONE API ---
@@ -409,11 +421,19 @@ export interface LeasedLand {
 }
 
 export const getLandZones = async (): Promise<LandZone[]> => {
-  return await request<LandZone[]>('/lands/zones', { method: 'GET' });
+  const response = await request<{ success: boolean; landZones: LandZone[] }>('/lands/zones', { method: 'GET' });
+  if (response.success) {
+    return response.landZones;
+  }
+  throw new Error("Failed to fetch land zones or backend response was not successful.");
 };
 
 export const getLeasedLands = async (): Promise<LeasedLand[]> => {
-  return await request<LeasedLand[]>('/lands', { method: 'GET' });
+  const response = await request<{ success: boolean; leasedLands: LeasedLand[] }>('/lands', { method: 'GET' });
+  if (response.success) {
+    return response.leasedLands;
+  }
+  throw new Error("Failed to fetch leased lands or backend response was not successful.");
 };
 
 // --- LIVE EVENTS API ---
@@ -456,16 +476,28 @@ export interface LiveEventConfig {
 }
 
 export const getActiveLiveEvent = async (): Promise<LiveEventConfig> => {
-  return await request<LiveEventConfig>('/live-events/active', { method: 'GET' });
+  const response = await request<{ success: boolean; liveEvent: LiveEventConfig }>('/live-events/active', { method: 'GET' });
+  if (response.success) {
+    return response.liveEvent;
+  }
+  throw new Error("Failed to fetch active live event or backend response was not successful.");
 };
 
 export const getAllLiveEvents = async (): Promise<LiveEventConfig[]> => {
-  return await request<LiveEventConfig[]>('/live-events', { method: 'GET' });
+  const response = await request<{ success: boolean; liveEvents: LiveEventConfig[] }>('/live-events', { method: 'GET' });
+  if (response.success) {
+    return response.liveEvents;
+  }
+  throw new Error("Failed to fetch live events or backend response was not successful.");
 };
 
 
 export const getLiveEvent = async (id: number): Promise<LiveEventConfig> => {
-  return await request<LiveEventConfig>(`/live-events/${id}`, { method: 'GET' });
+  const response = await request<{ success: boolean; liveEvent: LiveEventConfig }>(`/live-events/${id}`, { method: 'GET' });
+  if (response.success) {
+    return response.liveEvent;
+  }
+  throw new Error("Failed to fetch live event or backend response was not successful.");
 };
 
 // --- CAREER API ---
@@ -497,13 +529,16 @@ export interface TrackingStatus {
 }
 
 export const getCareerJobs = async (): Promise<Job[]> => {
-  const jobs = await request<Job[]>('/careers/jobs', { method: 'GET' });
-  return jobs.map(job => ({
-    ...job,
-    image: fixImageUrl((job as any).image) as string,
-    responsibilities: typeof job.responsibilities === 'string' ? JSON.parse(job.responsibilities) : job.responsibilities,
-    qualifications: typeof job.qualifications === 'string' ? JSON.parse(job.qualifications) : job.qualifications
-  }));
+  const response = await request<{ success: boolean; jobs: Job[] }>('/careers/jobs', { method: 'GET' });
+  if (response.success) {
+    return response.jobs.map(job => ({
+      ...job,
+      image: (job as any).image ? fixImageUrl((job as any).image) as string : '',
+      responsibilities: typeof job.responsibilities === 'string' ? JSON.parse(job.responsibilities) : job.responsibilities,
+      qualifications: typeof job.qualifications === 'string' ? JSON.parse(job.qualifications) : job.qualifications
+    }));
+  }
+  throw new Error("Failed to fetch career jobs or backend response was not successful.");
 };
 
 export const applyForJob = async (formData: FormData): Promise<ApplicationResponse> => {
@@ -587,21 +622,27 @@ export interface Investor {
 }
 
 export const getPartners = async (): Promise<Partner[]> => {
-  const partners = await request<Partner[]>('/partners-investors/partners', { method: 'GET' });
-  return partners.map(p => ({
-    ...p,
-    logo: fixImageUrl(p.logo) as string,
-    gallery: Array.isArray(p.gallery) ? p.gallery.map(img => fixImageUrl(img) as string) : []
-  }));
+  const response = await request<{ success: boolean; partners: Partner[] }>('/partners-investors/partners', { method: 'GET' });
+  if (response.success) {
+    return response.partners.map(p => ({
+      ...p,
+      logo: fixImageUrl(p.logo) as string,
+      gallery: Array.isArray(p.gallery) ? p.gallery.map(img => fixImageUrl(img) as string) : []
+    }));
+  }
+  throw new Error("Failed to fetch partners or backend response was not successful.");
 };
 
 export const getInvestors = async (): Promise<Investor[]> => {
-  const investors = await request<Investor[]>('/partners-investors/investors', { method: 'GET' });
-  return investors.map(i => ({
-    ...i,
-    image: fixImageUrl(i.image) as string,
-    gallery: Array.isArray(i.gallery) ? i.gallery.map(img => fixImageUrl(img) as string) : []
-  }));
+  const response = await request<{ success: boolean; investors: Investor[] }>('/partners-investors/investors', { method: 'GET' });
+  if (response.success) {
+    return response.investors.map(i => ({
+      ...i,
+      image: fixImageUrl(i.image) as string,
+      gallery: Array.isArray(i.gallery) ? i.gallery.map(img => fixImageUrl(img) as string) : []
+    }));
+  }
+  throw new Error("Failed to fetch investors or backend response was not successful.");
 };
 
 
@@ -624,19 +665,25 @@ export interface IncubationSuccessStory {
 }
 
 export const getIncubationPrograms = async (): Promise<IncubationProgram[]> => {
-  const programs = await request<IncubationProgram[]>('/incubation/programs', { method: 'GET' });
-  return programs.map(p => ({
-    ...p,
-    icon: fixImageUrl(p.icon) as string
-  }));
+  const response = await request<{ success: boolean; programs: IncubationProgram[] }>('/incubation/programs', { method: 'GET' });
+  if (response.success) {
+    return response.programs.map(p => ({
+      ...p,
+      icon: fixImageUrl(p.icon) as string
+    }));
+  }
+  throw new Error("Failed to fetch incubation programs or backend response was not successful.");
 };
 
 export const getIncubationSuccessStories = async (): Promise<IncubationSuccessStory[]> => {
-  const stories = await request<IncubationSuccessStory[]>('/incubation/stories', { method: 'GET' });
-  return stories.map(s => ({
-    ...s,
-    image_url: fixImageUrl(s.image_url) as string
-  }));
+  const response = await request<{ success: boolean; stories: IncubationSuccessStory[] }>('/incubation/stories', { method: 'GET' });
+  if (response.success) {
+    return response.stories.map(s => ({
+      ...s,
+      image_url: fixImageUrl(s.image_url) as string
+    }));
+  }
+  throw new Error("Failed to fetch incubation stories or backend response was not successful.");
 };
 
 // --- TRAINING & WORKSHOPS API ---
@@ -658,12 +705,15 @@ export interface TrainingWorkshop {
 }
 
 export const getTrainings = async (): Promise<TrainingWorkshop[]> => {
-  const trainings = await request<TrainingWorkshop[]>('/trainings', { method: 'GET' });
-  return trainings.map(t => ({
-    ...t,
-    image_url: fixImageUrl(t.image_url) as string,
-    tags: Array.isArray(t.tags) ? t.tags : []
-  }));
+  const response = await request<{ success: boolean; trainings: TrainingWorkshop[] }>('/trainings', { method: 'GET' });
+  if (response.success) {
+    return response.trainings.map(t => ({
+      ...t,
+      image_url: fixImageUrl(t.image_url) as string,
+      tags: Array.isArray(t.tags) ? t.tags : []
+    }));
+  }
+  throw new Error("Failed to fetch trainings or backend response was not successful.");
 };
 
 // --- ZONES API ---
@@ -773,19 +823,25 @@ export interface InvestmentResource {
 }
 
 export const getInvestmentSteps = async (): Promise<InvestmentStep[]> => {
-  const steps = await request<InvestmentStep[]>('/invest/steps', { method: 'GET' });
-  return steps.map(s => ({
-    ...s,
-    doc_url: fixImageUrl(s.doc_url) as string
-  }));
+  const response = await request<{ success: boolean; steps: InvestmentStep[] }>('/invest/steps', { method: 'GET' });
+  if (response.success) {
+    return response.steps.map(s => ({
+      ...s,
+      doc_url: fixImageUrl(s.doc_url) as string
+    }));
+  }
+  throw new Error("Failed to fetch investment steps or backend response was not successful.");
 };
 
 export const getInvestmentResources = async (): Promise<InvestmentResource[]> => {
-  const resources = await request<InvestmentResource[]>('/invest/resources', { method: 'GET' });
-  return resources.map(r => ({
-    ...r,
-    file_url: fixImageUrl(r.file_url) as string
-  }));
+  const response = await request<{ success: boolean; resources: InvestmentResource[] }>('/invest/resources', { method: 'GET' });
+  if (response.success) {
+    return response.resources.map(r => ({
+      ...r,
+      file_url: fixImageUrl(r.file_url) as string
+    }));
+  }
+  throw new Error("Failed to fetch investment resources or backend response was not successful.");
 };
 
 // --- BOARD MEMBERS & WHO WE ARE API ---

@@ -12,6 +12,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import './WhoWeAre.css';
 import { getWhoWeAreSections, WhoWeAreSection } from '../../services/apiService';
+import { sanitizeHtml } from '../../utils/sanitize';
 
 interface FeatureItem {
   title: string;
@@ -145,7 +146,7 @@ const WhoWeAre: React.FC = () => {
               {section.content && (
                 <div
                   className="who-general"
-                  dangerouslySetInnerHTML={{ __html: section.content }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(section.content) }}
                 />
               )}
             </WhoSection>
@@ -192,7 +193,7 @@ const WhoWeAre: React.FC = () => {
             viewport={{ once: true }}
             transition={{ duration: 1 }}
           >
-            <blockquote dangerouslySetInnerHTML={{ __html: voiceSection.subtitle || '&ldquo;We are here to lead Ethiopia&rsquo;s future with innovation, knowledge, and collaboration.&rdquo;' }}>
+            <blockquote dangerouslySetInnerHTML={{ __html: sanitizeHtml(voiceSection.subtitle || '&ldquo;We are here to lead Ethiopia&rsquo;s future with innovation, knowledge, and collaboration.&rdquo;') }}>
             </blockquote>
           </motion.div>
         )}

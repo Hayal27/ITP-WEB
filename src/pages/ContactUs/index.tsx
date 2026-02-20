@@ -24,6 +24,18 @@ const ContactUs: React.FC = () => {
       setStatus({ type: 'error', message: 'Please complete the reCAPTCHA security check.' });
       return;
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setStatus({ type: 'error', message: 'Please provide a valid email address.' });
+      return;
+    }
+
+    const phoneRegex = /^(\+251|0)[1-9]\d{8}$/;
+    if (formData.phone && !phoneRegex.test(formData.phone)) {
+      setStatus({ type: 'error', message: 'Invalid phone number format. Use +251 9... or 09...' });
+      return;
+    }
     setIsSubmitting(true);
     setStatus({ type: null, message: '' });
 
@@ -222,6 +234,7 @@ const ContactUs: React.FC = () => {
                 placeholder="+251 XXX XXX XXX"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                error={formData.phone && !/^(\+251|0)[1-9]\d{8}$/.test(formData.phone) ? "Invalid phone format" : null}
                 classNames={{ input: 'premium-input-class', label: 'premium-label-class' }}
               />
 

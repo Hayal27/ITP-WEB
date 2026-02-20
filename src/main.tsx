@@ -1,3 +1,11 @@
+// --- Security: Global Console Suppression ---
+console.log = () => { };
+console.debug = () => { };
+console.info = () => { };
+console.warn = () => { };
+console.error = () => { };
+// ---------------------------------------------
+
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { MantineProvider } from '@mantine/core';
